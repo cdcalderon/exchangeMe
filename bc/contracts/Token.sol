@@ -10,6 +10,8 @@ contract Token {
     uint256 public decimals = 18;
     uint256 public totalSupply;
 
+    mapping(address => uint256) public balanceOf; // Track Balances
+
     constructor(
         string memory _name,
         string memory _symbol,
@@ -18,5 +20,6 @@ contract Token {
         name = _name;
         symbol = _symbol;
         totalSupply = _totalSupply * (10**decimals);
+        balanceOf[msg.sender] = totalSupply; //update the balance of the person deploying (deployer) the smart contract to the entire total supply of the tokens
     }
 }

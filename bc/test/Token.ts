@@ -2,6 +2,7 @@ import { ethers } from 'hardhat';
 import { expect } from 'chai';
 import { anyValue } from '@nomicfoundation/hardhat-chai-matchers/withArgs';
 import { Token } from '../typechain-types/Token';
+import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 
 const tokens = (n: string | number) => {
   return ethers.utils.parseUnits(n.toString(), 'ether');
@@ -9,10 +10,15 @@ const tokens = (n: string | number) => {
 
 describe('Token', function () {
   let token: Token;
+  let accounts: SignerWithAddress[];
+  let deployer: SignerWithAddress;
 
   beforeEach(async () => {
     const Token = await ethers.getContractFactory('Token');
     token = await Token.deploy('Poncho', 'PCHO', '1000000');
+
+    accounts = await ethers.getSigners();
+    deployer = accounts[0];
   });
 
   describe('Deployment', () => {
@@ -35,6 +41,10 @@ describe('Token', function () {
 
     it('has correct total supply', async () => {
       expect(await token.totalSupply()).to.equal(totalSupply);
+    });
+
+    it('assigns total supply to deployer correctly', async () => {
+      expect(await token.balanceOf(deployer.address)).to.equal(totalSupply);
     });
   });
 });
