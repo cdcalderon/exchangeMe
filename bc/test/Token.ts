@@ -150,4 +150,62 @@ describe('Token', function () {
       });
     });
   });
+
+  describe('Delegated Token Transfers', () => {
+    let amount: BigNumber;
+    let approvalTransaccion;
+    let result: ContractReceipt;
+
+    beforeEach(async () => {
+      amount = tokens(100);
+      approvalTransaccion = await token
+        .connect(deployer)
+        .approve(exchange.address, amount);
+      result = await approvalTransaccion.wait();
+    });
+
+    describe('Success', () => {
+      let transferFromTransaccion;
+      beforeEach(async () => {
+        transferFromTransaccion = await token
+          .connect(exchange)
+          .transferFrom(deployer.address, receiver.address, amount);
+        result = await transferFromTransaccion.wait();
+      });
+
+      it('transfers token balances', async () => {
+        expect(await token.balanceOf(deployer.address)).to.be.equal(
+          ethers.utils.parseUnits('999900', 'ether')
+        );
+        expect(await token.balanceOf(receiver.address)).to.be.equal(amount);
+      });
+
+      it('adjust the allowance to correct balance', async () => {
+        expect(
+          await token.allowance(deployer.address, exchange.address)
+        ).to.be.equal(0);
+      });
+
+      it('emits a Transfer event', () => {
+        const events: any = result.events;
+        const transferEvent = events[0];
+        expect(transferEvent.event).to.equal('Transfer');
+
+        const args = transferEvent.args;
+        expect(args.from).to.equal(deployer.address);
+        expect(args.to).to.equal(receiver.address);
+        expect(args.value).to.equal(amount);
+      });
+    });
+
+    describe('Failure', async () => {
+      // Attempt to transfer more than total supply
+      const invalidAmount = tokens(10000000); // 10 Million, greater than total supply
+      await expect(
+        token
+          .connect(exchange)
+          .transferFrom(deployer.address, receiver.address, invalidAmount)
+      ).to.be.reverted;
+    });
+  });
 });
