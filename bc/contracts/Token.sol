@@ -4,6 +4,8 @@ pragma solidity ^0.8.0;
 // Uncomment this line to use console.log
 import "hardhat/console.sol";
 
+error InvalidTransferAmount();
+
 contract Token {
     string public name;
     string public symbol;
@@ -29,7 +31,7 @@ contract Token {
         public
         returns (bool success)
     {
-        require(balanceOf[msg.sender] >= _value);
+        if (balanceOf[msg.sender] < _value) revert InvalidTransferAmount();
         require(_to != address(0));
 
         // Deduct tokens from spender
