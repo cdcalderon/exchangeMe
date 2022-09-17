@@ -14,6 +14,7 @@ describe('Token', function () {
   let accounts: SignerWithAddress[];
   let deployer: SignerWithAddress;
   let receiver: SignerWithAddress;
+  let exchange: SignerWithAddress;
 
   beforeEach(async () => {
     const Token = await ethers.getContractFactory('Token');
@@ -22,6 +23,7 @@ describe('Token', function () {
     accounts = await ethers.getSigners();
     deployer = accounts[0];
     receiver = accounts[1];
+    exchange = accounts[2];
   });
 
   describe('Deployment', () => {
@@ -101,6 +103,49 @@ describe('Token', function () {
           token
             .connect(deployer)
             .transfer('0x0000000000000000000000000000000000000000', amount)
+        ).to.be.reverted;
+      });
+    });
+  });
+
+  describe('Approving Tokens', () => {
+    let amount: BigNumber;
+    let approvalTransaccion;
+    let result: ContractReceipt;
+
+    beforeEach(async () => {
+      amount = tokens(100);
+      approvalTransaccion = await token
+        .connect(deployer)
+        .approve(exchange.address, amount);
+      result = await approvalTransaccion.wait();
+    });
+
+    describe('Success', () => {
+      it('allocates an allowance for delegated token spending', async () => {
+        expect(
+          await token.allowance(deployer.address, exchange.address)
+        ).to.equal(amount);
+      });
+
+      it('emits an Approval event', async () => {
+        const events: any = result.events;
+        const approvalEvent = events[0];
+        expect(approvalEvent.event).to.equal('Approval');
+
+        const args = approvalEvent.args;
+        expect(args.owner).to.equal(deployer.address);
+        expect(args.spender).to.equal(exchange.address);
+        expect(args.value).to.equal(amount);
+      });
+    });
+
+    describe('Failure', () => {
+      it('rejects invalid spenders', async () => {
+        await expect(
+          token
+            .connect(deployer)
+            .approve('0x0000000000000000000000000000000000000000', amount)
         ).to.be.reverted;
       });
     });
