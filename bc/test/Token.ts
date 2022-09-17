@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import { anyValue } from '@nomicfoundation/hardhat-chai-matchers/withArgs';
 import { Token } from '../typechain-types/Token';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
+import { BigNumber, ContractReceipt, ContractTransaction } from 'ethers';
 
 const tokens = (n: string | number) => {
   return ethers.utils.parseUnits(n.toString(), 'ether');
@@ -51,29 +52,57 @@ describe('Token', function () {
   });
 
   describe('Transfer Tokens', () => {
-    let amount, transferTransaccion, result;
-    it('Transfer token and adjust balances', async () => {
-      amount = 100;
+    let amount: BigNumber;
+    let transferTransaccion;
+    let result: ContractReceipt;
 
-      // TODO: Remove once rest of tests are complete
-      // let deployerBalance = await token.balanceOf(deployer.address);
-      // let receiverBalance = await token.balanceOf(receiver.address);
-      // console.log(deployerBalance.toString());
-      // console.log(receiverBalance.toString());
-
+    beforeEach(async () => {
+      amount = tokens(100);
       // Transfer tokens
       transferTransaccion = await token
         .connect(deployer)
-        .transfer(receiver.address, tokens(amount));
-      result = transferTransaccion.wait();
+        .transfer(receiver.address, amount);
+      result = await transferTransaccion.wait();
+    });
 
-      expect(await token.balanceOf(deployer.address)).to.equal(tokens(999900));
-      expect(await token.balanceOf(receiver.address)).to.equal(tokens(amount));
+    describe('Success', () => {
+      it('transfer token and adjust balances', async () => {
+        expect(await token.balanceOf(deployer.address)).to.equal(
+          tokens(999900)
+        );
+        expect(await token.balanceOf(receiver.address)).to.equal(amount);
+      });
 
-      // deployerBalance = await token.balanceOf(deployer.address);
-      // receiverBalance = await token.balanceOf(receiver.address);
-      // console.log(deployerBalance.toString());
-      // console.log(receiverBalance.toString());
+      it('emits a Transfer event', () => {
+        const events: any = result.events;
+        const transferEvent = events[0];
+        expect(transferEvent.event).to.equal('Transfer');
+
+        const args = transferEvent.args;
+        expect(args.from).to.equal(deployer.address);
+        expect(args.to).to.equal(receiver.address);
+        expect(args.value).to.equal(amount);
+      });
+    });
+
+    describe('Failure', () => {
+      it('rejects insufficient balances', async () => {
+        const invalidTransferAmount = tokens(10000000);
+        await expect(
+          token
+            .connect(deployer)
+            .transfer(receiver.address, invalidTransferAmount)
+        ).to.be.reverted;
+      });
+
+      it('reverts invalid to address', async () => {
+        const amount = tokens(100);
+        await expect(
+          token
+            .connect(deployer)
+            .transfer('0x0000000000000000000000000000000000000000', amount)
+        ).to.be.reverted;
+      });
     });
   });
 });
