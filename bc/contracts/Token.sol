@@ -6,6 +6,7 @@ import "hardhat/console.sol";
 
 error InvalidTransferAmount();
 error InvalidDestinationAddress();
+error NotApprovedTokenBeforeOperation();
 
 contract Token {
     string public name;
@@ -63,9 +64,9 @@ contract Token {
         address _to,
         uint256 _value
     ) public returns (bool success) {
-        if (_value > balanceOf[_from]) revert InvalidTransferAmount();
+        if (_value > balanceOf[_from]) revert InvalidTransferAmount(); // not enough balance
         if (_value > allowance[_from][msg.sender])
-            revert InvalidTransferAmount();
+            revert NotApprovedTokenBeforeOperation(); // hasn't approve yet
 
         allowance[_from][msg.sender] = allowance[_from][msg.sender] - _value;
 
