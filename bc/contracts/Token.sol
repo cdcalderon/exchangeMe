@@ -5,6 +5,7 @@ pragma solidity ^0.8.0;
 import "hardhat/console.sol";
 
 error InvalidTransferAmount();
+error InvalidDestinationAddress();
 
 contract Token {
     string public name;
@@ -32,7 +33,7 @@ contract Token {
         returns (bool success)
     {
         if (balanceOf[msg.sender] < _value) revert InvalidTransferAmount();
-        require(_to != address(0));
+        if (_to == address(0)) revert InvalidDestinationAddress();
 
         // Deduct tokens from spender
         balanceOf[msg.sender] = balanceOf[msg.sender] - _value;
