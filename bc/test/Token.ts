@@ -12,6 +12,7 @@ describe('Token', function () {
   let token: Token;
   let accounts: SignerWithAddress[];
   let deployer: SignerWithAddress;
+  let receiver: SignerWithAddress;
 
   beforeEach(async () => {
     const Token = await ethers.getContractFactory('Token');
@@ -19,6 +20,7 @@ describe('Token', function () {
 
     accounts = await ethers.getSigners();
     deployer = accounts[0];
+    receiver = accounts[1];
   });
 
   describe('Deployment', () => {
@@ -45,6 +47,33 @@ describe('Token', function () {
 
     it('assigns total supply to deployer correctly', async () => {
       expect(await token.balanceOf(deployer.address)).to.equal(totalSupply);
+    });
+  });
+
+  describe('Transfer Tokens', () => {
+    let amount, transferTransaccion, result;
+    it('Transfer token and adjust balances', async () => {
+      amount = 100;
+
+      // TODO: Remove once rest of tests are complete
+      // let deployerBalance = await token.balanceOf(deployer.address);
+      // let receiverBalance = await token.balanceOf(receiver.address);
+      // console.log(deployerBalance.toString());
+      // console.log(receiverBalance.toString());
+
+      // Transfer tokens
+      transferTransaccion = await token
+        .connect(deployer)
+        .transfer(receiver.address, tokens(amount));
+      result = transferTransaccion.wait();
+
+      expect(await token.balanceOf(deployer.address)).to.equal(tokens(999900));
+      expect(await token.balanceOf(receiver.address)).to.equal(tokens(amount));
+
+      // deployerBalance = await token.balanceOf(deployer.address);
+      // receiverBalance = await token.balanceOf(receiver.address);
+      // console.log(deployerBalance.toString());
+      // console.log(receiverBalance.toString());
     });
   });
 });
