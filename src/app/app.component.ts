@@ -5,6 +5,10 @@ declare let window: any;
 import { Component, OnInit } from '@angular/core';
 import Token from '../../bc/artifacts/contracts/Token.sol/Token.json';
 import addresses from '../environments/contract-address.json';
+import { Store } from '@ngrx/store';
+import * as actions from './store/provider.actions';
+
+interface AppState {}
 
 @Component({
   selector: 'app-root',
@@ -16,7 +20,13 @@ export class AppComponent implements OnInit {
   tokenContract: any;
   signerAddress: any;
 
+  constructor(private store: Store<{ connection: string }>) {}
+
   async ngOnInit() {
+    this.store.subscribe((state) => {
+      console.log('ngrx State ', state);
+    });
+
     const provider = this.loadProvider();
     await provider.send('eth_requestAccounts', []); // <- this promps user to connect metamask
     // Reload page when network changes
@@ -67,6 +77,7 @@ export class AppComponent implements OnInit {
 
   loadProvider() {
     const connection = new ethers.providers.Web3Provider(window.ethereum);
+    this.store.dispatch(actions.loadProvider());
     return connection;
   }
 
