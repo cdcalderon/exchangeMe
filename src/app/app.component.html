@@ -1,7 +1,27 @@
-<div *ngIf="!signer">
+<div>
+  <div>NavBar</div>
+
+  <main className="exchange grid">
+    <section className="exchange__section--left grid">
+      <div>MarketsComponent</div>
+      <div>BalanceComponent</div>
+      <div>OrderComponent</div>
+    </section>
+    <section className="exchange__section--right grid">
+      <div>PriceChartComponent</div>
+      <div>TransaccionComponent</div>
+      <div>TradesComponent</div>
+      <div>OrderBookComponent</div>
+    </section>
+  </main>
+
+  <div>AlertComponent</div>
+</div>
+
+<!-- <div *ngIf="!signer">
   <h2>You have not connected!</h2>
 </div>
 
 <div *ngIf="signer">
   <h2>You have connected!</h2>
-</div>
+</div> -->

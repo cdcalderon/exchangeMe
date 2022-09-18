@@ -48,10 +48,11 @@ export class AppComponent implements OnInit {
     // if ((await this.signer.getChainId()) !== 80001) {
     //   alert('Please change your network to ');
     // }
-
-    console.log('address from config ', addresses.tokenContract);
+    const networkId = 31337;
+    const rootConfig = addresses[networkId];
+    console.log('address from config ', rootConfig.PCHO);
     this.tokenContract = new ethers.Contract(
-      addresses.tokenContract,
+      rootConfig.PCHO.address,
       Token.abi,
       this.signer
     );
