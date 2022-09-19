@@ -1,7 +1,18 @@
-import { createAction } from '@ngrx/store';
+import { ethers } from 'ethers';
 
-export const loadProvider = createAction('[PROVIDER_LOADED] ProviderLoaded');
+import { createAction, props } from '@ngrx/store';
 
-export const loadNetwork = createAction('[NETWORK_LOADED] NetworkLoaded');
+export const loadProvider = createAction(
+  '[PROVIDER_LOADED] ProviderLoaded',
+  props<{ connection: any }>()
+);
 
-export const loadAccount = createAction('[ACCOUNT_LOADED] AccountLoaded');
+export const loadNetwork = createAction(
+  '[NETWORK_LOADED] NetworkLoaded',
+  props<{ chainId: number }>()
+);
+
+export const loadAccount = createAction(
+  '[ACCOUNT_LOADED] AccountLoaded',
+  props<{ account: string }>()
+);
