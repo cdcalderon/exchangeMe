@@ -1,5 +1,3 @@
-import { ethers } from 'ethers';
-
 import { createAction, props } from '@ngrx/store';
 
 export const loadProvider = createAction(

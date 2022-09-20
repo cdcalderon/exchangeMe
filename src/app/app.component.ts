@@ -61,6 +61,9 @@ export class AppComponent implements OnInit {
     // }
     const networkId = 31337;
     const rootConfig = addresses[networkId];
+
+    this.loadToken(provider, rootConfig.PCHO.address);
+
     console.log('address from config ', rootConfig.PCHO);
     this.tokenContract = new ethers.Contract(
       rootConfig.PCHO.address,
@@ -101,6 +104,11 @@ export class AppComponent implements OnInit {
 
     const account = interactions.loadAccount(this.store);
 
+    return account;
+  }
+
+  async loadToken(provider: any, address: string) {
+    const account = interactions.loadToken(provider, address, this.store);
     return account;
   }
 
