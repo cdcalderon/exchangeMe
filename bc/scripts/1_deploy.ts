@@ -1,6 +1,6 @@
 //import { Token } from './../typechain-types/Token';
 import { ethers } from 'hardhat';
-import fs from 'fs';
+import * as fs from 'fs';
 
 async function main() {
   //Fetch contract to deploy
