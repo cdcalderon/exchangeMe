@@ -26,4 +26,22 @@ export class ProviderService {
 
     return connection;
   }
+
+  async loadNetwork(provider: ethers.providers.Web3Provider) {
+    const { chainId } = await provider.getNetwork();
+    this.store.dispatch(providerActions.loadNetwork({ chainId }));
+
+    return chainId;
+  }
+
+  async loadAccount() {
+    const accounts = await window.ethereum.request({
+      method: 'eth_requestAccounts',
+    });
+    const account = ethers.utils.getAddress(accounts[0]);
+
+    this.store.dispatch(providerActions.loadAccount({ account }));
+
+    return account;
+  }
 }

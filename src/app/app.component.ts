@@ -1,3 +1,4 @@
+import { ProviderService } from './shared/services/provider.service';
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { ethers } from 'ethers';
 
@@ -6,8 +7,9 @@ import { Component, OnInit } from '@angular/core';
 import Token from '../../bc/artifacts/contracts/Token.sol/Token.json';
 import addresses from '../environments/contract-address.json';
 import { Store } from '@ngrx/store';
+import { TokenService } from './shared/services/token.service';
 //import * as actions from './store/provider.actions';
-import * as interactions from './store/interactions';
+//import * as interactions from './store/interactions';
 
 interface AppState {}
 
@@ -21,7 +23,11 @@ export class AppComponent implements OnInit {
   tokenContract: any;
   signerAddress: any;
 
-  constructor(private store: Store<{ connection: string }>) {}
+  constructor(
+    private store: Store<{ connection: string }>,
+    private providerService: ProviderService,
+    private tokenService: TokenService
+  ) {}
 
   async ngOnInit() {
     this.store.subscribe((state) => {
@@ -81,7 +87,7 @@ export class AppComponent implements OnInit {
 
   loadProvider() {
     //const connection = new ethers.providers.Web3Provider(window.ethereum);
-    const connection = interactions.loadProvider(this.store);
+    const connection = this.providerService.loadProvider();
     //this.store.dispatch(interactions.loadProvider());
     // const connection = interactions.loadProvider(this.store);
     return connection;
@@ -89,7 +95,7 @@ export class AppComponent implements OnInit {
 
   async loadNetwork(provider: any) {
     // const { chainId } = await provider.getNetwork();
-    const chainId = interactions.loadNetwork(provider, this.store);
+    const chainId = this.providerService.loadNetwork(provider);
     return chainId;
   }
 
@@ -102,13 +108,13 @@ export class AppComponent implements OnInit {
     // let balance = await provider.getBalance(account);
     // balance = ethers.utils.formatEther(balance);
 
-    const account = interactions.loadAccount(this.store);
+    const account = this.providerService.loadAccount();
 
     return account;
   }
 
   async loadToken(provider: any, address: string) {
-    const account = interactions.loadToken(provider, address, this.store);
+    const account = this.tokenService.loadToken(provider, address);
     return account;
   }
 
