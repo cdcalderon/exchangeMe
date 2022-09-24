@@ -16,9 +16,11 @@ import { MarketTradeComponent } from './components/market-trade/market-trade.com
 import { HistoryOrderComponent } from './components/history-order/history-order.component';
 import { OrderBookComponent } from './components/order-book/order-book.component';
 import { MarketHistoryComponent } from './components/market-history/market-history.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
+    HeaderComponent,
     AppComponent,
     MarketPairsComponent,
     ExchangeComponent,
