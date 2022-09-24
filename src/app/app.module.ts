@@ -9,9 +9,25 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { environment } from 'src/environments/environment';
 import { appReducers } from './store/app.reducer';
+import { MarketPairsComponent } from './components/market-pairs/market-pairs.component';
+import { ExchangeComponent } from './pages/exchange/exchange.component';
+import { TradingChartComponent } from './components/trading-chart/trading-chart.component';
+import { MarketTradeComponent } from './components/market-trade/market-trade.component';
+import { HistoryOrderComponent } from './components/history-order/history-order.component';
+import { OrderBookComponent } from './components/order-book/order-book.component';
+import { MarketHistoryComponent } from './components/market-history/market-history.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    MarketPairsComponent,
+    ExchangeComponent,
+    TradingChartComponent,
+    MarketTradeComponent,
+    HistoryOrderComponent,
+    OrderBookComponent,
+    MarketHistoryComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
