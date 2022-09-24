@@ -8,6 +8,7 @@ import Token from '../../bc/artifacts/contracts/Token.sol/Token.json';
 import addresses from '../environments/contract-address.json';
 import { Store } from '@ngrx/store';
 import { TokenService } from './shared/services/token.service';
+import { ExchangeService } from './shared/services/exchange.service';
 //import * as actions from './store/provider.actions';
 //import * as interactions from './store/interactions';
 
@@ -26,7 +27,8 @@ export class AppComponent implements OnInit {
   constructor(
     private store: Store<{ connection: string }>,
     private providerService: ProviderService,
-    private tokenService: TokenService
+    private tokenService: TokenService,
+    private exchangeService: ExchangeService
   ) {}
 
   async ngOnInit() {
@@ -54,6 +56,10 @@ export class AppComponent implements OnInit {
     const PCHO = addresses[networkId].PCHO;
     const JEDY = addresses[networkId].JEDY;
     this.loadTokens(provider, [PCHO.address, JEDY.address]);
+
+    // Load exchange smart contract
+    const exchange = addresses[networkId].exchange;
+    this.exchangeService.loadExchange(provider, exchange.address);
     //await loadTokens(provider, [PCHO.address, JEDY.address], dispatch);
 
     //await provider.send('eth_requestAccounts', []); // <- this promps user to connect metamask
