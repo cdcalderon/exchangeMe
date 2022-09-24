@@ -39,16 +39,16 @@ export const loadAccount = async (store: Store) => {
   return account;
 };
 
-export const loadToken = async (
-  provider: ethers.providers.Web3Provider,
-  address: string,
-  store: Store
-) => {
-  const token = new ethers.Contract(address, TokenJson.abi, provider) as Token;
-  const symbol = await token.symbol();
-  store.dispatch(
-    tokenActions.loadToken({ loaded: true, contract: 'test', symbol: symbol })
-  );
+// export const loadToken = async (
+//   provider: ethers.providers.Web3Provider,
+//   address: string,
+//   store: Store
+// ) => {
+//   const token = new ethers.Contract(address, TokenJson.abi, provider) as Token;
+//   const symbol = await token.symbol();
+//   store.dispatch(
+//     tokenActions.loadToken({ loaded: true, contract: 'test', symbol: symbol })
+//   );
 
-  return token;
-};
+//   return token;
+// };

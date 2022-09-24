@@ -1,7 +1,12 @@
 import { createAction, props } from '@ngrx/store';
-import { TokenState } from './token.reducer';
+import { LoadTokenState, TokenState } from './token.reducer';
 
-export const loadToken = createAction(
-  '[TOKEN_LOADED] TokenLoaded',
-  props<TokenState>()
+export const loadToken1 = createAction(
+  '[TOKEN_LOADED_1] TokenLoaded_1',
+  props<LoadTokenState>()
+);
+
+export const loadToken2 = createAction(
+  '[TOKEN_LOADED_2] TokenLoaded_2',
+  props<LoadTokenState>()
 );

@@ -13,15 +13,33 @@ import { Token } from 'bc/typechain-types';
 export class TokenService {
   constructor(private store: Store<{ connection: string }>) {}
 
-  async loadToken(provider: ethers.providers.Web3Provider, address: string) {
-    const token = new ethers.Contract(
-      address,
+  async loadTokens(
+    provider: ethers.providers.Web3Provider,
+    addresses: string[]
+  ) {
+    let token = new ethers.Contract(
+      addresses[0],
       TokenJson.abi,
       provider
     ) as Token;
-    const symbol = await token.symbol();
+
+    let symbol = await token.symbol();
     this.store.dispatch(
-      tokenActions.loadToken({ loaded: true, contract: 'test', symbol: symbol })
+      tokenActions.loadToken1({
+        loaded: true,
+        contract: token.address,
+        symbol: symbol,
+      })
+    );
+
+    token = new ethers.Contract(addresses[1], TokenJson.abi, provider) as Token;
+    symbol = await token.symbol();
+    this.store.dispatch(
+      tokenActions.loadToken2({
+        loaded: true,
+        contract: token.address,
+        symbol: symbol,
+      })
     );
 
     return token;

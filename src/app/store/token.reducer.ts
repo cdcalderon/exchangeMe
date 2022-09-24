@@ -1,24 +1,36 @@
 import { createReducer, on } from '@ngrx/store';
-import { loadToken } from './token.actions';
+import { loadToken1, loadToken2 } from './token.actions';
 
-export interface TokenState {
+export interface LoadTokenState {
   loaded: boolean;
   contract: any;
   symbol: string;
 }
 
+export interface TokenState {
+  loaded: boolean;
+  contracts: any[];
+  symbols: string[];
+}
+
 export const tokenInitialState: TokenState = {
   loaded: false,
-  contract: null,
-  symbol: '',
+  contracts: [],
+  symbols: [],
 };
 
 export const tokenReducer = createReducer(
   tokenInitialState,
-  on(loadToken, (state, { loaded, contract, symbol }) => ({
+  on(loadToken1, (state, { loaded, contract, symbol }) => ({
     ...state,
     loaded,
-    contract,
-    symbol,
+    contracts: [...state.contracts, contract],
+    symbols: [...state.symbols, symbol],
+  })),
+  on(loadToken2, (state, { loaded, contract, symbol }) => ({
+    ...state,
+    loaded,
+    contracts: [...state.contracts, contract],
+    symbols: [...state.symbols, symbol],
   }))
 );
