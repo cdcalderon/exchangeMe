@@ -1,3 +1,4 @@
+import { AppService } from './app.service';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as providerActions from '../../store/provider.actions';
@@ -7,24 +8,32 @@ import TokenJson from '../../../../bc/artifacts/contracts/Token.sol/Token.json';
 declare let window: any;
 import * as _ from 'lodash';
 import { Token } from 'bc/typechain-types';
+import { AppState } from 'src/app/store/app.reducer';
+import { EventAggregator } from './helpers/event-aggregator';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProviderService {
-  constructor(private store: Store<{ connection: string }>) {}
+  constructor(
+    private store: Store<AppState>,
+    public eventAggregator: EventAggregator,
+    private appService: AppService
+  ) {}
 
   loadProvider(): ethers.providers.Web3Provider {
-    let connection = new ethers.providers.Web3Provider(window.ethereum);
+    let provider = new ethers.providers.Web3Provider(window.ethereum);
+    this.eventAggregator.providerConnection.next(provider);
+
     //const clonedConnection = JSON.parse(JSON.stringify(connection));
 
-    const clonedConnection = _.cloneDeep(connection);
+    const clonedConnection = _.cloneDeep(provider);
     console.log('clonec conneciton,,,,,  ', clonedConnection);
     this.store.dispatch(
-      providerActions.loadProvider({ connection: 'clonedConnection' })
+      providerActions.loadProvider({ connection: provider.connection })
     );
 
-    return connection;
+    return provider;
   }
 
   async loadNetwork(provider: ethers.providers.Web3Provider) {

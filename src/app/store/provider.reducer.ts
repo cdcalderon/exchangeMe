@@ -1,14 +1,14 @@
 import { loadProvider, loadNetwork, loadAccount } from './provider.actions';
 import { Action, createReducer, on } from '@ngrx/store';
 
-export interface State {
-  connection: string;
+export interface ProviderState {
+  connection: any;
   chainId: number;
   account: string;
 }
 
-export const initialState: State = {
-  connection: '',
+export const initialState: ProviderState = {
+  connection: {},
   chainId: 0,
   account: '',
 };

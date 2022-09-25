@@ -18,7 +18,8 @@
     <div class="collapse navbar-collapse" id="headerNav">
       <ul class="navbar-nav me-auto"></ul>
       <ul class="navbar-nav ml-auto">
-        <li>
+        <li class="nav-item">{{ account$ | async }}</li>
+        <li class="nav-item">
           <button type="button" class="btn btn-primary">Connect</button>
         </li>
       </ul>

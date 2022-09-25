@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
   signerAddress: any;
 
   constructor(
-    private store: Store<{ connection: string }>,
+    private store: Store<AppState>,
     private providerService: ProviderService,
     private tokenService: TokenService,
     private exchangeService: ExchangeService

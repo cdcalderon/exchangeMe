@@ -4,7 +4,7 @@ import * as exchange from './exchange.reducer';
 import { ActionReducerMap } from '@ngrx/store';
 
 export interface AppState {
-  provider: provider.State;
+  provider: provider.ProviderState;
   token: token.TokenState;
   exchange: exchange.ExchangeState;
 }

@@ -6,12 +6,13 @@ import TokenJson from '../../../../bc/artifacts/contracts/Token.sol/Token.json';
 declare let window: any;
 import * as _ from 'lodash';
 import { Token } from 'bc/typechain-types';
+import { AppState } from 'src/app/store/app.reducer';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TokenService {
-  constructor(private store: Store<{ connection: string }>) {}
+  constructor(private store: Store<AppState>) {}
 
   async loadTokens(
     provider: ethers.providers.Web3Provider,
