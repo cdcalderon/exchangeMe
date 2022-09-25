@@ -30,7 +30,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.provider$ = this.eventAggregator.providerConnection;
-
     this.account$ = this.store.select('provider').pipe(map((p) => p.account));
   }
 
@@ -43,6 +42,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subs.unsubscribe();
+    //this.subs.unsubscribe();
   }
 }

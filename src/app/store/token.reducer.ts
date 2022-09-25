@@ -24,8 +24,8 @@ export const tokenReducer = createReducer(
   on(loadToken1, (state, { loaded, contract, symbol }) => ({
     ...state,
     loaded,
-    contracts: [...state.contracts, contract],
-    symbols: [...state.symbols, symbol],
+    contracts: [contract],
+    symbols: [symbol],
   })),
   on(loadToken2, (state, { loaded, contract, symbol }) => ({
     ...state,

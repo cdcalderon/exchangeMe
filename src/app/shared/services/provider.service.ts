@@ -17,7 +17,7 @@ import { EventAggregator } from './helpers/event-aggregator';
 export class ProviderService {
   constructor(
     private store: Store<AppState>,
-    public eventAggregator: EventAggregator,
+    private eventAggregator: EventAggregator,
     private appService: AppService
   ) {}
 

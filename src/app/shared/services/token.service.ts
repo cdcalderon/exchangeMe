@@ -7,12 +7,16 @@ declare let window: any;
 import * as _ from 'lodash';
 import { Token } from 'bc/typechain-types';
 import { AppState } from 'src/app/store/app.reducer';
+import { EventAggregator } from './helpers/event-aggregator';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TokenService {
-  constructor(private store: Store<AppState>) {}
+  constructor(
+    private store: Store<AppState>,
+    private eventAggregator: EventAggregator
+  ) {}
 
   async loadTokens(
     provider: ethers.providers.Web3Provider,
@@ -32,6 +36,7 @@ export class TokenService {
         symbol: symbol,
       })
     );
+    this.eventAggregator.token1.next(token);
 
     token = new ethers.Contract(addresses[1], TokenJson.abi, provider) as Token;
     symbol = await token.symbol();
@@ -42,6 +47,7 @@ export class TokenService {
         symbol: symbol,
       })
     );
+    this.eventAggregator.token2.next(token);
 
     return token;
   }

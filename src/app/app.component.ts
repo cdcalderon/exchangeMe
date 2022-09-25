@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 declare let window: any;
 import { Component, OnInit } from '@angular/core';
 import Token from '../../bc/artifacts/contracts/Token.sol/Token.json';
-import addresses from '../environments/contract-address.json';
+import configContracts from '../environments/contract-address.json';
 import { Store } from '@ngrx/store';
 import { TokenService } from './shared/services/token.service';
 import { ExchangeService } from './shared/services/exchange.service';
@@ -52,13 +52,12 @@ export class AppComponent implements OnInit {
     });
 
     // Load token smart contracts
-    const networkId = 31337;
-    const PCHO = addresses[networkId].PCHO;
-    const JEDY = addresses[networkId].JEDY;
+    const PCHO = configContracts[chainId].PCHO;
+    const JEDY = configContracts[chainId].JEDY;
     this.loadTokens(provider, [PCHO.address, JEDY.address]);
 
     // Load exchange smart contract
-    const exchange = addresses[networkId].exchange;
+    const exchange = configContracts[chainId].exchange;
     this.exchangeService.loadExchange(provider, exchange.address);
     //await loadTokens(provider, [PCHO.address, JEDY.address], dispatch);
 
