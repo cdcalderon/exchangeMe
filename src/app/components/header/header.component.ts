@@ -7,6 +7,7 @@ import { EventAggregator } from 'src/app/shared/services/helpers/event-aggregato
 import { filter, map } from 'rxjs/operators';
 import { Observable, Subscription } from 'rxjs';
 import _ from 'lodash';
+import { ethers } from 'ethers';
 
 @Component({
   selector: 'app-header',
@@ -18,6 +19,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   account = '';
   subs: Subscription = {} as Subscription;
   account$!: Observable<string>;
+  provider$!: Observable<ethers.providers.Web3Provider>;
 
   constructor(
     private darkModeService: DarkModeService,
@@ -27,15 +29,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.subs = this.eventAggregator.providerConnection
-      .pipe(filter((provider) => !_.isEmpty(provider)))
-      .subscribe((provider) => this.providerService.loadAccount(provider));
+    this.provider$ = this.eventAggregator.providerConnection;
 
     this.account$ = this.store.select('provider').pipe(map((p) => p.account));
   }
 
   onToggle(): void {
     this.darkModeService.toggle();
+  }
+
+  loadAccount(provider: ethers.providers.Web3Provider) {
+    this.providerService.loadAccount(provider);
   }
 
   ngOnDestroy(): void {

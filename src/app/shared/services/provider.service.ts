@@ -47,7 +47,6 @@ export class ProviderService {
     const accounts = await window.ethereum.request({
       method: 'eth_requestAccounts',
     });
-
     const account = ethers.utils.getAddress(accounts[0]);
 
     this.store.dispatch(providerActions.loadAccount({ account }));

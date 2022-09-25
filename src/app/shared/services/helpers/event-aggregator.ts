@@ -8,6 +8,6 @@ import { ethers } from 'ethers';
 export class EventAggregator {
   public providerConnection =
     new BehaviorSubject<ethers.providers.Web3Provider>(
-      {} as ethers.providers.Web3Provider
+      null as unknown as ethers.providers.Web3Provider
     );
 }

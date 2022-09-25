@@ -17,10 +17,16 @@
     </button>
     <div class="collapse navbar-collapse" id="headerNav">
       <ul class="navbar-nav me-auto"></ul>
-      <ul class="navbar-nav ml-auto">
+      <ul class="navbar-nav ml-auto" *ngIf="provider$ | async as provider">
         <li class="nav-item">{{ account$ | async }}</li>
         <li class="nav-item">
-          <button type="button" class="btn btn-primary">Connect</button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="loadAccount(provider)"
+          >
+            Connect
+          </button>
         </li>
       </ul>
     </div>
