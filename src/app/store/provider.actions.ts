@@ -14,3 +14,8 @@ export const loadAccount = createAction(
   '[ACCOUNT_LOADED] AccountLoaded',
   props<{ account: string }>()
 );
+
+export const loadBalance = createAction(
+  '[ETHER_BALANCE_LOADED] BalanceLoaded',
+  props<{ balance: string }>()
+);

@@ -48,8 +48,14 @@ export class ProviderService {
       method: 'eth_requestAccounts',
     });
     const account = ethers.utils.getAddress(accounts[0]);
-
     this.store.dispatch(providerActions.loadAccount({ account }));
+
+    const balance = await provider.getBalance(account);
+    const formatedBalance = ethers.utils.formatEther(balance);
+    console.log(formatedBalance);
+    this.store.dispatch(
+      providerActions.loadBalance({ balance: formatedBalance })
+    );
 
     return account;
   }
