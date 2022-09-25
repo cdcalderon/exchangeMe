@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { ethers } from 'ethers';
-import { Token } from 'bc/typechain-types';
+import { Exchange, Token } from 'bc/typechain-types';
 
 @Injectable({
   providedIn: 'root',
@@ -11,4 +11,5 @@ export class EventAggregator {
     new BehaviorSubject<ethers.providers.Web3Provider>(null);
   public token1 = new BehaviorSubject<Token>(null);
   public token2 = new BehaviorSubject<Token>(null);
+  public exchange = new BehaviorSubject<Exchange>(null);
 }

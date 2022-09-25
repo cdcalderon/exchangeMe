@@ -1,5 +1,5 @@
 <div *ngIf="chainId$ | async as chainId; else notDeployed">
-  <div *ngIf="provider$ | async as provider" class="market-pairs">
+  <div class="market-pairs">
     <div class="input-group">
       <div class="input-group-prepend">
         <span class="input-group-text" id="inputGroup-sizing-sm">
@@ -82,7 +82,7 @@
                     configContractsSettings[chainId].JEDY.address
                   ],
                   chainId,
-                  provider
+                  contracts.provider
                 )
               "
             >
@@ -117,7 +117,7 @@
                     configContractsSettings[chainId].CHIH.address
                   ],
                   chainId,
-                  provider
+                  contracts.provider
                 )
               "
             >
@@ -130,53 +130,56 @@
       </div>
     </div>
   </div>
-
-  <div class="carousel-cell">
-    <div class="market-carousel-item">
-      <div class="market-carousel-item-name">
-        <img src="../../../assets/img/icon/1.png" alt="" />
-        <strong>Ethereum</strong>
+  <ng-container *ngIf="exchangeBalances$ | async as exchangeBalances">
+    <div *ngIf="token$ | async as token">
+      <div class="carousel-cell">
+        <div class="market-carousel-item">
+          <div class="market-carousel-item-name">
+            <img src="../../../assets/img/icon/1.png" alt="" />
+            <strong>{{ token.symbols[0] }}</strong>
+          </div>
+          <h2>Wallet {{ token.balances[0] }} {{ token.symbols[0] }}</h2>
+          <p>Exchange {{ exchangeBalances[0] }}</p>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">{{
+              token.symbols[0]
+            }}</span>
+            <input
+              type="text"
+              class="form-control"
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-default"
+            />
+          </div>
+          <a routerLink="/wallet"><button class="btn buy">Deposit</button></a>
+          <a routerLink="/wallet"><button class="btn sell">Withdraw</button></a>
+        </div>
       </div>
-      <h2>237394.06 ETH</h2>
-      <p>$12,000</p>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="inputGroup-sizing-default"
-          >PCHO</span
-        >
-        <input
-          type="text"
-          class="form-control"
-          aria-label="Sizing example input"
-          aria-describedby="inputGroup-sizing-default"
-        />
+      <div class="carousel-cell">
+        <div class="market-carousel-item">
+          <div class="market-carousel-item-name">
+            <img src="../../../assets/img/icon/5.png" alt="" />
+            <strong>{{ token.symbols[1] }}</strong>
+          </div>
+          <h2>Wallet {{ token.balances[1] }} {{ token.symbols[1] }}</h2>
+          <p>Exchange {{ exchangeBalances[1] }}</p>
+          <div class="input-group mb-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">{{
+              token.symbols[1]
+            }}</span>
+            <input
+              type="text"
+              class="form-control"
+              aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-default"
+            />
+          </div>
+          <a routerLink="/wallet"><button class="btn buy">Deposit</button></a>
+          <a routerLink="/wallet"><button class="btn sell">Withdraw</button></a>
+        </div>
       </div>
-      <a routerLink="/wallet"><button class="btn buy">Deposit</button></a>
-      <a routerLink="/wallet"><button class="btn sell">Withdraw</button></a>
     </div>
-  </div>
-  <div class="carousel-cell">
-    <div class="market-carousel-item">
-      <div class="market-carousel-item-name">
-        <img src="../../../assets/img/icon/5.png" alt="" />
-        <strong>Coti</strong>
-      </div>
-      <h2>267211.06 COTI</h2>
-      <p>$21,000</p>
-      <div class="input-group mb-3">
-        <span class="input-group-text" id="inputGroup-sizing-default"
-          >JEDY</span
-        >
-        <input
-          type="text"
-          class="form-control"
-          aria-label="Sizing example input"
-          aria-describedby="inputGroup-sizing-default"
-        />
-      </div>
-      <a routerLink="/wallet"><button class="btn buy">Deposit</button></a>
-      <a routerLink="/wallet"><button class="btn sell">Withdraw</button></a>
-    </div>
-  </div>
+  </ng-container>
 </div>
 
 <ng-template #notDeployed>Not connected</ng-template>

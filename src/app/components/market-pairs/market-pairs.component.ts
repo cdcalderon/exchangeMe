@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { map, Observable } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import { TokenService } from 'src/app/shared/services/token.service';
 import { AppState } from 'src/app/store/app.reducer';
 import configContracts from '../../../environments/contract-address.json';
 import { ethers } from 'ethers';
 import { EventAggregator } from 'src/app/shared/services/helpers/event-aggregator';
+import { ResolvedContracts } from 'src/app/shared/models/resolvedContracts';
+import { TokenState } from 'src/app/store/token.reducer';
 
 @Component({
   selector: 'app-market-pairs',
@@ -16,6 +18,12 @@ export class MarketPairsComponent implements OnInit {
   configContractsSettings = configContracts;
   chainId$!: Observable<number>;
   provider$!: Observable<ethers.providers.Web3Provider>;
+  tokenBalances$!: Observable<string[]>;
+  exchangeBalances$!: Observable<string[]>;
+  symbols$!: Observable<string[]>;
+  token$!: Observable<TokenState>;
+
+  @Input() contracts: ResolvedContracts;
 
   constructor(
     private store: Store<AppState>,
@@ -26,6 +34,25 @@ export class MarketPairsComponent implements OnInit {
   ngOnInit(): void {
     this.provider$ = this.eventAggregator.providerConnection;
     this.chainId$ = this.store.select('provider').pipe(map((p) => p.chainId));
+
+    this.store
+      .select('provider')
+      .pipe(
+        filter((p) => {
+          return !!p.account;
+        }),
+        map((p) => p.account)
+      )
+      .subscribe((account) => {
+        this.tokenService.loadBalances(
+          this.contracts.exchange,
+          [this.contracts.token1, this.contracts.token2],
+          account
+        );
+      });
+
+    this.token$ = this.store.select('token');
+    this.exchangeBalances$ = this.store.select('exchange', 'balances');
   }
 
   changeTokenPair(
