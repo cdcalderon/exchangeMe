@@ -75,4 +75,30 @@ export class TokenService {
     );
     this.store.dispatch(exchangeActions.loadExchangeToken2Balance({ balance }));
   }
+
+  async transferTokens(
+    provider: ethers.providers.Web3Provider,
+    exchange: Exchange,
+    transferType,
+    token: Token,
+    amount: number
+  ) {
+    let transaction;
+    try {
+      const signer = await provider.getSigner();
+      const amountToTransfer = ethers.utils.parseUnits(amount.toString(), 18);
+
+      transaction = await token
+        .connect(signer)
+        .approve(exchange.address, amountToTransfer);
+      await transaction.wait();
+      transaction = await exchange
+        .connect(signer)
+        .depositToken(token.address, amountToTransfer);
+
+      await transaction.wait();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }

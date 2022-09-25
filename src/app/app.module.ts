@@ -17,6 +17,7 @@ import { HistoryOrderComponent } from './components/history-order/history-order.
 import { OrderBookComponent } from './components/order-book/order-book.component';
 import { MarketHistoryComponent } from './components/market-history/market-history.component';
 import { HeaderComponent } from './components/header/header.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { HeaderComponent } from './components/header/header.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
     StoreModule.forRoot(appReducers),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states

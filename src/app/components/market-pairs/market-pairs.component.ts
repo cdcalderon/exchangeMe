@@ -8,6 +8,7 @@ import { ethers } from 'ethers';
 import { EventAggregator } from 'src/app/shared/services/helpers/event-aggregator';
 import { ResolvedContracts } from 'src/app/shared/models/resolvedContracts';
 import { TokenState } from 'src/app/store/token.reducer';
+import { Token } from 'bc/typechain-types';
 
 @Component({
   selector: 'app-market-pairs',
@@ -22,6 +23,7 @@ export class MarketPairsComponent implements OnInit {
   exchangeBalances$!: Observable<string[]>;
   symbols$!: Observable<string[]>;
   token$!: Observable<TokenState>;
+  token1TransferAmount: number;
 
   @Input() contracts: ResolvedContracts;
 
@@ -62,5 +64,15 @@ export class MarketPairsComponent implements OnInit {
   ) {
     //const tokenAddresses = configContracts[chainId];
     this.tokenService.loadTokens(provider, tokenPairAddresses);
+  }
+
+  deposit(token: Token, amount: number) {
+    this.tokenService.transferTokens(
+      this.contracts.provider,
+      this.contracts.exchange,
+      'Deposit',
+      token,
+      amount
+    );
   }
 }
