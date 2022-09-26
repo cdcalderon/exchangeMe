@@ -1,4 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  SimpleChanges,
+  OnChanges,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { filter, map, Observable } from 'rxjs';
 import { TokenService } from 'src/app/shared/services/token.service';
@@ -15,7 +21,7 @@ import { Token } from 'bc/typechain-types';
   templateUrl: './market-pairs.component.html',
   styleUrls: ['./market-pairs.component.scss'],
 })
-export class MarketPairsComponent implements OnInit {
+export class MarketPairsComponent implements OnInit, OnChanges {
   configContractsSettings = configContracts;
   chainId$!: Observable<number>;
   provider$!: Observable<ethers.providers.Web3Provider>;
@@ -26,12 +32,17 @@ export class MarketPairsComponent implements OnInit {
   token1TransferAmount: number;
 
   @Input() contracts: ResolvedContracts;
+  @Input() transferInProgress: boolean;
 
   constructor(
     private store: Store<AppState>,
     private tokenService: TokenService,
     private eventAggregator: EventAggregator
   ) {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    let tt = changes;
+  }
 
   ngOnInit(): void {
     this.provider$ = this.eventAggregator.providerConnection;

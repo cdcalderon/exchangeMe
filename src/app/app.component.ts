@@ -3,7 +3,7 @@ import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers';
 import { ethers } from 'ethers';
 
 declare let window: any;
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import Token from '../../bc/artifacts/contracts/Token.sol/Token.json';
 import configContracts from '../environments/contract-address.json';
 import { Store } from '@ngrx/store';
@@ -57,8 +57,15 @@ export class AppComponent implements OnInit {
     this.loadTokens(provider, [PCHO.address, JEDY.address]);
 
     // Load exchange smart contract
-    const exchange = configContracts[chainId].exchange;
-    this.exchangeService.loadExchange(provider, exchange.address);
+    const exchangeConfig = configContracts[chainId].exchange;
+    const exchangeContract = this.exchangeService.loadExchange(
+      provider,
+      exchangeConfig.address
+    );
+
+    // Listen to exchange events
+    this.exchangeService.subscribeToEvents(exchangeContract);
+
     //await loadTokens(provider, [PCHO.address, JEDY.address], dispatch);
 
     //await provider.send('eth_requestAccounts', []); // <- this promps user to connect metamask
@@ -68,11 +75,11 @@ export class AppComponent implements OnInit {
 
     // const connection = this.loadProvider();
 
-    provider.on('network', (newNetwork: any, oldNetwork: any) => {
-      if (oldNetwork) {
-        window.location.reload();
-      }
-    });
+    // provider.on('network', (newNetwork: any, oldNetwork: any) => {
+    //   if (oldNetwork) {
+    //     window.location.reload();
+    //   }
+    // });
 
     // this.signer = provider.getSigner();
     // console.log('carlos Provider  ', this.signer);

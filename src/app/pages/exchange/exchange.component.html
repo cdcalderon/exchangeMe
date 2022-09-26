@@ -5,7 +5,10 @@
       style="background-color: rgb(126, 126, 185)"
     >
       <!-- app-market-pairs -->
-      <app-market-pairs [contracts]="contracts"></app-market-pairs>
+      <app-market-pairs
+        [contracts]="contracts"
+        [transferInProgress]="transferInProgress$ | async"
+      ></app-market-pairs>
     </div>
     <div class="col-sm-12 col-md-6">
       <div class="darkMode">

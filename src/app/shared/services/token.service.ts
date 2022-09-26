@@ -84,6 +84,18 @@ export class TokenService {
     amount: number
   ) {
     let transaction;
+
+    const transaccionRequest = {
+      transaction: {
+        transactionType: 'Transfer',
+        isPending: true,
+        isSuccessful: false,
+        isError: false,
+      },
+      transferInProgress: true,
+    };
+
+    this.store.dispatch(exchangeActions.transferRequested(transaccionRequest));
     try {
       const signer = await provider.getSigner();
       const amountToTransfer = ethers.utils.parseUnits(amount.toString(), 18);
@@ -92,13 +104,23 @@ export class TokenService {
         .connect(signer)
         .approve(exchange.address, amountToTransfer);
       await transaction.wait();
+
       transaction = await exchange
         .connect(signer)
         .depositToken(token.address, amountToTransfer);
 
       await transaction.wait();
     } catch (error) {
-      console.log(error);
+      const transaccionFailed = {
+        transaction: {
+          transactionType: 'Transfer',
+          isPending: false,
+          isSuccessful: false,
+          isError: true,
+        },
+        transferInProgress: false,
+      };
+      this.store.dispatch(exchangeActions.transferRequested(transaccionFailed));
     }
   }
 }

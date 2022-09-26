@@ -16,7 +16,10 @@ export class ExchangeService {
     private eventAggregator: EventAggregator
   ) {}
 
-  async loadExchange(provider: ethers.providers.Web3Provider, address: string) {
+  async loadExchange(
+    provider: ethers.providers.Web3Provider,
+    address: string
+  ): Promise<Exchange> {
     const exchange = new ethers.Contract(
       address,
       ExchangeJson.abi,
@@ -27,5 +30,13 @@ export class ExchangeService {
       exchangeActions.loadExchange({ loaded: true, contract: exchange.address })
     );
     this.eventAggregator.exchange.next(exchange);
+
+    return exchange;
+  }
+
+  subscribeToEvents(exchange) {
+    exchange.on('Deposit', (token, user, amount, balance, event) => {
+      this.store.dispatch(exchangeActions.transferSuccess(event));
+    });
   }
 }
