@@ -30,6 +30,7 @@ export class MarketPairsComponent implements OnInit, OnChanges {
   symbols$!: Observable<string[]>;
   token$!: Observable<TokenState>;
   token1TransferAmount: number;
+  token2TransferAmount: number;
 
   @Input() contracts: ResolvedContracts;
   @Input() transferInProgress: boolean;
@@ -77,13 +78,16 @@ export class MarketPairsComponent implements OnInit, OnChanges {
     this.tokenService.loadTokens(provider, tokenPairAddresses);
   }
 
-  deposit(token: Token, amount: number) {
-    this.tokenService.transferTokens(
+  async deposit(token: Token, amount: number) {
+    await this.tokenService.transferTokens(
       this.contracts.provider,
       this.contracts.exchange,
       'Deposit',
       token,
       amount
     );
+
+    // this.token1TransferAmount = 0;
+    // this.token2TransferAmount = 0;
   }
 }
