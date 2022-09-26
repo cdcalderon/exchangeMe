@@ -160,7 +160,14 @@
               Deposit
             </button></a
           >
-          <a routerLink="/wallet"><button class="btn sell">Withdraw</button></a>
+          <a routerLink="/wallet"
+            ><button
+              (click)="withdraw(contracts.token1, token1TransferAmount)"
+              class="btn sell"
+            >
+              Withdraw
+            </button></a
+          >
         </div>
       </div>
       <div class="carousel-cell">
@@ -191,7 +198,14 @@
               Deposit
             </button></a
           >
-          <a routerLink="/wallet"><button class="btn sell">Withdraw</button></a>
+          <a routerLink="/wallet"
+            ><button
+              (click)="withdraw(contracts.token2, token2TransferAmount)"
+              class="btn sell"
+            >
+              Withdraw
+            </button></a
+          >
         </div>
       </div>
     </div>

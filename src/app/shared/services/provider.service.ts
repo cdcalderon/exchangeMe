@@ -52,7 +52,7 @@ export class ProviderService {
 
     const balance = await provider.getBalance(account);
     const formatedBalance = ethers.utils.formatEther(balance);
-    console.log(formatedBalance);
+
     this.store.dispatch(
       providerActions.loadBalance({ balance: formatedBalance })
     );

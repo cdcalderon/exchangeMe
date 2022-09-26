@@ -58,7 +58,7 @@ export class AppComponent implements OnInit {
 
     // Load exchange smart contract
     const exchangeConfig = configContracts[chainId].exchange;
-    const exchangeContract = this.exchangeService.loadExchange(
+    const exchangeContract = await this.exchangeService.loadExchange(
       provider,
       exchangeConfig.address
     );

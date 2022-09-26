@@ -6,7 +6,16 @@ import {
   OnChanges,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { filter, map, Observable } from 'rxjs';
+import {
+  filter,
+  map,
+  Observable,
+  switchMap,
+  forkJoin,
+  combineLatest,
+  take,
+  tap,
+} from 'rxjs';
 import { TokenService } from 'src/app/shared/services/token.service';
 import { AppState } from 'src/app/store/app.reducer';
 import configContracts from '../../../environments/contract-address.json';
@@ -49,33 +58,20 @@ export class MarketPairsComponent implements OnInit, OnChanges {
     this.provider$ = this.eventAggregator.providerConnection;
     this.chainId$ = this.store.select('provider').pipe(map((p) => p.chainId));
 
-    this.store
-      .select('provider')
-      .pipe(
-        filter((p) => {
-          return !!p.account;
-        }),
-        map((p) => p.account)
-      )
-      .subscribe((account) => {
-        this.tokenService.loadBalances(
-          this.contracts.exchange,
-          [this.contracts.token1, this.contracts.token2],
-          account
-        );
-      });
+    this.loadBalances();
 
     this.token$ = this.store.select('token');
     this.exchangeBalances$ = this.store.select('exchange', 'balances');
   }
 
-  changeTokenPair(
+  async changeTokenPair(
     tokenPairAddresses: string[],
     chainId: number,
     provider: ethers.providers.Web3Provider
   ) {
     //const tokenAddresses = configContracts[chainId];
-    this.tokenService.loadTokens(provider, tokenPairAddresses);
+    await this.tokenService.loadTokens(provider, tokenPairAddresses);
+    this.loadBalances();
   }
 
   async deposit(token: Token, amount: number) {
@@ -89,5 +85,46 @@ export class MarketPairsComponent implements OnInit, OnChanges {
 
     // this.token1TransferAmount = 0;
     // this.token2TransferAmount = 0;
+  }
+
+  async withdraw(token: Token, amount: number) {
+    await this.tokenService.transferTokens(
+      this.contracts.provider,
+      this.contracts.exchange,
+      'Withdraw',
+      token,
+      amount
+    );
+
+    // this.token1TransferAmount = 0;
+    // this.token2TransferAmount = 0;
+  }
+
+  loadBalances() {
+    const token1$ = this.eventAggregator.token1;
+    const token2$ = this.eventAggregator.token2;
+    const account$ = this.store.select('provider').pipe(
+      filter((p) => {
+        return !!p.account;
+      }),
+      map((p) => p.account)
+    );
+
+    combineLatest([token1$, token2$, account$])
+      .pipe(
+        take(1),
+        tap((result) => {
+          this.contracts.token1 = result[0];
+          this.contracts.token2 = result[1];
+        }),
+        switchMap((result) =>
+          this.tokenService.loadBalances(
+            this.contracts.exchange,
+            [result[0], result[1]],
+            result[2]
+          )
+        )
+      )
+      .subscribe();
   }
 }

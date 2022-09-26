@@ -100,14 +100,19 @@ export class TokenService {
       const signer = await provider.getSigner();
       const amountToTransfer = ethers.utils.parseUnits(amount.toString(), 18);
 
-      transaction = await token
-        .connect(signer)
-        .approve(exchange.address, amountToTransfer);
-      await transaction.wait();
-
-      transaction = await exchange
-        .connect(signer)
-        .depositToken(token.address, amountToTransfer);
+      if (transferType === 'Deposit') {
+        transaction = await token
+          .connect(signer)
+          .approve(exchange.address, amountToTransfer);
+        await transaction.wait();
+        transaction = await exchange
+          .connect(signer)
+          .depositToken(token.address, amountToTransfer);
+      } else {
+        transaction = await exchange
+          .connect(signer)
+          .withdrawToken(token.address, amountToTransfer);
+      }
 
       await transaction.wait();
     } catch (error) {
@@ -120,7 +125,7 @@ export class TokenService {
         },
         transferInProgress: false,
       };
-      this.store.dispatch(exchangeActions.transferRequested(transaccionFailed));
+      this.store.dispatch(exchangeActions.transferFailed(transaccionFailed));
     }
   }
 }

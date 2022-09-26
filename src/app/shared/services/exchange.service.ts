@@ -38,5 +38,9 @@ export class ExchangeService {
     exchange.on('Deposit', (token, user, amount, balance, event) => {
       this.store.dispatch(exchangeActions.transferSuccess(event));
     });
+
+    exchange.on('Withdraw', (token, user, amount, balance, event) => {
+      this.store.dispatch(exchangeActions.transferSuccess(event));
+    });
   }
 }
