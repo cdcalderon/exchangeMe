@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { ethers } from 'ethers';
@@ -13,8 +13,9 @@ import { AppState } from 'src/app/store/app.reducer';
 })
 export class ExchangeComponent implements OnInit {
   provider: ethers.providers.Web3Provider;
-  contracts: ResolvedContracts;
   transferInProgress$: Observable<boolean>;
+
+  @Input() contracts: ResolvedContracts;
   constructor(private route: ActivatedRoute, private store: Store<AppState>) {}
 
   ngOnInit(): void {
