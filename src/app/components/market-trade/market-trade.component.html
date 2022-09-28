@@ -24,98 +24,94 @@
     >
       <div class="d-flex justify-content-between">
         <div class="market-trade-buy">
-          <form>
-            <div class="input-group">
-              <input
-                type="number"
-                [(ngModel)]="orderBuyPrice"
-                class="form-control"
-                placeholder="Price"
-                required
-              />
-              <div class="input-group-append">
-                <span class="input-group-text">BTC</span>
-              </div>
+          <div class="input-group">
+            <input
+              type="number"
+              [(ngModel)]="orderBuyPrice"
+              class="form-control"
+              placeholder="Price"
+              required
+            />
+            <div class="input-group-append">
+              <span class="input-group-text">BTC</span>
             </div>
-            <div class="input-group">
-              <input
-                type="number"
-                [(ngModel)]="orderBuyAmount"
-                class="form-control"
-                placeholder="Amount"
-                required
-              />
-              <div class="input-group-append">
-                <span class="input-group-text">ETH</span>
-              </div>
+          </div>
+          <div class="input-group">
+            <input
+              type="number"
+              [(ngModel)]="orderBuyAmount"
+              class="form-control"
+              placeholder="Amount"
+              required
+            />
+            <div class="input-group-append">
+              <span class="input-group-text">ETH</span>
             </div>
-            <ul class="market-trade-list">
-              <li>
-                <a href="#">25%</a>
-              </li>
-              <li>
-                <a href="#">50%</a>
-              </li>
-              <li>
-                <a href="#">75%</a>
-              </li>
-              <li>
-                <a href="#">100%</a>
-              </li>
-            </ul>
-            <p>Available: <span>0 BTC = 0 USD</span></p>
-            <p>Volume: <span>0 BTC = 0 USD</span></p>
-            <p>Margin: <span>0 BTC = 0 USD</span></p>
-            <p>Fee: <span>0 BTC = 0 USD</span></p>
-            <button (click)="buyOrder()" type="submit" class="btn buy">
-              Buy
-            </button>
-          </form>
+          </div>
+          <ul class="market-trade-list">
+            <li>
+              <a href="#">25%</a>
+            </li>
+            <li>
+              <a href="#">50%</a>
+            </li>
+            <li>
+              <a href="#">75%</a>
+            </li>
+            <li>
+              <a href="#">100%</a>
+            </li>
+          </ul>
+          <p>Available: <span>0 BTC = 0 USD</span></p>
+          <p>Volume: <span>0 BTC = 0 USD</span></p>
+          <p>Margin: <span>0 BTC = 0 USD</span></p>
+          <p>Fee: <span>0 BTC = 0 USD</span></p>
+          <button (click)="buyOrder()" type="submit" class="btn buy">
+            Buy
+          </button>
         </div>
         <div class="market-trade-sell">
-          <form>
-            <div class="input-group">
-              <input
-                type="number"
-                class="form-control"
-                placeholder="Price"
-                required
-              />
-              <div class="input-group-append">
-                <span class="input-group-text">BTC</span>
-              </div>
+          <div class="input-group">
+            <input
+              type="number"
+              class="form-control"
+              placeholder="Price"
+              required
+            />
+            <div class="input-group-append">
+              <span class="input-group-text">BTC</span>
             </div>
-            <div class="input-group">
-              <input
-                type="number"
-                class="form-control"
-                placeholder="Amount"
-                required
-              />
-              <div class="input-group-append">
-                <span class="input-group-text">ETH</span>
-              </div>
+          </div>
+          <div class="input-group">
+            <input
+              type="number"
+              class="form-control"
+              placeholder="Amount"
+              required
+            />
+            <div class="input-group-append">
+              <span class="input-group-text">ETH</span>
             </div>
-            <ul class="market-trade-list">
-              <li>
-                <a href="#">25%</a>
-              </li>
-              <li>
-                <a href="#">50%</a>
-              </li>
-              <li>
-                <a href="#">75%</a>
-              </li>
-              <li>
-                <a href="#">100%</a>
-              </li>
-            </ul>
-            <p>Available: <span>0 BTC = 0 USD</span></p>
-            <p>Volume: <span>0 BTC = 0 USD</span></p>
-            <p>Margin: <span>0 BTC = 0 USD</span></p>
-            <p>Fee: <span>0 BTC = 0 USD</span></p>
-            <button class="btn sell">Sell</button>
-          </form>
+          </div>
+          <ul class="market-trade-list">
+            <li>
+              <a href="#">25%</a>
+            </li>
+            <li>
+              <a href="#">50%</a>
+            </li>
+            <li>
+              <a href="#">75%</a>
+            </li>
+            <li>
+              <a href="#">100%</a>
+            </li>
+          </ul>
+          <p>Available: <span>0 BTC = 0 USD</span></p>
+          <p>Volume: <span>0 BTC = 0 USD</span></p>
+          <p>Margin: <span>0 BTC = 0 USD</span></p>
+          <p>Fee: <span>0 BTC = 0 USD</span></p>
+          <button class="btn sell">Sell</button>
         </div>
       </div>
     </div>

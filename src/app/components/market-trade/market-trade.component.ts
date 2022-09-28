@@ -35,17 +35,26 @@ export class MarketTradeComponent implements OnInit {
 
     combineLatest([token1$, token2$, account$])
       .pipe(
-        take(1),
-        switchMap((result) =>
-          this.exchangeService.makeBuyOrder(
-            this.contracts.provider,
-            this.contracts.exchange,
-            [result[0], result[1]],
-            { amount: this.orderBuyAmount, price: this.orderBuyPrice }
-          )
-        )
+        take(1)
+        // switchMap((result) =>
+        //   this.exchangeService.makeBuyOrder(
+        //     this.contracts.provider,
+        //     this.contracts.exchange,
+        //     [result[0], result[1]],
+        //     { amount: 1, price: 1 }
+        //   )
+        // )
       )
-      .subscribe();
+      .subscribe((result) => {
+        this.exchangeService.makeBuyOrder(
+          this.contracts.provider,
+          this.contracts.exchange,
+          [result[0], result[1]],
+          {
+            amount: this.orderBuyAmount.toString(),
+            price: this.orderBuyPrice.toString(),
+          }
+        );
+      });
   }
-  //this.exchangeService.makeBuyOrder();
 }
