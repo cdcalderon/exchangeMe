@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { Exchange } from 'bc/typechain-types';
 import { ethers } from 'ethers';
 import { AppState } from 'src/app/store/app.reducer';
+import { Transaction } from 'src/app/store/exchange.reducer';
 import ExchangeJson from '../../../../bc/artifacts/contracts/Exchange.sol/Exchange.json';
 import * as exchangeActions from '../../store/exchange.actions';
 import { EventAggregator } from './helpers/event-aggregator';
@@ -56,7 +57,20 @@ export class ExchangeService {
         event
       ) => {
         const order = event.args;
-        this.store.dispatch(exchangeActions.newOrderSuccess({ order, event }));
+        const transaccionSuccess: Transaction = {
+          transactionType: 'New Order',
+          isPending: false,
+          isSuccessful: true,
+          isError: false,
+        };
+
+        this.store.dispatch(
+          exchangeActions.newOrderSuccess({
+            order,
+            event,
+            transaction: transaccionSuccess,
+          })
+        );
       }
     );
   }

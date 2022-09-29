@@ -11,7 +11,7 @@ import {
   transferSuccess,
 } from './exchange.actions';
 
-export interface Transaccion {
+export interface Transaction {
   transactionType: string;
   isPending: boolean;
   isSuccessful: boolean;
@@ -33,17 +33,18 @@ export interface ExchangeTokenBalanceLoadedState {
 }
 
 export interface ExchangeTransferRequest {
-  transaction: Transaccion;
+  transaction: Transaction;
   transferInProgress: boolean;
 }
 
 export interface ExchangeOrderRequest {
-  transaction: Transaccion;
+  transaction: Transaction;
 }
 
 export interface ExchangeOrderSuccess {
   order: any;
   event: any;
+  transaction: Transaction;
 }
 
 export interface ExchangeTransferSuccess {
@@ -55,7 +56,7 @@ export interface ExchangeState {
   contract: any;
   balances: string[];
   events: any[];
-  transaction: Transaccion;
+  transaction: Transaction;
   transferInProgress: boolean;
   order?: any;
   allOrders?: Orders;
@@ -114,7 +115,7 @@ export const exchangeReducer = createReducer(
     ...state,
     transaction,
   })),
-  on(newOrderSuccess, (state, { order, event }) => {
+  on(newOrderSuccess, (state, { order, event, transaction }) => {
     // Prevent duplicate orders
     let index = state.allOrders.data.findIndex((o) => o.id === order.id);
     let data;
@@ -124,7 +125,20 @@ export const exchangeReducer = createReducer(
     } else {
       data = state.allOrders.data;
     }
-    return { ...state };
+    return {
+      ...state,
+      allOrders: {
+        ...state.allOrders,
+        data,
+      },
+      transaction,
+      // transaction: {
+      //   transactionType: 'New Order',
+      //   isPending: false,
+      //   isSuccessful: true,
+      // },
+      events: [event, ...state.events],
+    };
   }),
   on(newOrderFailed, (state, { transaction }) => ({
     ...state,
