@@ -117,7 +117,7 @@ export class ExchangeService {
     }
   }
 
-  async makeSellOrder(provider, exchange, tokens, order, dispatch) {
+  async makeSellOrder(provider, exchange, tokens, order) {
     const tokenGet = tokens[1].address;
     const amountGet = ethers.utils.parseUnits(
       (order.amount * order.price).toString(),
@@ -126,7 +126,17 @@ export class ExchangeService {
     const tokenGive = tokens[0].address;
     const amountGive = ethers.utils.parseUnits(order.amount, 18);
 
-    //dispatch -> new order;
+    const transaccionNewOrderRequest = {
+      transaction: {
+        transactionType: 'New Order',
+        isPending: true,
+        isSuccessful: false,
+        isError: false,
+      },
+    };
+    this.store.dispatch(
+      exchangeActions.newOrderCreated(transaccionNewOrderRequest)
+    );
 
     try {
       const signer = await provider.getSigner();
@@ -135,7 +145,17 @@ export class ExchangeService {
         .makeOrder(tokenGet, amountGet, tokenGive, amountGive);
       await transaction.wait();
     } catch (error) {
-      //dispatch -> order fail;
+      const transaccionNewOrderRequestFailed = {
+        transaction: {
+          transactionType: 'New Order',
+          isPending: false,
+          isSuccessful: false,
+          isError: true,
+        },
+      };
+      this.store.dispatch(
+        exchangeActions.newOrderFailed(transaccionNewOrderRequestFailed)
+      );
     }
   }
 }

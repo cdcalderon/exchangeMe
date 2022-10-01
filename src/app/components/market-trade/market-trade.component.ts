@@ -14,6 +14,8 @@ import { AppState } from 'src/app/store/app.reducer';
 export class MarketTradeComponent implements OnInit {
   orderBuyPrice: number;
   orderBuyAmount: number;
+  orderSellPrice: number;
+  orderSellAmount: number;
   @Input() contracts: ResolvedContracts;
   constructor(
     private exchangeService: ExchangeService,
@@ -53,6 +55,31 @@ export class MarketTradeComponent implements OnInit {
           {
             amount: this.orderBuyAmount.toString(),
             price: this.orderBuyPrice.toString(),
+          }
+        );
+      });
+  }
+
+  sellOrder() {
+    const token1$ = this.eventAggregator.token1;
+    const token2$ = this.eventAggregator.token2;
+    const account$ = this.store.select('provider').pipe(
+      filter((p) => {
+        return !!p.account;
+      }),
+      map((p) => p.account)
+    );
+
+    combineLatest([token1$, token2$, account$])
+      .pipe(take(1))
+      .subscribe((result) => {
+        this.exchangeService.makeSellOrder(
+          this.contracts.provider,
+          this.contracts.exchange,
+          [result[0], result[1]],
+          {
+            amount: this.orderSellAmount.toString(),
+            price: this.orderSellPrice.toString(),
           }
         );
       });
