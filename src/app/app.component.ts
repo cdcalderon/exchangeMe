@@ -63,6 +63,9 @@ export class AppComponent implements OnInit {
       exchangeConfig.address
     );
 
+    // Fetch all orders: Open, Cancelled, Filled
+    this.exchangeService.loadAllOrders(provider, exchangeContract);
+
     // Listen to exchange events
     this.exchangeService.subscribeToEvents(exchangeContract);
 

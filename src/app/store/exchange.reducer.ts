@@ -1,5 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import {
+  allOrdersLoaded,
   loadExchange,
   loadExchangeToken1Balance,
   loadExchangeToken2Balance,
@@ -49,6 +50,10 @@ export interface ExchangeOrderSuccess {
 
 export interface ExchangeTransferSuccess {
   event: any;
+}
+
+export interface ExchangeOrdersLoaded {
+  allOrders: Orders;
 }
 
 export interface ExchangeState {
@@ -117,7 +122,9 @@ export const exchangeReducer = createReducer(
   })),
   on(newOrderSuccess, (state, { order, event, transaction }) => {
     // Prevent duplicate orders
-    let index = state.allOrders.data.findIndex((o) => o.id === order.id);
+    let index = state.allOrders.data.findIndex(
+      (o) => o.id.toString() === order.id.toString()
+    );
     let data;
 
     if (index === -1) {
@@ -132,16 +139,18 @@ export const exchangeReducer = createReducer(
         data,
       },
       transaction,
-      // transaction: {
-      //   transactionType: 'New Order',
-      //   isPending: false,
-      //   isSuccessful: true,
-      // },
       events: [event, ...state.events],
     };
   }),
   on(newOrderFailed, (state, { transaction }) => ({
     ...state,
     transaction,
+  })),
+
+  // Orders Loaded
+
+  on(allOrdersLoaded, (state, { allOrders }) => ({
+    ...state,
+    allOrders,
   }))
 );

@@ -3,7 +3,11 @@ import { Store } from '@ngrx/store';
 import { Exchange } from 'bc/typechain-types';
 import { ethers } from 'ethers';
 import { AppState } from 'src/app/store/app.reducer';
-import { Transaction } from 'src/app/store/exchange.reducer';
+import {
+  ExchangeOrdersLoaded,
+  Orders,
+  Transaction,
+} from 'src/app/store/exchange.reducer';
 import ExchangeJson from '../../../../bc/artifacts/contracts/Exchange.sol/Exchange.json';
 import * as exchangeActions from '../../store/exchange.actions';
 import { EventAggregator } from './helpers/event-aggregator';
@@ -157,5 +161,16 @@ export class ExchangeService {
         exchangeActions.newOrderFailed(transaccionNewOrderRequestFailed)
       );
     }
+  }
+
+  async loadAllOrders(provider, exchange) {
+    const block = await provider.getBlockNumber();
+    const fromBlock = 0;
+
+    // Fetch all orders
+    const orderStream = await exchange.queryFilter('Order', fromBlock, block);
+    const allOrders = orderStream.map((event) => event.args);
+    const orders: Orders = { loaded: true, data: allOrders };
+    this.store.dispatch(exchangeActions.allOrdersLoaded({ allOrders: orders }));
   }
 }
