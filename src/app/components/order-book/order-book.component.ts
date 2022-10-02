@@ -13,13 +13,13 @@ export class OrderBookComponent implements OnInit {
   allOrders$: Observable<any>; // TODO: create interfaces
   constructor(private store: Store<fromStore.AppState>) {
     this.store
-      .select(fromStore.getSymbols)
+      .select(fromStore.getSymbolsSelector)
       .subscribe((symbols) => (this.symbols = symbols)); // TODO: use async pipe or unsubscribe OnDestroy
-
-    this.allOrders$ = this.store.select(fromStore.getAllOrdersState);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.allOrders$ = this.store.select(fromStore.getAllOrdersSelector);
+  }
 
   getSellOrderShadow(index: number): string {
     if (8 - index === 0) {

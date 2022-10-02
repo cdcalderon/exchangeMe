@@ -3,11 +3,7 @@ import { Store } from '@ngrx/store';
 import { Exchange } from 'bc/typechain-types';
 import { ethers } from 'ethers';
 import { AppState } from 'src/app/store/app.reducer';
-import {
-  ExchangeOrdersLoaded,
-  Orders,
-  Transaction,
-} from 'src/app/store/exchange.reducer';
+import { Orders, Transaction } from 'src/app/store/exchange.reducer';
 import ExchangeJson from '../../../../bc/artifacts/contracts/Exchange.sol/Exchange.json';
 import * as exchangeActions from '../../store/exchange.actions';
 import { EventAggregator } from './helpers/event-aggregator';
@@ -179,7 +175,7 @@ export class ExchangeService {
     );
 
     // Fetch filled orders from all orders
-    const tradeStream = await exchange.queryFilter('Trade', block, block);
+    const tradeStream = await exchange.queryFilter('Trade', fromBlock, block);
     const filledOrders = tradeStream.map((event) => event.args);
     const ordersFilled: Orders = { loaded: true, data: filledOrders };
     this.store.dispatch(
