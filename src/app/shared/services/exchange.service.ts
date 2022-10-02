@@ -167,6 +167,25 @@ export class ExchangeService {
     const block = await provider.getBlockNumber();
     const fromBlock = 0;
 
+    // Fetch canceled orders from all orders
+    const cancelStream = await exchange.queryFilter('Cancel', fromBlock, block);
+    const cancelledOrders = cancelStream.map((event) => event.args);
+    const ordersCancelled: Orders = { loaded: true, data: cancelledOrders };
+
+    this.store.dispatch(
+      exchangeActions.ordersCancelledLoaded({
+        cancelledOrders: ordersCancelled,
+      })
+    );
+
+    // Fetch filled orders from all orders
+    const tradeStream = await exchange.queryFilter('Trade', block, block);
+    const filledOrders = tradeStream.map((event) => event.args);
+    const ordersFilled: Orders = { loaded: true, data: filledOrders };
+    this.store.dispatch(
+      exchangeActions.ordersFilledLoaded({ filledOrders: ordersFilled })
+    );
+
     // Fetch all orders
     const orderStream = await exchange.queryFilter('Order', fromBlock, block);
     const allOrders = orderStream.map((event) => event.args);

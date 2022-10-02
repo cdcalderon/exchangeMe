@@ -53,3 +53,5 @@ export const tokenReducer = createReducer(
     balances: [...state.balances, balance],
   }))
 );
+
+export const getSymbols = (state: TokenState) => state.symbols;

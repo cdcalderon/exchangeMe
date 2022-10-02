@@ -7,6 +7,8 @@ import {
   newOrderCreated,
   newOrderFailed,
   newOrderSuccess,
+  ordersCancelledLoaded,
+  ordersFilledLoaded,
   transferFailed,
   transferRequested,
   transferSuccess,
@@ -56,6 +58,14 @@ export interface ExchangeOrdersLoaded {
   allOrders: Orders;
 }
 
+export interface ExchangeOrdersCancelledLoaded {
+  cancelledOrders: Orders;
+}
+
+export interface ExchangeOrdersFilledLoaded {
+  filledOrders: Orders;
+}
+
 export interface ExchangeState {
   loaded: boolean;
   contract: any;
@@ -65,6 +75,8 @@ export interface ExchangeState {
   transferInProgress: boolean;
   order?: any;
   allOrders?: Orders;
+  cancelledOrders?: Orders;
+  filledOrders?: Orders;
 }
 
 export const initialState: ExchangeState = {
@@ -75,6 +87,14 @@ export const initialState: ExchangeState = {
   transaction: null,
   transferInProgress: false,
   allOrders: {
+    loaded: false,
+    data: [],
+  },
+  cancelledOrders: {
+    loaded: false,
+    data: [],
+  },
+  filledOrders: {
     loaded: false,
     data: [],
   },
@@ -152,5 +172,15 @@ export const exchangeReducer = createReducer(
   on(allOrdersLoaded, (state, { allOrders }) => ({
     ...state,
     allOrders,
+  })),
+  on(ordersCancelledLoaded, (state, { cancelledOrders }) => ({
+    ...state,
+    cancelledOrders,
+  })),
+  on(ordersFilledLoaded, (state, { filledOrders }) => ({
+    ...state,
+    filledOrders,
   }))
 );
+
+export const getAllOrders = (state: ExchangeState) => state.allOrders.data;

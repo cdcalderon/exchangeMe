@@ -2,6 +2,8 @@ import { createAction, props } from '@ngrx/store';
 import {
   ExchangeLoadedState,
   ExchangeOrderRequest,
+  ExchangeOrdersCancelledLoaded,
+  ExchangeOrdersFilledLoaded,
   ExchangeOrdersLoaded,
   ExchangeOrderSuccess,
   ExchangeTokenBalanceLoadedState,
@@ -57,4 +59,14 @@ export const newOrderFailed = createAction(
 export const allOrdersLoaded = createAction(
   '[ALL_ORDERS_LOADED] AllOrdersLoaded',
   props<ExchangeOrdersLoaded>()
+);
+
+export const ordersCancelledLoaded = createAction(
+  '[CANCELLED_ORDERS_LOADED] CancelOrdersLoaded',
+  props<ExchangeOrdersCancelledLoaded>()
+);
+
+export const ordersFilledLoaded = createAction(
+  '[FILLED_ORDERS_LOADED] FilledOrdersLoaded',
+  props<ExchangeOrdersFilledLoaded>()
 );

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/store/app.reducer';
+import { Observable } from 'rxjs';
+import * as fromStore from 'src/app/store/app.reducer';
 
 @Component({
   selector: 'app-order-book',
@@ -9,11 +10,24 @@ import { AppState } from 'src/app/store/app.reducer';
 })
 export class OrderBookComponent implements OnInit {
   symbols: string[];
-  constructor(private store: Store<AppState>) {
+  allOrders$: Observable<any>; // TODO: create interfaces
+  constructor(private store: Store<fromStore.AppState>) {
     this.store
-      .select('token', 'symbols')
-      .subscribe((symbols) => (this.symbols = symbols));
+      .select(fromStore.getSymbols)
+      .subscribe((symbols) => (this.symbols = symbols)); // TODO: use async pipe or unsubscribe OnDestroy
+
+    this.allOrders$ = this.store.select(fromStore.getAllOrdersState);
   }
 
   ngOnInit(): void {}
+
+  getSellOrderShadow(index: number): string {
+    if (8 - index === 0) {
+      return '-0';
+    } else if (8 - index < 0) {
+      return '';
+    }
+
+    return '-' + (8 - index) + '0';
+  }
 }

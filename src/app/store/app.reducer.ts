@@ -1,7 +1,17 @@
 import * as provider from './provider.reducer';
 import * as token from './token.reducer';
 import * as exchange from './exchange.reducer';
-import { ActionReducerMap } from '@ngrx/store';
+import {
+  ActionReducerMap,
+  createFeatureSelector,
+  createSelector,
+} from '@ngrx/store';
+import { get, groupBy, reject } from 'lodash';
+import * as moment from 'moment';
+import { ethers } from 'ethers';
+
+const GREEN = '#25CE8F';
+const RED = '#F45353';
 
 export interface AppState {
   provider: provider.ProviderState;
@@ -13,4 +23,120 @@ export const appReducers: ActionReducerMap<AppState> = {
   token: token.tokenReducer,
   provider: provider.providerReducer,
   exchange: exchange.exchangeReducer,
+};
+
+export const getTokenState = createFeatureSelector<token.TokenState>('token');
+export const getProviderState =
+  createFeatureSelector<provider.ProviderState>('provider');
+export const getExchangeState =
+  createFeatureSelector<exchange.ExchangeState>('exchange');
+
+// Exchange state
+export const getAllOrdersState = createSelector(
+  getExchangeState,
+  getTokenState,
+  (exchange, token) => {
+    const tokens = token.contracts;
+    let orders: any = openOrders(exchange);
+
+    // Filter orders by selected tokens
+    orders = orders.filter(
+      (o) => o.tokenGet === tokens[0] || o.tokenGet === tokens[1]
+    );
+    orders = orders.filter(
+      (o) => o.tokenGive === tokens[0] || o.tokenGive === tokens[1]
+    );
+
+    // Decorate orders
+    orders = decorateOrderBookOrders(orders, tokens);
+
+    // Group orders by "orderType"
+    orders = groupBy(orders, 'orderType');
+
+    // Fetch buy orders
+    const buyOrders = get(orders, 'buy', []);
+
+    // Sort buy orders by token price
+    orders = {
+      ...orders,
+      buyOrders: buyOrders.sort((a, b) => b.tokenPrice - a.tokenPrice),
+    };
+
+    // Fetch sell orders
+    const sellOrders = get(orders, 'sell', []);
+
+    // Sort sell orders by token price
+    orders = {
+      ...orders,
+      sellOrders: sellOrders.sort((a, b) => b.tokenPrice - a.tokenPrice),
+    };
+
+    return orders;
+  }
+);
+
+// Token state
+export const getSymbols = createSelector(getTokenState, token.getSymbols);
+
+const openOrders = (exchange) => {
+  const all = get(exchange, 'allOrders.data', []);
+  const filled = get(exchange, 'filledOrders.data', []);
+  const cancelled = get(exchange, 'cancelledOrders.data', []);
+
+  const openOrders = reject(all, (order) => {
+    const orderFilled = filled.some(
+      (o) => o.id.toString() === order.id.toString()
+    );
+    const orderCancelled = cancelled.some(
+      (o) => o.id.toString() === order.id.toString()
+    );
+    return orderFilled || orderCancelled;
+  });
+  return openOrders;
+};
+
+const decorateOrder = (order, tokens) => {
+  let token0Amount, token1Amount;
+
+  // Note: PCHO should be considered token0, JEDY or CHIH is considered token1
+  // Example: Giving JEDY in exchange for PCHO
+  if (order.tokenGive === tokens[1]) {
+    token0Amount = order.amountGive; // The amount of PCHO we are giving
+    token1Amount = order.amountGet; // The amount of JEDY we want...
+  } else {
+    token0Amount = order.amountGet; // The amount of DApp we want
+    token1Amount = order.amountGive; // The amount of JEDY we are giving...
+  }
+
+  // Calculate token price to 5 decimal places
+  const precision = 100000;
+  let tokenPrice = token1Amount / token0Amount;
+  tokenPrice = Math.round(tokenPrice * precision) / precision;
+
+  return {
+    ...order,
+    token1Amount: ethers.utils.formatUnits(token1Amount, 'ether'),
+    token0Amount: ethers.utils.formatUnits(token0Amount, 'ether'),
+    tokenPrice,
+    formattedTimestamp: moment.unix(order.timestamp).format('h:mm:ssa d MMM D'),
+  };
+};
+
+const decorateOrderBookOrders = (orders, tokens) => {
+  return orders.map((order) => {
+    order = decorateOrder(order, tokens);
+    order = decorateOrderBookOrder(order, tokens);
+    return order;
+  });
+};
+
+const decorateOrderBookOrder = (order, tokens) => {
+  const orderType = order.tokenGive === tokens[1] ? 'buy' : 'sell';
+
+  return {
+    ...order,
+    orderType,
+    orderTypeClass: orderType === 'buy' ? GREEN : RED,
+    orderFillAction: orderType === 'buy' ? 'sell' : 'buy',
+  };
 };
