@@ -156,6 +156,39 @@ export const myOpenOrdersSelector = createSelector(
   }
 );
 
+export const myFilledOrdersSelector = createSelector(
+  getExchangeState,
+  getTokensWithAccoutSelector,
+  (exchange, tokensAccount) => {
+    const tokens = tokensAccount.tokens;
+    if (!tokens[0] || !tokens[1]) {
+      return;
+    }
+
+    let orders: any = get(exchange, 'filledOrders.data', []);
+    // Find our orders
+    orders = orders.filter(
+      (o) =>
+        o.user === tokensAccount.account || o.creator === tokensAccount.account
+    );
+    // Filter orders for current trading pair
+    orders = orders.filter(
+      (o) => o.tokenGet === tokens[0] || o.tokenGet === tokens[1]
+    );
+    orders = orders.filter(
+      (o) => o.tokenGive === tokens[0] || o.tokenGive === tokens[1]
+    );
+
+    // Sort by date descending
+    orders = orders.sort((a, b) => b.timestamp - a.timestamp);
+
+    // Decorate orders - add display attributes
+    orders = decorateMyFilledOrders(orders, tokensAccount.account, tokens);
+
+    return orders;
+  }
+);
+
 // -------------------------------------------------------------------------------------
 // Helpers
 const openOrders = (exchange) => {
@@ -271,5 +304,31 @@ const decorateMyOpenOrder = (order, tokens) => {
     ...order,
     orderType,
     orderTypeClass: orderType === 'buy' ? GREEN : RED,
+  };
+};
+
+const decorateMyFilledOrders = (orders, account, tokens) => {
+  return orders.map((order) => {
+    order = decorateOrder(order, tokens);
+    order = decorateMyFilledOrder(order, account, tokens);
+    return order;
+  });
+};
+
+const decorateMyFilledOrder = (order, account, tokens) => {
+  const myOrder = order.creator === account;
+
+  let orderType;
+  if (myOrder) {
+    orderType = order.tokenGive === tokens[1].address ? 'buy' : 'sell';
+  } else {
+    orderType = order.tokenGive === tokens[1].address ? 'sell' : 'buy';
+  }
+
+  return {
+    ...order,
+    orderType,
+    orderClass: orderType === 'buy' ? GREEN : RED,
+    orderSign: orderType === 'buy' ? '+' : '-',
   };
 };

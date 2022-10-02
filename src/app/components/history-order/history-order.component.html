@@ -220,89 +220,40 @@
       role="tabpanel"
       aria-labelledby="balance-tab"
     >
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Time</th>
-              <th>All pairs</th>
-              <th>Buy/Sell</th>
-              <th>Price</th>
-              <th>Amount</th>
-              <th>Executed</th>
-              <th>Unexecuted</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>2:40 PM</td>
-              <td>ETH/BTC</td>
-              <td class="green">BUY</td>
-              <td>$444</td>
-              <td>41</td>
-              <td>
-                <i class="icon ion-md-checkmark-circle-outline green"></i>
-              </td>
-              <td>-</td>
-            </tr>
-            <tr>
-              <td>2:40 PM</td>
-              <td>ETH/BTC</td>
-              <td class="green">BUY</td>
-              <td>$444</td>
-              <td>41</td>
-              <td>
-                <i class="icon ion-md-close-circle-outline red"></i>
-              </td>
-              <td>-</td>
-            </tr>
-            <tr>
-              <td>2:40 PM</td>
-              <td>ETH/BTC</td>
-              <td class="green">BUY</td>
-              <td>$444</td>
-              <td>41</td>
-              <td>
-                <i class="icon ion-md-checkmark-circle-outline green"></i>
-              </td>
-              <td>-</td>
-            </tr>
-            <tr>
-              <td>2:40 PM</td>
-              <td>ETH/BTC</td>
-              <td class="red">SELL</td>
-              <td>$444</td>
-              <td>41</td>
-              <td>
-                <i class="icon ion-md-close-circle-outline red"></i>
-              </td>
-              <td>-</td>
-            </tr>
-            <tr>
-              <td>2:40 PM</td>
-              <td>ETH/BTC</td>
-              <td class="red">SELL</td>
-              <td>$444</td>
-              <td>41</td>
-              <td>
-                <i class="icon ion-md-close-circle-outline red"></i>
-              </td>
-              <td>-</td>
-            </tr>
-            <tr>
-              <td>2:40 PM</td>
-              <td>ETH/BTC</td>
-              <td class="red">SELL</td>
-              <td>$444</td>
-              <td>41</td>
-              <td>
-                <i class="icon ion-md-checkmark-circle-outline green"></i>
-              </td>
-              <td>-</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <ng-container *ngIf="myFilledOrders$ | async as myFilledOrders">
+        <div class="table-responsive">
+          <table class="table" *ngIf="myFilledOrders?.length; else nodata">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>All pairs</th>
+                <th>Buy/Sell</th>
+                <th>Price</th>
+                <th>Amount</th>
+                <th>Executed</th>
+                <th>Unexecuted</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let order of myFilledOrders">
+                <td>{{ order.formattedTimestamp }}</td>
+                <td>{{ symbols[0] }}/{{ symbols[1] }}</td>
+                <td [ngStyle]="{ color: order.orderClass }">
+                  {{ order.orderType | uppercase }}
+                </td>
+                <td>{{ order.tokenPrice }}</td>
+                <td [ngStyle]="{ color: order.orderClass }">
+                  {{ order.orderSign }}{{ order.token0Amount }}
+                </td>
+                <td>
+                  <i class="icon ion-md-checkmark-circle-outline green"></i>
+                </td>
+                <td>-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>
