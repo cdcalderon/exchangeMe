@@ -75,6 +75,17 @@ export const getAllOrdersSelector = createSelector(
   }
 );
 
+export const getTokensWithAccoutSelector = createSelector(
+  getTokenState,
+  getProviderState,
+  (token, provider) => {
+    return {
+      tokens: token.contracts,
+      account: provider.account,
+    };
+  }
+);
+
 // Token state
 export const getSymbolsSelector = createSelector(
   getTokenState,
@@ -107,6 +118,38 @@ export const filledOrdersSelector = createSelector(
     orders = decorateFilledOrders(orders, tokens);
 
     // Sort orders by date descending for display
+    orders = orders.sort((a, b) => b.timestamp - a.timestamp);
+
+    return orders;
+  }
+);
+
+export const myOpenOrdersSelector = createSelector(
+  getExchangeState,
+  getTokensWithAccoutSelector,
+  (exchange, tokensAccount) => {
+    const tokens = tokensAccount.tokens;
+    if (!tokens[0] || !tokens[1]) {
+      return;
+    }
+
+    let orders: any = openOrders(exchange);
+
+    // Filter orders created by current account
+    orders = orders.filter((o) => o.user === tokensAccount.account);
+
+    // Filter orders by token addresses
+    orders = orders.filter(
+      (o) => o.tokenGet === tokens[0] || o.tokenGet === tokens[1]
+    );
+    orders = orders.filter(
+      (o) => o.tokenGive === tokens[0] || o.tokenGive === tokens[1]
+    );
+
+    // Decorate orders - add display attributes
+    orders = decorateMyOpenOrders(orders, tokens);
+
+    // Sort orders by date descending
     orders = orders.sort((a, b) => b.timestamp - a.timestamp);
 
     return orders;
@@ -211,4 +254,22 @@ const tokenPriceClass = (tokenPrice, orderId, previousOrder) => {
   } else {
     return RED; // danger
   }
+};
+
+const decorateMyOpenOrders = (orders, tokens) => {
+  return orders.map((order) => {
+    order = decorateOrder(order, tokens);
+    order = decorateMyOpenOrder(order, tokens);
+    return order;
+  });
+};
+
+const decorateMyOpenOrder = (order, tokens) => {
+  let orderType = order.tokenGive === tokens[1] ? 'buy' : 'sell';
+
+  return {
+    ...order,
+    orderType,
+    orderTypeClass: orderType === 'buy' ? GREEN : RED,
+  };
 };
