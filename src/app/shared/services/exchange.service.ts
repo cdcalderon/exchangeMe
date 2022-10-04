@@ -73,6 +73,23 @@ export class ExchangeService {
         );
       }
     );
+
+    exchange.on(
+      'Cancel',
+      (
+        id,
+        user,
+        tokenGet,
+        amountGet,
+        tokenGive,
+        amountGive,
+        timestamp,
+        event
+      ) => {
+        const order = event.args;
+        // dispatch ORDER_CANCEL_SUCCESS with order and event
+      }
+    );
   }
 
   async makeBuyOrder(provider, exchange, tokens, order) {
@@ -187,5 +204,36 @@ export class ExchangeService {
     const allOrders = orderStream.map((event) => event.args);
     const orders: Orders = { loaded: true, data: allOrders };
     this.store.dispatch(exchangeActions.allOrdersLoaded({ allOrders: orders }));
+  }
+
+  async cancelOrder(provider, exchange, order) {
+    const transaccionCancelOrderRequest = {
+      transaction: {
+        transactionType: 'Cancel',
+        isPending: true,
+        isSuccessful: false,
+        isError: false,
+      },
+    };
+    this.store.dispatch(
+      exchangeActions.orderCancelRequest(transaccionCancelOrderRequest)
+    );
+    try {
+      const signer = await provider.getSigner();
+      const transaction = await exchange.connect(signer).cancelOrder(order.id);
+      await transaction.wait();
+    } catch (error) {
+      const transaccionCancelOrderFailed = {
+        transaction: {
+          transactionType: 'Cancel',
+          isPending: false,
+          isSuccessful: false,
+          isError: true,
+        },
+      };
+      this.store.dispatch(
+        exchangeActions.orderCancelRequest(transaccionCancelOrderFailed)
+      );
+    }
   }
 }
