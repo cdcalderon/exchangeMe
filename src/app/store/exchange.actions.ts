@@ -26,6 +26,7 @@ export const loadExchangeToken2Balance = createAction(
   props<ExchangeTokenBalanceLoadedState>()
 );
 
+// Deposits
 export const transferRequested = createAction(
   '[TRANSFER_REQUESTED] TransferRequested',
   props<ExchangeTransferRequest>()
@@ -41,6 +42,7 @@ export const transferFailed = createAction(
   props<ExchangeTransferRequest>()
 );
 
+// create Orders
 export const newOrderCreated = createAction(
   '[NEW_ORDER_CREATED] NewOrderCreated',
   props<ExchangeOrderRequest>()
@@ -56,6 +58,7 @@ export const newOrderFailed = createAction(
   props<ExchangeOrderRequest>()
 );
 
+// Orders Loaded
 export const allOrdersLoaded = createAction(
   '[ALL_ORDERS_LOADED] AllOrdersLoaded',
   props<ExchangeOrdersLoaded>()
