@@ -12,6 +12,7 @@ import {
   orderCancelSuccess,
   orderFillFailed,
   orderFillRequest,
+  orderFillSuccess,
   ordersCancelledLoaded,
   ordersFilledLoaded,
   transferFailed,
@@ -91,6 +92,12 @@ export interface ExchangeOrderFillRequest {
 
 export interface ExchangeOrderFillFailed {
   transaction: Transaction;
+}
+
+export interface ExchangeOrderFillSuccess {
+  transaction: Transaction;
+  filledOrder: any;
+  event: any;
 }
 
 export interface ExchangeState {
@@ -236,7 +243,30 @@ export const exchangeReducer = createReducer(
   on(orderFillFailed, (state, { transaction }) => ({
     ...state,
     transaction,
-  }))
+  })),
+  on(orderFillSuccess, (state, { transaction, filledOrder, event }) => {
+    let data;
+    // Prevent duplicate orders
+    let index = state.filledOrders.data.findIndex(
+      (order) => order.id.toString() === filledOrder.id.toString()
+    );
+
+    if (index === -1) {
+      data = [...state.filledOrders.data, filledOrder];
+    } else {
+      data = state.allOrders.data;
+    }
+
+    return {
+      ...state,
+      transaction,
+      filledOrders: {
+        ...state.filledOrders,
+        data,
+      },
+      events: [event, ...state.events],
+    };
+  })
 );
 
 export const getAllOrders = (state: ExchangeState) => state.allOrders.data;

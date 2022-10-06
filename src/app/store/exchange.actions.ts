@@ -6,6 +6,7 @@ import {
   ExchangeOrderCancelSuccess,
   ExchangeOrderFillFailed,
   ExchangeOrderFillRequest,
+  ExchangeOrderFillSuccess,
   ExchangeOrderRequest,
   ExchangeOrdersCancelledLoaded,
   ExchangeOrdersFilledLoaded,
@@ -102,4 +103,9 @@ export const orderFillRequest = createAction(
 export const orderFillFailed = createAction(
   '[ORDER_FILL_FAIL] OrderFillFailed',
   props<ExchangeOrderFillFailed>()
+);
+
+export const orderFillSuccess = createAction(
+  '[ORDER_FILL_SUCCESS] OrderFillSucess',
+  props<ExchangeOrderFillSuccess>()
 );
