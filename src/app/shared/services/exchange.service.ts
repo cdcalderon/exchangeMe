@@ -248,4 +248,17 @@ export class ExchangeService {
       );
     }
   }
+
+  async fillOrder(provider, exchange, order) {
+    // TODO:
+    // dispatch ORDER_FILL_REQUESTED
+
+    try {
+      const signer = await provider.getSigner();
+      const transaction = await exchange.connect(signer).fillOrder(order.id);
+      await transaction.wait();
+    } catch (error) {
+      // dispatch ORDER_FILL_FAIL
+    }
+  }
 }
