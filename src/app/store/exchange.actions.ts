@@ -4,6 +4,8 @@ import {
   ExchangeOrderCancelFailed,
   ExchangeOrderCancelRequest,
   ExchangeOrderCancelSuccess,
+  ExchangeOrderFillFailed,
+  ExchangeOrderFillRequest,
   ExchangeOrderRequest,
   ExchangeOrdersCancelledLoaded,
   ExchangeOrdersFilledLoaded,
@@ -90,4 +92,14 @@ export const orderCancelFailed = createAction(
 export const orderCancelSuccess = createAction(
   '[ORDER_CANCEL_SUCCESS] OrderCancelSuccess',
   props<ExchangeOrderCancelSuccess>()
+);
+
+export const orderFillRequest = createAction(
+  '[ORDER_FILL_REQUEST] OrderFillRequest',
+  props<ExchangeOrderFillRequest>()
+);
+
+export const orderFillFailed = createAction(
+  '[ORDER_FILL_FAIL] OrderFillFailed',
+  props<ExchangeOrderFillFailed>()
 );

@@ -102,6 +102,24 @@ export class ExchangeService {
         );
       }
     );
+
+    exchange.on(
+      'Trade',
+      (
+        id,
+        user,
+        tokenGet,
+        amountGet,
+        tokenGive,
+        amountGive,
+        creator,
+        timestamp,
+        event
+      ) => {
+        const order = event.args;
+        // -> dispatch ORDER_FILL_SUCCESS
+      }
+    );
   }
 
   async makeBuyOrder(provider, exchange, tokens, order) {
