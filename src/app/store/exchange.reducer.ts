@@ -9,6 +9,7 @@ import {
   newOrderSuccess,
   orderCancelFailed,
   orderCancelRequest,
+  orderCancelSuccess,
   ordersCancelledLoaded,
   ordersFilledLoaded,
   transferFailed,
@@ -74,6 +75,12 @@ export interface ExchangeOrderCancelRequest {
 
 export interface ExchangeOrderCancelFailed {
   transaction: Transaction;
+}
+
+export interface ExchangeOrderCancelSuccess {
+  transaction: Transaction;
+  cancelledOrder: Orders;
+  event: any;
 }
 
 export interface ExchangeState {
@@ -200,6 +207,15 @@ export const exchangeReducer = createReducer(
   on(orderCancelFailed, (state, { transaction }) => ({
     ...state,
     transaction,
+  })),
+  on(orderCancelSuccess, (state, { transaction, cancelledOrder, event }) => ({
+    ...state,
+    transaction,
+    cancelledOrders: {
+      ...state.cancelledOrders,
+      data: [...state.cancelledOrders.data, cancelledOrder],
+    },
+    events: [event, ...state.events],
   }))
 );
 

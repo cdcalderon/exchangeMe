@@ -3,6 +3,7 @@ import {
   ExchangeLoadedState,
   ExchangeOrderCancelFailed,
   ExchangeOrderCancelRequest,
+  ExchangeOrderCancelSuccess,
   ExchangeOrderRequest,
   ExchangeOrdersCancelledLoaded,
   ExchangeOrdersFilledLoaded,
@@ -84,4 +85,9 @@ export const orderCancelRequest = createAction(
 export const orderCancelFailed = createAction(
   '[ORDER_CANCEL_FAILED] OrderCancelFailed',
   props<ExchangeOrderCancelFailed>()
+);
+
+export const orderCancelSuccess = createAction(
+  '[ORDER_CANCEL_SUCCESS] OrderCancelSuccess',
+  props<ExchangeOrderCancelSuccess>()
 );
