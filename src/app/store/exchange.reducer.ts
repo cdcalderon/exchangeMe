@@ -252,6 +252,7 @@ export const exchangeReducer = createReducer(
     );
 
     if (index === -1) {
+      // not exist
       data = [...state.filledOrders.data, filledOrder];
     } else {
       data = state.allOrders.data;

@@ -116,8 +116,20 @@ export class ExchangeService {
         timestamp,
         event
       ) => {
-        const order = event.args;
-        // -> dispatch ORDER_FILL_SUCCESS
+        const filledOrder = event.args;
+        const transaccionSuccess: Transaction = {
+          transactionType: 'Cancel',
+          isPending: false,
+          isSuccessful: true,
+          isError: false,
+        };
+        this.store.dispatch(
+          exchangeActions.orderFillSuccess({
+            transaction: transaccionSuccess,
+            filledOrder,
+            event,
+          })
+        );
       }
     );
   }
