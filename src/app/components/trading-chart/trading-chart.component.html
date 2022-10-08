@@ -1,3 +1,11 @@
 <div class="main-chart mb15">
-  <div id="tradingview_123"></div>
+  <!-- <div id="tradingview_123"></div> -->
+  <div style="text-align: center">
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [xaxis]="chartOptions.xaxis"
+      [title]="chartOptions.title"
+    ></apx-chart>
+  </div>
 </div>

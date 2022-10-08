@@ -18,6 +18,7 @@ import { OrderBookComponent } from './components/order-book/order-book.component
 import { MarketHistoryComponent } from './components/market-history/market-history.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FormsModule } from '@angular/forms';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { FormsModule } from '@angular/forms';
       logOnly: environment.production, // Restrict extension to log-only mode
       autoPause: true, // Pauses recording actions and state changes when the extension window is not open
     }),
+    NgApexchartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
