@@ -30,4 +30,6 @@ export class OrderBookComponent implements OnInit {
 
     return '-' + (8 - index) + '0';
   }
+
+  fillOrder(order) {}
 }
