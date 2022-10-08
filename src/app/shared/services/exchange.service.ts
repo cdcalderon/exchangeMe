@@ -268,15 +268,33 @@ export class ExchangeService {
   }
 
   async fillOrder(provider, exchange, order) {
-    // TODO:
-    // dispatch ORDER_FILL_REQUESTED
-
+    const transaccionFillOrderRequest = {
+      transaction: {
+        transactionType: 'Fill Order',
+        isPending: true,
+        isSuccessful: false,
+        isError: false,
+      },
+    };
+    this.store.dispatch(
+      exchangeActions.orderFillRequest(transaccionFillOrderRequest)
+    );
     try {
       const signer = await provider.getSigner();
       const transaction = await exchange.connect(signer).fillOrder(order.id);
       await transaction.wait();
     } catch (error) {
-      // dispatch ORDER_FILL_FAIL
+      const transaccionFillOrderFailed = {
+        transaction: {
+          transactionType: 'Fill Order',
+          isPending: false,
+          isSuccessful: false,
+          isError: true,
+        },
+      };
+      this.store.dispatch(
+        exchangeActions.orderFillFailed(transaccionFillOrderFailed)
+      );
     }
   }
 }
