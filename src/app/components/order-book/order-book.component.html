@@ -36,6 +36,7 @@
       <tr
         *ngFor="let order of allOrders.buyOrders; let i = index"
         [ngClass]="'green-bg' + getSellOrderShadow(i)"
+        (click)="fillOrder(order)"
       >
         <td class="green">{{ order.token0Amount }}</td>
         <td>{{ order.tokenPrice }}</td>
