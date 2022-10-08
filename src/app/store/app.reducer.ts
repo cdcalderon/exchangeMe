@@ -6,7 +6,7 @@ import {
   createFeatureSelector,
   createSelector,
 } from '@ngrx/store';
-import { get, groupBy, reject } from 'lodash';
+import { get, groupBy, maxBy, minBy, reject } from 'lodash';
 import * as moment from 'moment';
 import { ethers } from 'ethers';
 
@@ -189,6 +189,52 @@ export const myFilledOrdersSelector = createSelector(
   }
 );
 
+export const priceChartSelector = createSelector(
+  getExchangeState,
+  getTokenState,
+  (exchange, token) => {
+    const tokens = token.contracts;
+
+    let orders: any = get(exchange, 'filledOrders.data', []);
+    // Filter orders by selected tokens
+    orders = orders.filter(
+      (o) => o.tokenGet === tokens[0] || o.tokenGet === tokens[1]
+    );
+    orders = orders.filter(
+      (o) => o.tokenGive === tokens[0] || o.tokenGive === tokens[1]
+    );
+
+    // Sort orders by date ascending to compare history
+    orders = orders.sort((a, b) => a.timestamp - b.timestamp);
+
+    // Decorate orders - add display attributes
+    orders = orders.map((o) => decorateOrder(o, tokens));
+
+    // Get last 2 order for final price & price change
+    let secondLastOrder, lastOrder;
+    [secondLastOrder, lastOrder] = orders.slice(
+      orders.length - 2,
+      orders.length
+    );
+
+    // get last order price
+    const lastPrice = get(lastOrder, 'tokenPrice', 0);
+
+    // get second last order price
+    const secondLastPrice = get(secondLastOrder, 'tokenPrice', 0);
+
+    return {
+      lastPrice,
+      lastPriceChange: lastPrice >= secondLastPrice ? '+' : '-',
+      series: [
+        {
+          data: buildGraphData(orders),
+        },
+      ],
+    };
+  }
+);
+
 // -------------------------------------------------------------------------------------
 // Helpers
 const openOrders = (exchange) => {
@@ -331,4 +377,33 @@ const decorateMyFilledOrder = (order, account, tokens) => {
     orderClass: orderType === 'buy' ? GREEN : RED,
     orderSign: orderType === 'buy' ? '+' : '-',
   };
+};
+
+const buildGraphData = (orders) => {
+  // Group the orders by hour for the graph
+  orders = groupBy(orders, (o) =>
+    moment.unix(o.timestamp).startOf('hour').format()
+  );
+
+  // Get each hour where data exists
+  const hours = Object.keys(orders);
+
+  // Build the graph series
+  const graphData = hours.map((hour) => {
+    // Fetch all orders from current hour
+    const group = orders[hour];
+
+    // Calculate price values: open, high, low, close
+    const open = group[0]; // first order
+    const high: any = maxBy(group, 'tokenPrice'); // high price
+    const low: any = minBy(group, 'tokenPrice'); // low price
+    const close = group[group.length - 1]; // last order
+
+    return {
+      x: new Date(hour),
+      y: [open.tokenPrice, high.tokenPrice, low.tokenPrice, close.tokenPrice],
+    };
+  });
+
+  return graphData;
 };

@@ -1,10 +1,11 @@
 <div class="main-chart mb15">
   <!-- <div id="tradingview_123"></div> -->
-  <div style="text-align: center">
+  <div id="chart" *ngIf="priceChart$ | async as priceChart">
     <apx-chart
-      [series]="chartOptions.series"
+      [series]="priceChart.series"
       [chart]="chartOptions.chart"
       [xaxis]="chartOptions.xaxis"
+      [yaxis]="chartOptions.yaxis"
       [title]="chartOptions.title"
     ></apx-chart>
   </div>
