@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable, take } from 'rxjs';
+import { ExchangeService } from 'src/app/shared/services/exchange.service';
+import { EventAggregator } from 'src/app/shared/services/helpers/event-aggregator';
 import * as fromStore from 'src/app/store/app.reducer';
 
 @Component({
@@ -11,7 +13,11 @@ import * as fromStore from 'src/app/store/app.reducer';
 export class OrderBookComponent implements OnInit {
   symbols: string[];
   allOrders$: Observable<any>; // TODO: create interfaces
-  constructor(private store: Store<fromStore.AppState>) {
+  constructor(
+    private store: Store<fromStore.AppState>,
+    private exchangeService: ExchangeService,
+    private eventAggregator: EventAggregator
+  ) {
     this.store
       .select(fromStore.getSymbolsSelector)
       .subscribe((symbols) => (this.symbols = symbols)); // TODO: use async pipe or unsubscribe OnDestroy
@@ -31,5 +37,14 @@ export class OrderBookComponent implements OnInit {
     return '-' + (8 - index) + '0';
   }
 
-  fillOrder(order) {}
+  fillOrder(order) {
+    const exchange$ = this.eventAggregator.exchange;
+    const provider$ = this.eventAggregator.providerConnection;
+
+    combineLatest([provider$, exchange$])
+      .pipe(take(1))
+      .subscribe((result) => {
+        this.exchangeService.fillOrder(result[0], result[1], order);
+      });
+  }
 }
