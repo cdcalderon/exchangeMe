@@ -21,7 +21,6 @@ export class ExchangeComponent implements OnInit {
   ngOnInit(): void {
     this.route.data.subscribe((data) => {
       this.contracts = data['contractResolver'];
-      //this.provider = data as ethers.providers.Web3Provider;
     });
 
     this.transferInProgress$ = this.store.select(
