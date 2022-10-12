@@ -24,9 +24,6 @@ export class ProviderService {
   loadProvider(): ethers.providers.Web3Provider {
     let provider = new ethers.providers.Web3Provider(window.ethereum);
     this.eventAggregator.providerConnection.next(provider);
-
-    //const clonedConnection = JSON.parse(JSON.stringify(connection));
-
     const clonedConnection = _.cloneDeep(provider);
     console.log('clonec conneciton,,,,,  ', clonedConnection);
     this.store.dispatch(

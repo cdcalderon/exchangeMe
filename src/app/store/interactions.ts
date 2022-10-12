@@ -9,8 +9,6 @@ import { Token } from 'bc/typechain-types';
 
 export const loadProvider = (store: Store) => {
   let connection = new ethers.providers.Web3Provider(window.ethereum);
-  //const clonedConnection = JSON.parse(JSON.stringify(connection));
-
   const clonedConnection = _.cloneDeep(connection);
   console.log('clonec conneciton,,,,,  ', clonedConnection);
   store.dispatch(actions.loadProvider({ connection: 'clonedConnection' }));
