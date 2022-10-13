@@ -19,6 +19,7 @@ import { MarketHistoryComponent } from './components/market-history/market-histo
 import { HeaderComponent } from './components/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     HistoryOrderComponent,
     OrderBookComponent,
     MarketHistoryComponent,
+    ModalComponent,
   ],
   imports: [
     BrowserModule,
