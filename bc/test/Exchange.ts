@@ -38,8 +38,6 @@ describe('Exchange', () => {
       .connect(deployer)
       .transfer(user1.address, tokens(100));
     await transferToken1Transaction.wait();
-
-    exchange = await Exchange.deploy(feeAccount.address, feePercent);
   });
 
   describe('Deployment', () => {
