@@ -31,6 +31,7 @@ async function main() {
   await exchange.deployed();
   console.log(`Exchange Deployed to: ${exchange.address}`);
 
+  // TODO: Add chainId
   const configurationHardHatNetwork = {
     [31337]: {
       exchange: {
