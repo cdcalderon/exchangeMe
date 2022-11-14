@@ -152,7 +152,7 @@
               [(ngModel)]="token1TransferAmount"
             />
           </div>
-          <a routerLink="/wallet"
+          <a
             ><button
               (click)="deposit(contracts.token1, token1TransferAmount)"
               class="btn buy"
@@ -160,7 +160,7 @@
               Deposit
             </button></a
           >
-          <a routerLink="/wallet"
+          <a
             ><button
               (click)="withdraw(contracts.token1, token1TransferAmount)"
               class="btn sell"
@@ -190,7 +190,7 @@
               [(ngModel)]="token2TransferAmount"
             />
           </div>
-          <a routerLink="/wallet"
+          <a
             ><button
               (click)="deposit(contracts.token2, token2TransferAmount)"
               class="btn buy"
@@ -198,7 +198,7 @@
               Deposit
             </button></a
           >
-          <a routerLink="/wallet"
+          <a
             ><button
               (click)="withdraw(contracts.token2, token2TransferAmount)"
               class="btn sell"

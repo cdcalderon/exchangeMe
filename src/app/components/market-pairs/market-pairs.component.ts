@@ -62,6 +62,10 @@ export class MarketPairsComponent implements OnInit, OnChanges {
 
     this.token$ = this.store.select('token');
     this.exchangeBalances$ = this.store.select('exchange', 'balances');
+
+    this.eventAggregator.reloadBalances.subscribe(
+      (reloadNeeded) => reloadNeeded && this.loadBalances()
+    );
   }
 
   async changeTokenPair(

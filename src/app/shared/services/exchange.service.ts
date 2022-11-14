@@ -37,7 +37,29 @@ export class ExchangeService {
 
   subscribeToEvents(exchange) {
     exchange.on('Deposit', (token, user, amount, balance, event) => {
+      console.log(
+        'Deposit Complete..........',
+        ethers.utils.formatEther(event.args.balance),
+        0
+      );
       this.store.dispatch(exchangeActions.transferSuccess(event));
+      if (event?.args?.balance) {
+        this.eventAggregator.reloadBalances.next(true);
+        // this.store.dispatch(
+        //   exchangeActions.exchangeToken1BalanceUpdated({
+        //     balance: ethers.utils.formatEther(event.args.balance),
+        //     index: 0,
+        //   })
+        // );
+        // const amountV = ethers.utils.formatEther(amount);
+        // const balanceV = ethers.utils.formatEther(balance);
+        // this.store.dispatch(
+        //   tokenActions.tokenBalanceUpdated({
+        //     balance: ethers.utils.formatEther(amount),
+        //     index: 0,
+        //   })
+        // );
+      }
     });
 
     exchange.on('Withdraw', (token, user, amount, balance, event) => {

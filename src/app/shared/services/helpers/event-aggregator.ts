@@ -12,4 +12,5 @@ export class EventAggregator {
   public token1 = new BehaviorSubject<Token>(null);
   public token2 = new BehaviorSubject<Token>(null);
   public exchange = new BehaviorSubject<Exchange>(null);
+  public reloadBalances = new BehaviorSubject<boolean>(false);
 }
