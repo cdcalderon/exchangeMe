@@ -20,6 +20,8 @@ import { HeaderComponent } from './components/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { ModalComponent } from './components/modal/modal.component';
+import { ToasterComponent } from './components/toaster/toaster.component';
+import { ToastComponent } from './components/toast/toast.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,8 @@ import { ModalComponent } from './components/modal/modal.component';
     OrderBookComponent,
     MarketHistoryComponent,
     ModalComponent,
+    ToasterComponent,
+    ToastComponent,
   ],
   imports: [
     BrowserModule,
