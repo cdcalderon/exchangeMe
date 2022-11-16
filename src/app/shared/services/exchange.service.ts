@@ -7,6 +7,7 @@ import { Orders, Transaction } from 'src/app/store/exchange.reducer';
 import ExchangeJson from '../../../../bc/artifacts/contracts/Exchange.sol/Exchange.json';
 import * as exchangeActions from '../../store/exchange.actions';
 import { EventAggregator } from './helpers/event-aggregator';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,8 @@ import { EventAggregator } from './helpers/event-aggregator';
 export class ExchangeService {
   constructor(
     private store: Store<AppState>,
-    private eventAggregator: EventAggregator
+    private eventAggregator: EventAggregator,
+    private toastService: ToastService
   ) {}
 
   async loadExchange(
@@ -45,6 +47,7 @@ export class ExchangeService {
       this.store.dispatch(exchangeActions.transferSuccess(event));
       if (event?.args?.balance) {
         this.eventAggregator.reloadBalances.next(true);
+        this.toastService.showSuccessToast('Deposit', 'Deposit complete.');
         // this.store.dispatch(
         //   exchangeActions.exchangeToken1BalanceUpdated({
         //     balance: ethers.utils.formatEther(event.args.balance),
