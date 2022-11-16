@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Exchange } from 'bc/typechain-types';
 import { ethers } from 'ethers';
+import { map } from 'rxjs';
 import { AppState } from 'src/app/store/app.reducer';
 import { Orders, Transaction } from 'src/app/store/exchange.reducer';
 import ExchangeJson from '../../../../bc/artifacts/contracts/Exchange.sol/Exchange.json';
@@ -13,11 +14,17 @@ import { ToastService } from './toast.service';
   providedIn: 'root',
 })
 export class ExchangeService {
+  account?: string;
   constructor(
     private store: Store<AppState>,
     private eventAggregator: EventAggregator,
     private toastService: ToastService
-  ) {}
+  ) {
+    this.store
+      .select('provider')
+      .pipe(map((p) => p.account))
+      .subscribe((acct) => (this.account = acct));
+  }
 
   async loadExchange(
     provider: ethers.providers.Web3Provider,
@@ -39,13 +46,15 @@ export class ExchangeService {
 
   subscribeToEvents(exchange) {
     exchange.on('Deposit', (token, user, amount, balance, event) => {
+      this.store.dispatch(exchangeActions.transferSuccess(event));
       console.log(
         'Deposit Complete..........',
         ethers.utils.formatEther(event.args.balance),
         0
       );
-      this.store.dispatch(exchangeActions.transferSuccess(event));
-      if (event?.args?.balance) {
+      if (this.account && event?.args?.balance) {
+        const amounttt = ethers.utils.formatEther(amount);
+        const balancett = ethers.utils.formatEther(balance);
         this.eventAggregator.reloadBalances.next(true);
         this.toastService.showSuccessToast('Deposit', 'Deposit complete.');
         // this.store.dispatch(
