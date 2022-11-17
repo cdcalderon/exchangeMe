@@ -20,6 +20,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   subs: Subscription = {} as Subscription;
   account$!: Observable<string>;
   provider$!: Observable<ethers.providers.Web3Provider>;
+  balance$!: Observable<string>;
 
   constructor(
     private darkModeService: DarkModeService,
@@ -31,6 +32,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.provider$ = this.eventAggregator.providerConnection;
     this.account$ = this.store.select('provider').pipe(map((p) => p.account));
+    this.balance$ = this.store.select('provider').pipe(map((p) => p.balance));
   }
 
   onToggle(): void {

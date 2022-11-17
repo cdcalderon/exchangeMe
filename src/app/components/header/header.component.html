@@ -21,7 +21,9 @@
         <!-- <li class="nav-item">{{ account$ | async }}</li> -->
         <li class="nav-item" *ngIf="account$ | async as account; else connect">
           <div class="exchange__header--account flex">
-            <p><small>My Balance</small>0 ETH</p>
+            <p *ngIf="this.balance$ | async as balance">
+              <small>My Balance</small>{{ balance | number: "1.2-2" }} ETH
+            </p>
             {{ account.slice(0, 5) + "..." + account.slice(38, 42) }}
             <div>Placeholder</div>
           </div>
@@ -48,7 +50,3 @@
     </div>
   </nav>
 </header>
-<div class="exchange__header--account flex">
-  <p><small>My Balance</small>0 ETH</p>
-  <button class="button">Connect</button>
-</div>

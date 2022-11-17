@@ -143,7 +143,12 @@ export class ExchangeService {
             event,
           })
         );
-        this.toastService.showSuccessToast('Cancel Order', 'Order Cancelled.');
+        if (this.account) {
+          this.toastService.showSuccessToast(
+            'Cancel Order',
+            'Order Cancelled.'
+          );
+        }
       }
     );
 
@@ -174,7 +179,9 @@ export class ExchangeService {
             event,
           })
         );
-        this.toastService.showSuccessToast('Order Fill', 'orderFillSuccess.');
+        if (this.account) {
+          this.toastService.showSuccessToast('Order Fill', 'orderFillSuccess.');
+        }
       }
     );
   }
