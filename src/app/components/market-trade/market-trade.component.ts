@@ -58,6 +58,8 @@ export class MarketTradeComponent implements OnInit {
           }
         );
       });
+
+    this.resetAmounts();
   }
 
   sellOrder() {
@@ -83,5 +85,14 @@ export class MarketTradeComponent implements OnInit {
           }
         );
       });
+
+    this.resetAmounts();
+  }
+
+  resetAmounts() {
+    this.orderBuyPrice = null;
+    this.orderBuyAmount = null;
+    this.orderSellPrice = null;
+    this.orderSellAmount = null;
   }
 }

@@ -76,6 +76,9 @@ export class ExchangeService {
 
     exchange.on('Withdraw', (token, user, amount, balance, event) => {
       this.store.dispatch(exchangeActions.transferSuccess(event));
+      if (this.account) {
+        this.toastService.showSuccessToast('Withdraw', 'Withdraw complete.');
+      }
     });
 
     exchange.on(
@@ -105,6 +108,12 @@ export class ExchangeService {
             transaction: transaccionSuccess,
           })
         );
+        if (this.account) {
+          this.toastService.showSuccessToast(
+            'New Order',
+            'New Order complete.'
+          );
+        }
       }
     );
 
@@ -134,6 +143,7 @@ export class ExchangeService {
             event,
           })
         );
+        this.toastService.showSuccessToast('Cancel Order', 'Order Cancelled.');
       }
     );
 
@@ -164,6 +174,7 @@ export class ExchangeService {
             event,
           })
         );
+        this.toastService.showSuccessToast('Order Fill', 'orderFillSuccess.');
       }
     );
   }

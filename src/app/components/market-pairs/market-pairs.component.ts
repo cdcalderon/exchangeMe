@@ -87,8 +87,7 @@ export class MarketPairsComponent implements OnInit, OnChanges {
       amount
     );
 
-    // this.token1TransferAmount = 0;
-    // this.token2TransferAmount = 0;
+    this.resetAmounts();
   }
 
   async withdraw(token: Token, amount: number) {
@@ -100,8 +99,12 @@ export class MarketPairsComponent implements OnInit, OnChanges {
       amount
     );
 
-    // this.token1TransferAmount = 0;
-    // this.token2TransferAmount = 0;
+    this.resetAmounts();
+  }
+
+  resetAmounts() {
+    this.token1TransferAmount = null;
+    this.token2TransferAmount = null;
   }
 
   loadBalances() {
