@@ -65,6 +65,10 @@
   grid-column-start: 9;
   grid-column-end: 13;
   color: #f1f2f9;
+
+  & .account {
+    margin-right: 40px;
+  }
 }
 
 .exchange__header--account p {
