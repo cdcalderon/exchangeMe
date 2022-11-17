@@ -33,7 +33,7 @@
               required
             />
             <div class="input-group-append">
-              <span class="input-group-text">BTC</span>
+              <span class="input-group-text">{{ symbols[0] }}</span>
             </div>
           </div>
           <div class="input-group">
@@ -45,27 +45,9 @@
               required
             />
             <div class="input-group-append">
-              <span class="input-group-text">ETH</span>
+              <span class="input-group-text">{{ symbols[1] }}</span>
             </div>
           </div>
-          <ul class="market-trade-list">
-            <li>
-              <a href="#">25%</a>
-            </li>
-            <li>
-              <a href="#">50%</a>
-            </li>
-            <li>
-              <a href="#">75%</a>
-            </li>
-            <li>
-              <a href="#">100%</a>
-            </li>
-          </ul>
-          <p>Available: <span>0 BTC = 0 USD</span></p>
-          <p>Volume: <span>0 BTC = 0 USD</span></p>
-          <p>Margin: <span>0 BTC = 0 USD</span></p>
-          <p>Fee: <span>0 BTC = 0 USD</span></p>
           <button (click)="buyOrder()" type="submit" class="btn buy">
             Buy
           </button>
@@ -80,7 +62,7 @@
               required
             />
             <div class="input-group-append">
-              <span class="input-group-text">BTC</span>
+              <span class="input-group-text">{{ symbols[0] }}</span>
             </div>
           </div>
           <div class="input-group">
@@ -92,27 +74,9 @@
               required
             />
             <div class="input-group-append">
-              <span class="input-group-text">ETH</span>
+              <span class="input-group-text">{{ symbols[1] }}</span>
             </div>
           </div>
-          <ul class="market-trade-list">
-            <li>
-              <a href="#">25%</a>
-            </li>
-            <li>
-              <a href="#">50%</a>
-            </li>
-            <li>
-              <a href="#">75%</a>
-            </li>
-            <li>
-              <a href="#">100%</a>
-            </li>
-          </ul>
-          <p>Available: <span>0 BTC = 0 USD</span></p>
-          <p>Volume: <span>0 BTC = 0 USD</span></p>
-          <p>Margin: <span>0 BTC = 0 USD</span></p>
-          <p>Fee: <span>0 BTC = 0 USD</span></p>
           <button (click)="sellOrder()" class="btn sell">Sell</button>
         </div>
       </div>

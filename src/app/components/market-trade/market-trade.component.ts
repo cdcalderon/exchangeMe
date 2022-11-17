@@ -1,21 +1,25 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { combineLatest, filter, map, switchMap, take, tap } from 'rxjs';
+import { combineLatest, filter, map, take, Subscription } from 'rxjs';
 import { ResolvedContracts } from 'src/app/shared/models/resolvedContracts';
 import { ExchangeService } from 'src/app/shared/services/exchange.service';
 import { EventAggregator } from 'src/app/shared/services/helpers/event-aggregator';
 import { AppState } from 'src/app/store/app.reducer';
+import * as fromStore from 'src/app/store/app.reducer';
 
 @Component({
   selector: 'app-market-trade',
   templateUrl: './market-trade.component.html',
   styleUrls: ['./market-trade.component.scss'],
 })
-export class MarketTradeComponent implements OnInit {
+export class MarketTradeComponent implements OnInit, OnDestroy {
   orderBuyPrice: number;
   orderBuyAmount: number;
   orderSellPrice: number;
   orderSellAmount: number;
+  symbols: string[];
+  subscription: Subscription;
+
   @Input() contracts: ResolvedContracts;
   constructor(
     private exchangeService: ExchangeService,
@@ -23,7 +27,11 @@ export class MarketTradeComponent implements OnInit {
     public eventAggregator: EventAggregator
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.subscription = this.store
+      .select(fromStore.getSymbolsSelector)
+      .subscribe((s) => (this.symbols = s));
+  }
 
   buyOrder() {
     const token1$ = this.eventAggregator.token1;
@@ -94,5 +102,9 @@ export class MarketTradeComponent implements OnInit {
     this.orderBuyAmount = null;
     this.orderSellPrice = null;
     this.orderSellAmount = null;
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }
