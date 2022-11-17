@@ -18,8 +18,15 @@
     <div class="collapse navbar-collapse" id="headerNav">
       <ul class="navbar-nav me-auto"></ul>
       <ul class="navbar-nav ml-auto" *ngIf="provider$ | async as provider">
-        <li class="nav-item">{{ account$ | async }}</li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">{{ account$ | async }}</li> -->
+        <li class="nav-item" *ngIf="account$ | async as account; else connect">
+          <div class="exchange__header--account flex">
+            <p><small>My Balance</small>0 ETH</p>
+            {{ account.slice(0, 5) + "..." + account.slice(38, 42) }}
+            <div>Placeholder</div>
+          </div>
+        </li>
+        <!-- <li class="nav-item">
           <button
             type="button"
             class="btn btn-primary"
@@ -27,8 +34,21 @@
           >
             Connect
           </button>
-        </li>
+        </li> -->
+
+        <ng-template #connect>
+          <li class="exchange__header--account flex">
+            <p><small>My Balance</small>0 ETH</p>
+            <button class="button" (click)="loadAccount(provider)">
+              Connect
+            </button>
+          </li>
+        </ng-template>
       </ul>
     </div>
   </nav>
 </header>
+<div class="exchange__header--account flex">
+  <p><small>My Balance</small>0 ETH</p>
+  <button class="button">Connect</button>
+</div>

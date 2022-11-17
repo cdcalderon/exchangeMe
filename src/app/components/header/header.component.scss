@@ -1,0 +1,105 @@
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.exchange__header {
+  background: #131d0d;
+  height: 10vh;
+
+  position: relative;
+}
+
+.exchange__header small {
+  margin: 0 0.5em 0 0;
+}
+
+.exchange__header select,
+.exchange__chart select {
+  background: transparent;
+  color: #f1f2f9;
+  border: none;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.exchange__header select:focus {
+  background: #9abdff;
+}
+
+.exchange__header--brand {
+  padding: 0.75em 2em;
+
+  grid-column-start: 1;
+  grid-column-end: 6;
+}
+
+.exchange__header--brand h1 {
+  display: none;
+}
+
+.exchange__header--networks {
+  grid-column-start: 12;
+  grid-column-end: 13;
+
+  grid-row: 2;
+
+  position: absolute;
+  top: 24px;
+  right: 64px;
+}
+
+.exchange__header--account {
+  background: #515b6f;
+
+  top: 50%;
+  right: 24px;
+
+  width: 400px;
+  height: 48px;
+
+  border-radius: 10px;
+
+  grid-column-start: 9;
+  grid-column-end: 13;
+  color: #f1f2f9;
+}
+
+.exchange__header--account p {
+  margin: 0 auto;
+}
+
+.exchange__header--account a,
+.exchange__header--account button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: #222d41;
+  border: none;
+  color: #f1f2f9;
+
+  margin: 0;
+  border-radius: 10px;
+
+  width: 182px;
+  height: 48px;
+
+  font-size: 16px;
+  text-decoration: none;
+
+  transition: all 250ms ease;
+}
+
+.exchange__header--account button:hover {
+  background: #2187d0;
+  border: none;
+}
+
+.exchange__header--account img {
+  width: 32px;
+  height: auto;
+  margin: 0 0 0 0.75em;
+}
