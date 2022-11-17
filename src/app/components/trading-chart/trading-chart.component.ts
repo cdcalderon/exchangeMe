@@ -40,13 +40,13 @@ export class TradingChartComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    // new TradingView.widget({
-    //   width: '100%',
-    //   height: '550px',
-    //   symbol: 'BINANCE:BTCUSDT',
-    //   theme: 'light',
-    //   allow_symbol_change: true,
-    //   container_id: 'tradingview_123',
-    // });
+    new TradingView.widget({
+      width: '100%',
+      height: '532px',
+      symbol: 'BINANCE:BTCUSDT',
+      theme: 'light',
+      allow_symbol_change: true,
+      container_id: 'tradingview_123',
+    });
   }
 }
