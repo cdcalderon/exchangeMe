@@ -1,10 +1,10 @@
 export const options = {
   chart: {
     type: 'candlestick',
-    height: 350,
+    height: 512,
   },
   title: {
-    text: 'Carlos Exchnage Chart',
+    text: 'Carlos Calderon Exchange',
     align: 'left',
   },
   xaxis: {

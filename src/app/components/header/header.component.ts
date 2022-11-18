@@ -8,6 +8,8 @@ import { filter, map } from 'rxjs/operators';
 import { Observable, Subscription } from 'rxjs';
 import _ from 'lodash';
 import { ethers } from 'ethers';
+import * as fromStore from 'src/app/store/app.reducer';
+import * as providerActions from '../../store/provider.actions';
 
 @Component({
   selector: 'app-header',
@@ -21,6 +23,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   account$!: Observable<string>;
   provider$!: Observable<ethers.providers.Web3Provider>;
   balance$!: Observable<string>;
+  chartMode$!: Observable<string>;
+  chartMode = true;
 
   constructor(
     private darkModeService: DarkModeService,
@@ -33,6 +37,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.provider$ = this.eventAggregator.providerConnection;
     this.account$ = this.store.select('provider').pipe(map((p) => p.account));
     this.balance$ = this.store.select('provider').pipe(map((p) => p.balance));
+    this.chartMode$ = this.store.select(fromStore.getChartModeSelector);
   }
 
   onToggle(): void {
@@ -41,6 +46,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   loadAccount(provider: ethers.providers.Web3Provider) {
     this.providerService.loadAccount(provider);
+  }
+
+  onChartModeChange(e: any) {
+    if (e.target.checked) {
+      this.store.dispatch(providerActions.loadChart({ chartMode: 'apex' }));
+    } else {
+      this.store.dispatch(
+        providerActions.loadChart({ chartMode: 'tradingview' })
+      );
+    }
   }
 
   ngOnDestroy(): void {}

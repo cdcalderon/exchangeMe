@@ -15,6 +15,18 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
+    <div class="form-check form-switch">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        id="char-mode"
+        [checked]="chartMode$"
+        (change)="onChartModeChange($event)"
+      />
+      <label class="form-check-label" for="char-mode"
+        >Activate Chart Mode</label
+      >
+    </div>
     <div class="collapse navbar-collapse" id="headerNav">
       <ul class="navbar-nav me-auto"></ul>
       <ul class="navbar-nav ml-auto" *ngIf="provider$ | async as provider">
