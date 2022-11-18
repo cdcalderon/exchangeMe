@@ -7,7 +7,7 @@ import {
   createSelector,
 } from '@ngrx/store';
 import { get, groupBy, maxBy, minBy, reject } from 'lodash';
-import * as moment from 'moment';
+import moment from 'moment';
 import { ethers } from 'ethers';
 
 const GREEN = '#25CE8F';
@@ -396,7 +396,7 @@ const buildGraphData = (orders) => {
   const hours = Object.keys(orders);
 
   // Build the graph series
-  const graphData = hours.map((hour) => {
+  let graphData = hours.map((hour) => {
     // Fetch all orders from current hour
     const group = orders[hour];
 
@@ -411,6 +411,44 @@ const buildGraphData = (orders) => {
       y: [open.tokenPrice, high.tokenPrice, low.tokenPrice, close.tokenPrice],
     };
   });
+  const graphDataWithFilledGaps = fillGaps(graphData);
+  return graphDataWithFilledGaps;
+};
 
-  return graphData;
+const fillGaps = (graphData) => {
+  // const lGraphData = JSON.parse(JSON.stringify(graphData));
+  const lGraphData = [...graphData];
+  if (lGraphData.length < 2) {
+    return [];
+  }
+  let finalGraphData = [];
+
+  for (let i = 0; i < lGraphData.length - 1; i++) {
+    let startTime = new Date(lGraphData[i].x) as Date;
+    let end = new Date(lGraphData[i + 1].x) as Date;
+
+    var duration = moment.duration(moment(end).diff(startTime));
+    var gap = duration.asHours();
+    finalGraphData.push({ ...lGraphData[i] });
+
+    if (gap > 1) {
+      for (let j = 1; j <= gap - 1; j++) {
+        let date = startTime.setHours(startTime.getHours() + 1); //moment('2017-04-14 07:07:15').add(j, 'hours');
+        //let date = moment(startTime).add(j, 'hours');
+        finalGraphData.push({
+          x: moment(date).format(),
+          y: [
+            lGraphData[i].y[3],
+            lGraphData[i].y[3],
+            lGraphData[i].y[3],
+            lGraphData[i].y[3],
+          ],
+        });
+      }
+      finalGraphData.push({ ...lGraphData[i + 1] });
+    } else {
+      finalGraphData.push({ ...lGraphData[i + 1] });
+    }
+  }
+  return finalGraphData;
 };
