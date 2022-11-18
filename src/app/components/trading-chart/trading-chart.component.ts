@@ -28,6 +28,7 @@ import { options, defaultSeries } from './price-chart.config';
 })
 export class TradingChartComponent implements OnInit {
   priceChart$: Observable<any>; // TODO: create interfaces
+  chartMode: string;
   @ViewChild('chart') chart: ChartComponent;
   public chartOptions: Partial<ChartOptions>;
   options = null;
@@ -37,6 +38,9 @@ export class TradingChartComponent implements OnInit {
 
   ngOnInit(): void {
     this.priceChart$ = this.store.select(fromStore.priceChartSelector);
+    this.store
+      .select(fromStore.getChartModeSelector)
+      .subscribe((cm) => (this.chartMode = cm));
   }
 
   ngAfterViewInit() {
