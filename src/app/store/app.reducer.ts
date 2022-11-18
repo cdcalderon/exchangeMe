@@ -86,6 +86,13 @@ export const getTokensWithAccoutSelector = createSelector(
   }
 );
 
+export const getChartModeSelector = createSelector(
+  getProviderState,
+  (provider) => {
+    return provider.chartMode;
+  }
+);
+
 // Token state
 export const getSymbolsSelector = createSelector(
   getTokenState,

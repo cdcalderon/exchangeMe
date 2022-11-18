@@ -19,3 +19,8 @@ export const loadBalance = createAction(
   '[ETHER_BALANCE_LOADED] BalanceLoaded',
   props<{ balance: string }>()
 );
+
+export const loadChart = createAction(
+  '[LOAD_CHART] chartLoaded',
+  props<{ chartMode: string }>()
+);
