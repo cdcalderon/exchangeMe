@@ -411,8 +411,11 @@ const buildGraphData = (orders) => {
       y: [open.tokenPrice, high.tokenPrice, low.tokenPrice, close.tokenPrice],
     };
   });
-  const graphDataWithFilledGaps = fillGaps(graphData);
-  return graphDataWithFilledGaps;
+
+  if(graphData.length > 1){
+    graphData = fillGaps(graphData);
+  }
+  return graphData;
 };
 
 const fillGaps = (graphData) => {

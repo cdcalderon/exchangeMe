@@ -48,7 +48,7 @@ export class TradingChartComponent implements OnInit {
       width: '100%',
       height: '532px',
       symbol: 'BINANCE:BTCUSDT',
-      theme: 'light',
+      theme: 'dark',
       allow_symbol_change: true,
       container_id: 'tradingview_123',
     });
