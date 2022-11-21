@@ -3,7 +3,7 @@
   <table class="table" *ngIf="allOrders$ | async as allOrders">
     <thead>
       <tr>
-        <th>{{ symbols[0] }})</th>
+        <th>{{ symbols[0] }}</th>
         <th>{{ symbols[0] }}/{{ symbols[1] }}</th>
         <th>{{ symbols[1] }}</th>
       </tr>
@@ -22,10 +22,10 @@
     <tbody class="ob-heading">
       <tr>
         <td>
-          <span>{{ symbols[0] }})</span>
+          <span>{{ symbols[0] }}</span>
         </td>
         <td>
-          <span>{{ symbols[0] }}/{{ symbols[1] }}</span>
+          <span class="pairs">{{ symbols[0] }}/{{ symbols[1] }}</span>
         </td>
         <td>
           <span>{{ symbols[1] }}</span>
@@ -39,7 +39,7 @@
         (click)="fillOrder(order)"
       >
         <td class="green">{{ order.token0Amount }}</td>
-        <td>{{ order.tokenPrice }}</td>
+        <td class="pairs-amount">{{ order.tokenPrice }}</td>
         <td>{{ order.token1Amount }}</td>
       </tr>
     </tbody>
