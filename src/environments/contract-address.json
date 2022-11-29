@@ -1,16 +1,1 @@
-{
-  "5": {
-    "exchange": { "address": "0x8b337E2171EA4F8F0C96CC9dF5B8570590d608F1" },
-    "PCHO": { "address": "0x02F60CCc9447cE3cde1C24a6E8Bd6D9Aa21bC299" },
-    "JEDY": { "address": "0x6560C29EA946dD49C76077BDFc1c58EC1b6f0943" },
-    "CHIH": { "address": "0x9665Abe2904D48C7A40485F9083c13F6F1Cc75b4" },
-    "explorerURL": "#"
-  },
-  "31337": {
-    "exchange": { "address": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9" },
-    "PCHO": { "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3" },
-    "JEDY": { "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512" },
-    "CHIH": { "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0" },
-    "explorerURL": "https://goerli.etherscan.io/"
-  }
-}
+{"31337":{"exchange":{"address":"0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"},"PCHO":{"address":"0x5FbDB2315678afecb367f032d93F642f64180aa3"},"JEDY":{"address":"0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"},"CHIH":{"address":"0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"}}}
