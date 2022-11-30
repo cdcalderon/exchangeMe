@@ -418,6 +418,7 @@ const buildGraphData = (orders) => {
 const fillGaps = (graphData) => {
   // const lGraphData = JSON.parse(JSON.stringify(graphData));
   const lGraphData = [...graphData];
+  // Less than to bars means we have no gaps so we don't need to override
   if (lGraphData.length < 2) {
     return [];
   }
