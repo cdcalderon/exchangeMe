@@ -64,23 +64,18 @@ export class AppComponent implements OnInit {
   }
 
   loadProvider() {
-    const connection = this.providerService.loadProvider();
-    return connection;
+    return this.providerService.loadProvider();
   }
 
   async loadNetwork(provider: any) {
-    const chainId = this.providerService.loadNetwork(provider);
-    return chainId;
+    return this.providerService.loadNetwork(provider);
   }
 
   async loadAccount(provider: any) {
-    const account = this.providerService.loadAccount(provider);
-
-    return account;
+    return this.providerService.loadAccount(provider);
   }
 
   async loadTokens(provider: any, addresses: string[]) {
-    const account = this.tokenService.loadTokens(provider, addresses);
-    return account;
+    return this.tokenService.loadTokens(provider, addresses);
   }
 }
