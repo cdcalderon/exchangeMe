@@ -8,12 +8,14 @@
       ></app-market-pairs>
     </div>
     <div class="col-sm-12 col-md-6">
-      <div class="darkMode">
+      <app-trading-chart></app-trading-chart>
+      <!-- <div class="darkMode">
         <app-trading-chart></app-trading-chart>
       </div>
       <div class="lightMode">
-        <!-- <app-trading-dark-chart></app-trading-dark-chart> -->
-      </div>
+        <app-trading-chart></app-trading-chart>
+        <app-trading-dark-chart></app-trading-dark-chart>
+      </div> -->
 
       <app-market-trade [contracts]="contracts"></app-market-trade>
     </div>

@@ -24,16 +24,16 @@
     >
       <table class="table" *ngIf="filledOrders$ | async as filledOrders">
         <thead *ngIf="symbols$ | async as symbols">
-          <tr>
+          <tr class="rt-headers">
             <th>Time</th>
             <th>Amount({{ symbols[1] }})</th>
             <th>Price({{ symbols[0] }}/{{ symbols[1] }})</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let order of filledOrders">
-            <td>{{ order.formattedTimestamp }}</td>
-            <td [ngStyle]="{ color: order.tokenPriceClass }">
+          <tr *ngFor="let order of filledOrders" class="rt-headers">
+            <td class="rt-time">{{ order.formattedTimestamp }}</td>
+            <td [ngStyle]="{ color: order.tokenPriceClass }" >
               {{ order.token0Amount }}
             </td>
             <td>{{ order.tokenPrice }}</td>
