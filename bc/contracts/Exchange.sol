@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
+//import "hardhat/console.sol";
 import "./Token.sol";
 
 error NotApprovedToken();
@@ -47,16 +47,6 @@ contract Exchange {
         uint256 timestamp; // When order was created
     }
 
-    event Cancel(
-        uint256 id,
-        address user,
-        address tokenGet,
-        uint256 amountGet,
-        address tokenGive,
-        uint256 amountGive,
-        uint256 timestamp
-    );
-
     event Trade(
         uint256 id,
         address user,
@@ -65,6 +55,16 @@ contract Exchange {
         address tokenGive,
         uint256 amountGive,
         address creator,
+        uint256 timestamp
+    );
+
+    event Cancel(
+        uint256 id,
+        address user,
+        address tokenGet,
+        uint256 amountGet,
+        address tokenGive,
+        uint256 amountGive,
         uint256 timestamp
     );
 

@@ -15,7 +15,7 @@ contract Token {
     uint256 public totalSupply;
 
     mapping(address => uint256) public balanceOf; // Track Balances
-    mapping(address => mapping(address => uint256)) public allowance; //
+    mapping(address => mapping(address => uint256)) public allowance; // owner address -> spender address -> amount/// owner -> all the potential spender and how much they are approved for
 
     event Transfer(address indexed from, address indexed to, uint256 value);
     event Approval(

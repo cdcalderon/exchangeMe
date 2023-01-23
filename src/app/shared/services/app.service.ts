@@ -3,6 +3,7 @@ import { Token } from 'bc/typechain-types';
 import { ethers } from 'ethers';
 import { EventAggregator } from './helpers/event-aggregator';
 
+// TODO: Remove use for testing purposes only
 @Injectable({
   providedIn: 'root',
 })

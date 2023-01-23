@@ -1,1 +1,8 @@
-{"31337":{"exchange":{"address":"0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"},"PCHO":{"address":"0x5FbDB2315678afecb367f032d93F642f64180aa3"},"JEDY":{"address":"0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"},"CHIH":{"address":"0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0"}}}
+{
+  "5": {
+    "exchange": { "address": "0x47DA249Dc6b05106Abb13cd3e83a4B4767f23D01" },
+    "PCHO": { "address": "0x1Ff178c370d2c00d37c7Cabd5F1631DA33E92E1A" },
+    "JEDY": { "address": "0x4014Be8806D81D857EE1d931d8c7490A0d0CB8a2" },
+    "CHIH": { "address": "0x467190faB94E392A6395135cAa3770502bF415B8" }
+  }
+}

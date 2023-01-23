@@ -1,4 +1,5 @@
 import { HardhatUserConfig } from 'hardhat/config';
+require('@nomiclabs/hardhat-etherscan');
 require('dotenv').config();
 import '@nomicfoundation/hardhat-toolbox';
 
@@ -37,6 +38,14 @@ const config: HardhatUserConfig = {
     localhost: {
       chainId: 31337,
     },
+    // goerli: {
+    //   url: GOERLI_RPC_URL,
+    //   accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
+    //   //   accounts: {
+    //   //     mnemonic: MNEMONIC,
+    //   //   },
+    //   chainId: 5,
+    // },
     goerli: {
       url: GOERLI_RPC_URL,
       accounts: privateKeys.split(','),
@@ -55,6 +64,9 @@ const config: HardhatUserConfig = {
       url: POLYGON_MAINNET_RPC_URL,
       accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
     },
+  },
+  etherscan: {
+    apiKey: ETHERSCAN_API_KEY,
   },
 };
 
