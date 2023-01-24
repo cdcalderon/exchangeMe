@@ -34,6 +34,7 @@ export class MarketTradeComponent implements OnInit, OnDestroy {
   }
 
   buyOrder() {
+    this.eventAggregator.waiting.next(true);
     const token1$ = this.eventAggregator.token1;
     const token2$ = this.eventAggregator.token2;
     const account$ = this.store.select('provider').pipe(
@@ -55,17 +56,20 @@ export class MarketTradeComponent implements OnInit, OnDestroy {
         //   )
         // )
       )
-      .subscribe((result) => {
-        this.exchangeService.makeBuyOrder(
-          this.contracts.provider,
-          this.contracts.exchange,
-          [result[0], result[1]],
-          {
-            amount: this.orderBuyAmount.toString(),
-            price: this.orderBuyPrice.toString(),
-          }
-        );
-      });
+      .subscribe(
+        (result) => {
+          this.exchangeService.makeBuyOrder(
+            this.contracts.provider,
+            this.contracts.exchange,
+            [result[0], result[1]],
+            {
+              amount: this.orderBuyAmount.toString(),
+              price: this.orderBuyPrice.toString(),
+            }
+          );
+        },
+        () => this.eventAggregator.waiting.next(false)
+      );
 
     this.resetAmounts();
   }
