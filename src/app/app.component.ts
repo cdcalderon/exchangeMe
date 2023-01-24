@@ -5,6 +5,7 @@ import configContracts from '../environments/contract-address.json';
 import { Store } from '@ngrx/store';
 import { TokenService } from './shared/services/token.service';
 import { ExchangeService } from './shared/services/exchange.service';
+import { EventAggregator } from './shared/services/helpers/event-aggregator';
 interface AppState {}
 
 @Component({
@@ -21,7 +22,8 @@ export class AppComponent implements OnInit {
     private store: Store<AppState>,
     private providerService: ProviderService,
     private tokenService: TokenService,
-    private exchangeService: ExchangeService
+    private exchangeService: ExchangeService,
+    private eventAggregator: EventAggregator
   ) {}
 
   async ngOnInit() {
@@ -40,8 +42,8 @@ export class AppComponent implements OnInit {
     });
 
     // Fetch current account & balance from Metamask when changed
-    window.ethereum.on('accountsChanged', () => {
-      this.loadAccount(provider);
+    window.ethereum.on('accountsChanged', async () => {
+      await this.reload();
     });
 
     // Load token smart contracts
@@ -77,5 +79,30 @@ export class AppComponent implements OnInit {
 
   async loadTokens(provider: any, addresses: string[]) {
     return this.tokenService.loadTokens(provider, addresses);
+  }
+
+  async reload() {
+    const provider = this.loadProvider();
+    this.providerService.loadAccount(provider);
+
+    const chainId = await this.loadNetwork(provider)!;
+    console.log(chainId);
+    this.loadAccount(provider);
+    const PCHO = configContracts[chainId].PCHO;
+    const JEDY = configContracts[chainId].JEDY;
+    this.loadTokens(provider, [PCHO.address, JEDY.address]);
+
+    // Load exchange smart contract
+    const exchangeConfig = configContracts[chainId].exchange;
+    const exchangeContract = await this.exchangeService.loadExchange(
+      provider,
+      exchangeConfig.address
+    );
+
+    // Fetch all orders: Open, Cancelled, Filled
+    this.exchangeService.loadAllOrders(provider, exchangeContract);
+    // this.providerService.loadAccount(provider);
+    //window.location.reload();
+    this.eventAggregator.reloadBalances.next(true);
   }
 }

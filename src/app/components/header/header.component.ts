@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   provider$!: Observable<ethers.providers.Web3Provider>;
   balance$!: Observable<string>;
   chartMode$!: Observable<string>;
+  waiting$!: Observable<boolean>;
   chartMode = true;
 
   constructor(
@@ -35,6 +36,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.provider$ = this.eventAggregator.providerConnection;
+    this.waiting$ = this.eventAggregator.waiting;
     this.account$ = this.store.select('provider').pipe(map((p) => p.account));
     this.balance$ = this.store.select('provider').pipe(map((p) => p.balance));
     this.chartMode$ = this.store.select(fromStore.getChartModeSelector);

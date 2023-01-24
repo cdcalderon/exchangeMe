@@ -412,7 +412,7 @@ const buildGraphData = (orders) => {
     };
   });
 
-  if(graphData.length > 1){
+  if (graphData.length > 1) {
     graphData = fillGaps(graphData);
   }
   return graphData;

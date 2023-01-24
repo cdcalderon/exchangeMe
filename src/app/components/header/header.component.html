@@ -4,6 +4,7 @@
       <img src="../../../assets/img/logo-dark.svg" class="darkMode" alt="" />
       <img src="../../../assets/img/logo-light.svg" class="lightMode" alt="" />
     </a>
+
     <button
       class="navbar-toggler"
       type="button"
@@ -15,6 +16,7 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="form-check form-switch">
       <input
         class="form-check-input"
@@ -28,7 +30,16 @@
       >
     </div>
     <div class="collapse navbar-collapse" id="headerNav">
-      <ul class="navbar-nav me-auto"></ul>
+      <ul class="navbar-nav me-auto">
+        <li>
+          <img
+            *ngIf="waiting$ | async as waiting"
+            src="../../../assets/img/waiting.gif"
+            class="waiting"
+            alt=""
+          />
+        </li>
+      </ul>
       <ul class="navbar-nav ml-auto" *ngIf="provider$ | async as provider">
         <!-- <li class="nav-item">{{ account$ | async }}</li> -->
         <li class="nav-item" *ngIf="account$ | async as account; else connect">

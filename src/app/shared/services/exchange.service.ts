@@ -93,6 +93,7 @@ export class ExchangeService {
         timestamp,
         event
       ) => {
+        this.eventAggregator.waiting.next(false);
         const order = event.args;
         const transaccionSuccess: Transaction = {
           transactionType: 'New Order',
@@ -165,6 +166,7 @@ export class ExchangeService {
         timestamp,
         event
       ) => {
+        debugger;
         const filledOrder = event.args;
         const transaccionSuccess: Transaction = {
           transactionType: 'Cancel',
@@ -182,6 +184,8 @@ export class ExchangeService {
         if (this.account) {
           this.toastService.showSuccessToast('Order Fill', 'orderFillSuccess.');
         }
+
+        this.eventAggregator.reloadBalances.next(true);
       }
     );
   }
