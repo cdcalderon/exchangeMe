@@ -79,6 +79,7 @@ export class MarketPairsComponent implements OnInit, OnChanges {
   }
 
   async deposit(token: Token, amount: number) {
+    this.eventAggregator.waiting.next(true);
     await this.tokenService.transferTokens(
       this.contracts.provider,
       this.contracts.exchange,
@@ -91,6 +92,7 @@ export class MarketPairsComponent implements OnInit, OnChanges {
   }
 
   async withdraw(token: Token, amount: number) {
+    this.eventAggregator.waiting.next(true);
     await this.tokenService.transferTokens(
       this.contracts.provider,
       this.contracts.exchange,
@@ -124,11 +126,11 @@ export class MarketPairsComponent implements OnInit, OnChanges {
           this.contracts.token1 = result[0];
           this.contracts.token2 = result[1];
         }),
-        switchMap((result) =>
+        switchMap(([token1, token2, account]) =>
           this.tokenService.loadBalances(
             this.contracts.exchange,
-            [result[0], result[1]],
-            result[2]
+            [token1, token2],
+            account
           )
         )
       )
