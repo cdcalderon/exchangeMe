@@ -7,6 +7,8 @@ import {
   take,
   Subscription,
   switchMap,
+  catchError,
+  throwError,
 } from 'rxjs';
 import { ResolvedContracts } from 'src/app/shared/models/resolvedContracts';
 import { ExchangeService } from 'src/app/shared/services/exchange.service';
@@ -83,23 +85,25 @@ export class MarketTradeComponent implements OnInit, OnDestroy {
     );
 
     combineLatest([token1$, token2$, account$])
-      .pipe(take(1))
-      .subscribe(
-        (result) => {
-          this.exchangeService.makeSellOrder(
+      .pipe(
+        take(1),
+        switchMap(([token1, token2, account]) => {
+          return this.exchangeService.makeSellOrder(
             this.contracts.provider,
             this.contracts.exchange,
-            [result[0], result[1]],
+            [token1, token2],
             {
               amount: this.orderSellAmount.toString(),
               price: this.orderSellPrice.toString(),
             }
           );
-        },
-        (err) => {
+        }),
+        catchError((err) => {
           this.eventAggregator.waiting.next(false);
-        }
-      );
+          return throwError(() => err);
+        })
+      )
+      .subscribe();
 
     this.resetAmounts();
   }
