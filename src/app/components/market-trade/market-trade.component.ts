@@ -1,6 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { combineLatest, filter, map, take, Subscription } from 'rxjs';
+import {
+  combineLatest,
+  filter,
+  map,
+  take,
+  Subscription,
+  switchMap,
+} from 'rxjs';
 import { ResolvedContracts } from 'src/app/shared/models/resolvedContracts';
 import { ExchangeService } from 'src/app/shared/services/exchange.service';
 import { EventAggregator } from 'src/app/shared/services/helpers/event-aggregator';
@@ -46,35 +53,26 @@ export class MarketTradeComponent implements OnInit, OnDestroy {
 
     combineLatest([token1$, token2$, account$])
       .pipe(
-        take(1)
-        // switchMap((result) =>
-        //   this.exchangeService.makeBuyOrder(
-        //     this.contracts.provider,
-        //     this.contracts.exchange,
-        //     [result[0], result[1]],
-        //     { amount: 1, price: 1 }
-        //   )
-        // )
-      )
-      .subscribe(
-        (result) => {
-          this.exchangeService.makeBuyOrder(
+        take(1),
+        switchMap(([token1, token2, account]) => {
+          return this.exchangeService.makeBuyOrder(
             this.contracts.provider,
             this.contracts.exchange,
-            [result[0], result[1]],
+            [token1, token2],
             {
               amount: this.orderBuyAmount.toString(),
               price: this.orderBuyPrice.toString(),
             }
           );
-        },
-        () => this.eventAggregator.waiting.next(false)
-      );
+        })
+      )
+      .subscribe();
 
     this.resetAmounts();
   }
 
   sellOrder() {
+    this.eventAggregator.waiting.next(true);
     const token1$ = this.eventAggregator.token1;
     const token2$ = this.eventAggregator.token2;
     const account$ = this.store.select('provider').pipe(
@@ -86,17 +84,22 @@ export class MarketTradeComponent implements OnInit, OnDestroy {
 
     combineLatest([token1$, token2$, account$])
       .pipe(take(1))
-      .subscribe((result) => {
-        this.exchangeService.makeSellOrder(
-          this.contracts.provider,
-          this.contracts.exchange,
-          [result[0], result[1]],
-          {
-            amount: this.orderSellAmount.toString(),
-            price: this.orderSellPrice.toString(),
-          }
-        );
-      });
+      .subscribe(
+        (result) => {
+          this.exchangeService.makeSellOrder(
+            this.contracts.provider,
+            this.contracts.exchange,
+            [result[0], result[1]],
+            {
+              amount: this.orderSellAmount.toString(),
+              price: this.orderSellPrice.toString(),
+            }
+          );
+        },
+        (err) => {
+          this.eventAggregator.waiting.next(false);
+        }
+      );
 
     this.resetAmounts();
   }
