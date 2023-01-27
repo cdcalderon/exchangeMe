@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { combineLatest, Observable, take } from 'rxjs';
+import { combineLatest, Observable, switchMap, take } from 'rxjs';
 import { ExchangeService } from 'src/app/shared/services/exchange.service';
 import { EventAggregator } from 'src/app/shared/services/helpers/event-aggregator';
 import * as fromStore from 'src/app/store/app.reducer';
@@ -38,13 +38,17 @@ export class OrderBookComponent implements OnInit {
   }
 
   fillOrder(order) {
+    this.eventAggregator.waiting.next(true);
     const exchange$ = this.eventAggregator.exchange;
     const provider$ = this.eventAggregator.providerConnection;
 
     combineLatest([provider$, exchange$])
-      .pipe(take(1))
-      .subscribe((result) => {
-        this.exchangeService.fillOrder(result[0], result[1], order);
-      });
+      .pipe(
+        take(1),
+        switchMap(([provider, exchange]) => {
+          return this.exchangeService.fillOrder(provider, exchange, order);
+        })
+      )
+      .subscribe();
   }
 }
