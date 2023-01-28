@@ -27,6 +27,7 @@ export class HistoryOrderComponent implements OnInit {
   }
 
   cancelOrder(order) {
+    this.eventAggregator.waiting.next(true);
     const exchange$ = this.eventAggregator.exchange;
     const provider$ = this.eventAggregator.providerConnection;
 
