@@ -46,6 +46,7 @@ export class ExchangeService {
 
   subscribeToEvents(exchange) {
     exchange.on('Deposit', (token, user, amount, balance, event) => {
+      this.eventAggregator.waiting.next(false);
       this.store.dispatch(exchangeActions.transferSuccess(event));
       console.log(
         'Deposit Complete..........',
@@ -75,6 +76,7 @@ export class ExchangeService {
     });
 
     exchange.on('Withdraw', (token, user, amount, balance, event) => {
+      this.eventAggregator.waiting.next(false);
       this.store.dispatch(exchangeActions.transferSuccess(event));
       if (this.account) {
         this.toastService.showSuccessToast('Withdraw', 'Withdraw complete.');
@@ -130,6 +132,7 @@ export class ExchangeService {
         timestamp,
         event
       ) => {
+        this.eventAggregator.waiting.next(false);
         const cancelledOrder = event.args;
         const transaccionSuccess: Transaction = {
           transactionType: 'Cancel',
@@ -166,7 +169,7 @@ export class ExchangeService {
         timestamp,
         event
       ) => {
-        debugger;
+        this.eventAggregator.waiting.next(false);
         const filledOrder = event.args;
         const transaccionSuccess: Transaction = {
           transactionType: 'Cancel',
@@ -218,6 +221,7 @@ export class ExchangeService {
         .makeOrder(tokenGet, amountGet, tokenGive, amountGive);
       await transaction.wait();
     } catch (error) {
+      this.eventAggregator.waiting.next(false);
       const transaccionNewOrderRequestFailed = {
         transaction: {
           transactionType: 'New Order',
@@ -260,6 +264,7 @@ export class ExchangeService {
         .makeOrder(tokenGet, amountGet, tokenGive, amountGive);
       await transaction.wait();
     } catch (error) {
+      this.eventAggregator.waiting.next(false);
       const transaccionNewOrderRequestFailed = {
         transaction: {
           transactionType: 'New Order',
@@ -321,6 +326,7 @@ export class ExchangeService {
       const transaction = await exchange.connect(signer).cancelOrder(order.id);
       await transaction.wait();
     } catch (error) {
+      this.eventAggregator.waiting.next(false);
       const transaccionCancelOrderFailed = {
         transaction: {
           transactionType: 'Cancel',
@@ -346,6 +352,7 @@ export class ExchangeService {
       const transaction = await exchange.connect(signer).fillOrder(order.id);
       await transaction.wait();
     } catch (error) {
+      this.eventAggregator.waiting.next(false);
       this.store.dispatch(
         exchangeActions.orderFillFailed(
           this.getTrasaction('Fill Order', false, false, true)
