@@ -52,6 +52,21 @@
             </div>
           </div>
         </li>
+        <li class="nav-item header-custom-icon">
+          <input
+            id="darkMode"
+            type="checkbox"
+            [checked]="darkMode$ | async"
+            (change)="onToggle()"
+            class="theme-toggle-input"
+          />
+          <a href="#" class="nav-link">
+            <label class="theme-toggle-input-label" for="darkMode">
+              <i class="icon ion-md-moon darkMode"></i>
+              <i class="icon ion-md-sunny lightMode"></i>
+            </label>
+          </a>
+        </li>
         <!-- <li class="nav-item">
           <button
             type="button"
