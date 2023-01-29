@@ -136,4 +136,8 @@ export class MarketPairsComponent implements OnInit, OnChanges {
       )
       .subscribe();
   }
+
+  scroll(el: HTMLElement) {
+    el.scrollIntoView();
+  }
 }

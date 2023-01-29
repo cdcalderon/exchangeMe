@@ -22,6 +22,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { ModalComponent } from './components/modal/modal.component';
 import { ToasterComponent } from './components/toaster/toaster.component';
 import { ToastComponent } from './components/toast/toast.component';
+import { MarketNewsComponent } from './components/market-news/market-news.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +38,7 @@ import { ToastComponent } from './components/toast/toast.component';
     ModalComponent,
     ToasterComponent,
     ToastComponent,
+    MarketNewsComponent,
   ],
   imports: [
     BrowserModule,

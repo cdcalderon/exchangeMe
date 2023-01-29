@@ -138,6 +138,14 @@
           <div class="market-carousel-item-name">
             <img src="../../../assets/img/icon/1.png" alt="" />
             <strong>{{ token.symbols[0] }}</strong>
+
+            <a
+              class="lq-btn"
+              href="https://throbbing-hat-4928.on.fleek.co/"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Get PCHO by joining liquidity pool</a
+            >
           </div>
           <h2>Wallet {{ token.balances[0] }} {{ token.symbols[0] }}</h2>
           <p>Exchange {{ exchangeBalances[0] }}</p>
@@ -176,6 +184,14 @@
           <div class="market-carousel-item-name">
             <img src="../../../assets/img/icon/5.png" alt="" />
             <strong>{{ token.symbols[1] }}</strong>
+            <button
+              class="btn lq-btn"
+              (click)="scroll(lp)"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Get {{ token.symbols[1] }} by joining Liquidity Pool
+            </button>
           </div>
           <h2>Wallet {{ token.balances[1] }} {{ token.symbols[1] }}</h2>
           <p>Exchange {{ exchangeBalances[1] }}</p>
@@ -199,7 +215,7 @@
               Deposit
             </button></a
           >
-          <a
+          <a #lp
             ><button
               (click)="withdraw(contracts.token2, token2TransferAmount)"
               class="btn sell"
