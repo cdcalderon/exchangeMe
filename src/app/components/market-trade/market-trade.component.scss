@@ -1,3 +1,8 @@
 .input-group-text {
   min-width: 70px;
 }
+
+button.sell:hover,
+button.buy:hover {
+  color: white !important;
+}
