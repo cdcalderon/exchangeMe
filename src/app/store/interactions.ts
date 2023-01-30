@@ -2,10 +2,10 @@ import { Store } from '@ngrx/store';
 import * as actions from './provider.actions';
 import * as tokenActions from './token.actions';
 import { ethers } from 'ethers';
-import TokenJson from '../../../bc/artifacts/contracts/Token.sol/Token.json';
+import TokenJson from '../../abis/Token.json';
 declare let window: any;
 import * as _ from 'lodash';
-import { Token } from 'bc/typechain-types';
+import { Token } from '../../typechain-types';
 
 export const loadProvider = (store: Store) => {
   let connection = new ethers.providers.Web3Provider(window.ethereum);

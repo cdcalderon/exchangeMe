@@ -23,7 +23,7 @@ import { ethers } from 'ethers';
 import { EventAggregator } from 'src/app/shared/services/helpers/event-aggregator';
 import { ResolvedContracts } from 'src/app/shared/models/resolvedContracts';
 import { TokenState } from 'src/app/store/token.reducer';
-import { Token } from 'bc/typechain-types';
+import { Token } from '../../../typechain-types';
 
 @Component({
   selector: 'app-market-pairs',

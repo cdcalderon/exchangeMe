@@ -3,10 +3,10 @@ import { Store } from '@ngrx/store';
 import * as tokenActions from '../../store/token.actions';
 import * as exchangeActions from '../../store/exchange.actions';
 import { ethers } from 'ethers';
-import TokenJson from '../../../../bc/artifacts/contracts/Token.sol/Token.json';
+import TokenJson from '../../../abis/Token.json';
 declare let window: any;
 import * as _ from 'lodash';
-import { Exchange, Token } from 'bc/typechain-types';
+import { Exchange, Token } from '../../../typechain-types';
 import { AppState } from 'src/app/store/app.reducer';
 import { EventAggregator } from './helpers/event-aggregator';
 

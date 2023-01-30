@@ -5,7 +5,7 @@ import { EventAggregator } from '../helpers/event-aggregator';
 import { ethers } from 'ethers';
 import { offset } from '@popperjs/core';
 import { Injectable } from '@angular/core';
-import { Exchange, Token } from 'bc/typechain-types';
+import { Exchange, Token } from '../../../../typechain-types';
 import { map } from 'rxjs/operators';
 
 @Injectable({

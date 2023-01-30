@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Exchange } from 'bc/typechain-types';
+import { Exchange } from '../../../typechain-types';
 import { ethers } from 'ethers';
 import { map } from 'rxjs';
 import { AppState } from 'src/app/store/app.reducer';
 import { Orders, Transaction } from 'src/app/store/exchange.reducer';
-import ExchangeJson from '../../../../bc/artifacts/contracts/Exchange.sol/Exchange.json';
+import ExchangeJson from '../../../abis/Exchange.json';
 import * as exchangeActions from '../../store/exchange.actions';
 import { EventAggregator } from './helpers/event-aggregator';
 import { ToastService } from './toast.service';

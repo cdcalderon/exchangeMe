@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Token } from 'bc/typechain-types';
+import { Token } from '../../../typechain-types';
 import { ethers } from 'ethers';
 import { EventAggregator } from './helpers/event-aggregator';
 

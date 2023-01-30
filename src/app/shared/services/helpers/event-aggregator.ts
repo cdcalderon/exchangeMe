@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { ethers } from 'ethers';
-import { Exchange, Token } from 'bc/typechain-types';
+import { Exchange, Token } from '../../../../typechain-types';
 
 @Injectable({
   providedIn: 'root',
