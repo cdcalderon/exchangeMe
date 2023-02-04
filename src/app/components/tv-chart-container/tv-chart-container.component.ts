@@ -57,6 +57,12 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
   private _containerId: ChartingLibraryWidgetOptions['container'] =
     'tv_chart_container';
   private _tvWidget: IChartingLibraryWidget | null = null;
+  private _theme: ChartingLibraryWidgetOptions['theme'] = 'Dark';
+
+  @Input()
+  set isDarkActive(isDarkActive: boolean) {
+    this._theme = isDarkActive ? 'Dark' : 'Light';
+  }
 
   @Input()
   set symbol(symbol: ChartingLibraryWidgetOptions['symbol']) {
@@ -114,8 +120,13 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
   }
 
   @Input()
-  set containerId(containerId: ChartingLibraryWidgetOptions['container_id']) {
-    this._containerId = containerId || this._containerId;
+  set theme(autosize: ChartingLibraryWidgetOptions['autosize']) {
+    this._autosize = autosize || this._autosize;
+  }
+
+  @Input()
+  set containerId(theme: ChartingLibraryWidgetOptions['theme']) {
+    this._theme = theme || this._theme;
   }
 
   ngOnInit() {
@@ -150,6 +161,7 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
       user_id: this._userId,
       fullscreen: this._fullscreen,
       autosize: this._autosize,
+      theme: this._theme,
     };
 
     const tvWidget = new widget(widgetOptions);
