@@ -1,5 +1,7 @@
+import { UdpApiInterceptor } from './shared/services/interceptors/udp-api-interceptors';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 // NgRx
 import { StoreModule } from '@ngrx/store';
@@ -23,6 +25,7 @@ import { ModalComponent } from './components/modal/modal.component';
 import { ToasterComponent } from './components/toaster/toaster.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { MarketNewsComponent } from './components/market-news/market-news.component';
+import { TvChartContainerComponent } from './components/tv-chart-container/tv-chart-container.component';
 
 @NgModule({
   declarations: [
@@ -39,10 +42,12 @@ import { MarketNewsComponent } from './components/market-news/market-news.compon
     ToasterComponent,
     ToastComponent,
     MarketNewsComponent,
+    TvChartContainerComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     FormsModule,
     StoreModule.forRoot(appReducers),
     StoreDevtoolsModule.instrument({
@@ -52,7 +57,9 @@ import { MarketNewsComponent } from './components/market-news/market-news.compon
     }),
     NgApexchartsModule,
   ],
-  providers: [],
+  providers: [
+    //{ provide: HTTP_INTERCEPTORS, useClass: UdpApiInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

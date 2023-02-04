@@ -1,0 +1,17 @@
+<div
+  [hidden]="chartMode !== 'tradingview'"
+  class="app-tv-chart-container"
+  id="tv_chart_container"
+></div>
+
+<div [hidden]="chartMode === 'tradingview'" class="main-chart mb15">
+  <div id="chart" *ngIf="priceChart$ | async as priceChart">
+    <apx-chart
+      [series]="priceChart.series"
+      [chart]="options.chart"
+      [xaxis]="options.xaxis"
+      [yaxis]="options.yaxis"
+      [title]="options.title"
+    ></apx-chart>
+  </div>
+</div>
