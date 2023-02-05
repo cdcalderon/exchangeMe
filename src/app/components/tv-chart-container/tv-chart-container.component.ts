@@ -37,6 +37,7 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
   constructor(private store: Store<fromStore.AppState>) {
     this.options = options;
   }
+  studyIds: any[] = [];
 
   private _symbol: ChartingLibraryWidgetOptions['symbol'] = 'AAPL';
   private _interval: ChartingLibraryWidgetOptions['interval'] =
@@ -168,7 +169,34 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
     this._tvWidget = tvWidget;
 
     tvWidget.onChartReady(() => {
+      this.onCreateStudy(this._tvWidget, 'stoch307bull');
+
+      const baseDate = new Date('Dec/01/2017');
+      const year = baseDate.getFullYear();
+      const month = baseDate.getMonth();
+      const day = baseDate.getDate();
+      const signalDate = Date.UTC(year, month, day) / 1000;
+      const pointA = signalDate;
+      const pointB = this.sixMonthsBeforeUTC(pointA);
+
+      this.createText(this.getNumberDateTime('Jan/10/2018'), 183);
+      this.createTrendLine(pointA, pointB, 180, 152, '#F15152');
+      this.createFlag(this.getNumberDateTime('Dec/01/2017'), 183);
+      this.createBallon(
+        "Sorry I'm still working on this tradingview integration, you can use the chart widget in the meantime",
+        this.getNumberDateTime('Dec/01/2017'),
+        177,
+        '#2ef03a'
+      );
       tvWidget.headerReady().then(() => {
+        this.createNote(
+          `Hello this is a Message form Carlos Calderon: Sorry I'm still working on this tradingview integration, you can use the chart widget in the meantime 👆🏻`,
+          this.getNumberDateTime('Jan/01/2018'),
+          177,
+          '#2ef03a'
+        );
+        tvWidget.chart().createStudy('Moving Average', false, true);
+
         const button = tvWidget.createButton();
         button.setAttribute('title', 'Click to show a notification popup');
         button.classList.add('apply-common-tooltip');
@@ -184,6 +212,217 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
         button.innerHTML = 'Check API';
       });
     });
+  }
+
+  private createNote(
+    message: string,
+    time: number,
+    price: number,
+    backgroundColor: string = '#fffece'
+  ) {
+    if (this._tvWidget) {
+      this._tvWidget.chart().createMultipointShape([{ time, price }], {
+        shape: 'note',
+        disableSave: true,
+        text: message,
+        overrides: {
+          // backgroundColor: backgroundColor,
+          showLabel: true,
+          fontSize: 16,
+          linewidth: 2,
+          linecolor: '#00000',
+          markerColor: '#3F7D41',
+        },
+      });
+    }
+  }
+
+  private createBallon(
+    message: string,
+    time: number,
+    price: number,
+    backgroundColor: string = '#fffece'
+  ) {
+    if (this._tvWidget) {
+      this._tvWidget.chart().createMultipointShape([{ time, price }], {
+        shape: 'balloon',
+        lock: false,
+        disableSelection: true,
+        disableSave: true,
+        disableUndo: true,
+        overrides: {
+          backgroundColor: backgroundColor,
+          showLabel: true,
+          fontSize: 30,
+          linewidth: 2,
+          linecolor: '#00FFFF',
+        },
+      });
+    }
+  }
+
+  private createFlag(time: number, price: number) {
+    this._tvWidget.chart().createShape(
+      {
+        time: time,
+        price: price,
+      },
+      {
+        shape: 'flag',
+        zOrder: 'top',
+        lock: true,
+        disableSelection: true,
+        disableSave: true,
+        disableUndo: true,
+        text: 'Hello Carlos',
+        overrides: {
+          color: 'red',
+          fontsize: 12,
+        },
+      }
+    );
+  }
+
+  private createText(time: number, price: number) {
+    this._tvWidget.chart().createShape(
+      {
+        time: time,
+        price: price,
+      },
+      {
+        shape: 'anchored_text',
+        zOrder: 'top',
+        lock: true,
+        disableSelection: true,
+        disableSave: true,
+        disableUndo: true,
+        text: 'Carlos Side Project Demo',
+        overrides: {
+          color: 'green',
+          fontsize: 20,
+        },
+      }
+    );
+  }
+
+  private createTrendLine(
+    pointA: number,
+    pointB: number,
+    pointAPrice: number,
+    pointBPrice: number,
+    lineColor: string
+  ) {
+    if (this._tvWidget) {
+      this._tvWidget.chart().createMultipointShape(
+        [
+          { time: pointA, price: pointAPrice },
+          { time: pointB, price: pointBPrice },
+        ],
+        {
+          shape: 'trend_line',
+          lock: true,
+          disableSelection: true,
+          disableSave: true,
+          disableUndo: true,
+          overrides: {
+            showLabel: true,
+            fontSize: 30,
+            linewidth: 4,
+            linecolor: lineColor,
+          },
+        }
+      );
+    }
+  }
+
+  private getNumberDateTime(date: string): number {
+    return new Date(date).valueOf() / 1000;
+  }
+
+  private onCreateStudy(widget, marksType) {
+    if (marksType === 'stoch307bull') {
+      widget
+        .chart()
+        .createStudy('Stochastic', false, false, [14, 5, 5], null, {
+          '%d.color': '#E3FFCA',
+          '%k.color': '#00FF00',
+        })
+        .then((id) => {
+          this.studyIds.push(id);
+        });
+
+      widget
+        .chart()
+        .createStudy('Moving Average', false, true, [7], {
+          'plot.color.0': '#44bcd8',
+        })
+        .then((id) => {
+          this.studyIds.push(id);
+        });
+
+      widget
+        .chart()
+        .createStudy('Moving Average', false, true, [13], {
+          'plot.color.0': '#e07b39',
+        })
+        .then((id) => {
+          this.studyIds.push(id);
+        });
+
+      widget
+        .chart()
+        .createStudy('Choppiness Index', false, true, [14], {
+          'plot.color.0': '#44bcd8',
+        })
+        .then((id) => {
+          this.studyIds.push(id);
+        });
+
+      widget
+        .chart()
+        .createStudy('Bollinger Bands', false, true, [20], {
+          'plot.color.0': '#44bcd8',
+        })
+        .then((id) => {
+          this.studyIds.push(id);
+        });
+    } else {
+      widget.chart().createStudy('Stochastic', false, false, [14, 5, 5], null, {
+        '%d.color': '#E3FFCA',
+        '%k.color': '#00FF00',
+      });
+
+      widget
+        .chart()
+        .createStudy('MACD', false, false, [8, 17, 'close', 9], null, {
+          'macd.color': '#00FF00',
+          'signal.color': '#fffa00',
+          'histogram.color': '#00F9FF',
+        });
+
+      widget.chart().createStudy(
+        'Moving Average',
+        false,
+        true,
+        [10],
+        function (guid) {
+          console.log(guid);
+        },
+        { 'plot.color.0': '#fffa00' }
+      );
+    }
+  }
+
+  private oneWeekAfterUTC(date: number) {
+    const oneMonthAfter = Math.floor(date + 1 * 4 * 24 * 60 * 60);
+
+    return oneMonthAfter;
+  }
+
+  private sixMonthsBeforeUTC(date: number) {
+    const oneMonthAfter = Math.floor(date - 6 * 30 * 24 * 60 * 60);
+
+    return oneMonthAfter;
   }
 
   ngOnDestroy() {
