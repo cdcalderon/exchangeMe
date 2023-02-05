@@ -147,7 +147,10 @@
               >Get PCHO by joining liquidity pool</a
             >
           </div>
-          <h2>Wallet {{ token.balances[0] }} {{ token.symbols[0] }}</h2>
+          <h2>
+            Wallet {{ token.balances[0] | number: "1.2-2" }}
+            {{ token.symbols[0] }}
+          </h2>
           <p>Exchange {{ exchangeBalances[0] }}</p>
           <div class="input-group mb-3">
             <span class="input-group-text" id="inputGroup-sizing-default">{{
@@ -193,7 +196,10 @@
               Get {{ token.symbols[1] }} by joining Liquidity Pool
             </button>
           </div>
-          <h2>Wallet {{ token.balances[1] }} {{ token.symbols[1] }}</h2>
+          <h2>
+            Wallet {{ token.balances[1] | number: "1.2-2" }}
+            {{ token.symbols[1] }}
+          </h2>
           <p>Exchange {{ exchangeBalances[1] }}</p>
           <div class="input-group mb-3">
             <span class="input-group-text" id="inputGroup-sizing-default">{{
