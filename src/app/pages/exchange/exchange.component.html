@@ -8,8 +8,21 @@
       ></app-market-pairs>
     </div>
     <div class="col-sm-12 col-md-6">
-      <!-- <app-trading-chart></app-trading-chart> -->
+      <div class="form-check form-switch" *ngIf="chartMode === 'tradingview'">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="char-mode"
+          [(ngModel)]="isActive"
+        />
+        <label class="tradingview-switch form-check-label" for="char-mode"
+          >Switch Trading view mode</label
+        >
+      </div>
+
+      <app-trading-chart [hidden]="!isActive"></app-trading-chart>
       <app-tv-chart-container
+        [hidden]="isActive"
         [isDarkActive]="darkMode$ | async"
       ></app-tv-chart-container>
       <!-- <div class="darkMode">
