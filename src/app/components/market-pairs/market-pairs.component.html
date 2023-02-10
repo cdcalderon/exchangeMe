@@ -185,7 +185,15 @@
       <div class="carousel-cell">
         <div class="market-carousel-item">
           <div class="market-carousel-item-name">
-            <img src="../../../assets/img/icon/5.png" alt="" />
+            <img
+              *ngIf="token.symbols[1] === 'JEDY'; else otherToken"
+              src="../../../assets/img/icon/5.png"
+              alt=""
+            />
+            <ng-template #otherToken>
+              <img src="../../../assets/img/icon/3.png" alt="" />
+            </ng-template>
+
             <strong>{{ token.symbols[1] }}</strong>
             <button
               class="btn lq-btn"
