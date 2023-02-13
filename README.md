@@ -47,7 +47,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Defi Exchange][product-screenshot1]](https://golden-gecko-d86f9a.netlify.app/static/c2d54da8f5e23f11efd3e221710f153a/c384e/image1.jpg)
+[![Defi Exchange][product-screenshotgif]](https://golden-gecko-d86f9a.netlify.app/static/c2d54da8f5e23f11efd3e221710f153a/c384e/image1.jpg)
 
 [![Defi Exchange 2][product-screensho2]](https://golden-gecko-d86f9a.netlify.app/static/797dd9fab1bb102be4cd733e74c334a5/c384e/image.jpg)
 
@@ -166,6 +166,7 @@ Project Link: [https://github.com/cdcalderon/exchangeMe](http://tiny-hall-9611.o
 [license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://github.com/cdcalderon
+[product-screenshotgif]: images/Exchange.gif
 [product-screenshot1]: images/Exchange1.png
 [product-screenshot2]: images/Exchange2.png
 [product-screenshot3]: images/Exchange3.png
