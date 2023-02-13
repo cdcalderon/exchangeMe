@@ -16,7 +16,7 @@
     <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
     ·
     <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
-  </p>
+  </p>`
 </div>
 
 
@@ -48,6 +48,12 @@
 ## About The Project
 
 [![Defi Exchange][product-screenshotgif]](https://golden-gecko-d86f9a.netlify.app/static/c2d54da8f5e23f11efd3e221710f153a/c384e/image1.jpg)
+<img width="960" alt="Exchange3" src="https://user-images.githubusercontent.com/5435179/218416775-17f23f43-cb44-4f99-9457-cb94406aadfd.png">
+<img width="953" alt="Exchange4" src="https://user-images.githubusercontent.com/5435179/218416779-686940e1-483d-421f-b569-79c96f8b988c.png">
+<img width="960" alt="Exchange5" src="https://user-images.githubusercontent.com/5435179/218416780-aab94dee-fc18-4d3c-b9f6-6d4162159fa4.png">
+<img width="953" alt="Exchange6" src="https://user-images.githubusercontent.com/5435179/218416781-2201219d-1a2f-4385-864d-784e617b95c5.png">
+<img width="960" alt="Exchange1" src="https://user-images.githubusercontent.com/5435179/218416783-24e578ef-85a7-4260-b4e9-5782b5dab3c0.png">
+<img width="960" alt="Exchange2" src="https://user-images.githubusercontent.com/5435179/218416784-d7d04643-b0a7-4de5-afed-0237e574e0e1.png">
 
 [![Defi Exchange 2][product-screensho2]](https://golden-gecko-d86f9a.netlify.app/static/797dd9fab1bb102be4cd733e74c334a5/c384e/image.jpg)
 
