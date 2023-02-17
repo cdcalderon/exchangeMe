@@ -26,6 +26,7 @@ import { ToasterComponent } from './components/toaster/toaster.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { MarketNewsComponent } from './components/market-news/market-news.component';
 import { TvChartContainerComponent } from './components/tv-chart-container/tv-chart-container.component';
+import { SignalAnalizerComponent } from './pages/signal-analizer/signal-analizer.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { TvChartContainerComponent } from './components/tv-chart-container/tv-ch
     ToastComponent,
     MarketNewsComponent,
     TvChartContainerComponent,
+    SignalAnalizerComponent,
   ],
   imports: [
     BrowserModule,
