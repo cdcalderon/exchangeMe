@@ -29,6 +29,7 @@ import { TvChartContainerComponent } from './components/tv-chart-container/tv-ch
 import { SignalAnalizerComponent } from './pages/signal-analizer/signal-analizer.component';
 import { SignalListComponent } from './components/signal-list/signal-list.component';
 import { InvestipsChartComponent } from './components/investips-chart/investips-chart.component';
+import { ImgFallbackDirective } from './shared/directives/image-falback.directive';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { InvestipsChartComponent } from './components/investips-chart/investips-
     SignalAnalizerComponent,
     SignalListComponent,
     InvestipsChartComponent,
+    ImgFallbackDirective,
   ],
   imports: [
     BrowserModule,

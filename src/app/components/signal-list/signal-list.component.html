@@ -19,7 +19,12 @@
           <div class="d-flex">
             <img
               class="token-img"
-              src="../../../assets/img/icon/1.png"
+              src="https://eodhistoricaldata.com/img/logos/US/{{
+                signal.symbol.toLowerCase()
+              }}.png"
+              appImgFallback="https://eodhistoricaldata.com/img/logos/US/{{
+                signal.symbol.toUpperCase()
+              }}.png"
               alt="btc"
             />
             <div>
