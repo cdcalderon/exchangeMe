@@ -27,6 +27,8 @@ import { ToastComponent } from './components/toast/toast.component';
 import { MarketNewsComponent } from './components/market-news/market-news.component';
 import { TvChartContainerComponent } from './components/tv-chart-container/tv-chart-container.component';
 import { SignalAnalizerComponent } from './pages/signal-analizer/signal-analizer.component';
+import { SignalListComponent } from './components/signal-list/signal-list.component';
+import { InvestipsChartComponent } from './components/investips-chart/investips-chart.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,8 @@ import { SignalAnalizerComponent } from './pages/signal-analizer/signal-analizer
     MarketNewsComponent,
     TvChartContainerComponent,
     SignalAnalizerComponent,
+    SignalListComponent,
+    InvestipsChartComponent,
   ],
   imports: [
     BrowserModule,

@@ -22,6 +22,7 @@ import { options, defaultSeries } from '../trading-chart/price-chart.config';
 import { ChartOptions } from '../trading-chart/trading-chart.component';
 import * as fromStore from 'src/app/store/app.reducer';
 import { Store } from '@ngrx/store';
+import { IZigZagFiboSignal } from 'src/app/shared/models/zigzag-fibo-signal';
 
 @Component({
   selector: 'app-tv-chart-container',
@@ -38,6 +39,7 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
     this.options = options;
   }
   studyIds: any[] = [];
+  @Input() selectedZigZagSignal: IZigZagFiboSignal;
 
   private _symbol: ChartingLibraryWidgetOptions['symbol'] = 'AAPL';
   private _interval: ChartingLibraryWidgetOptions['interval'] =
