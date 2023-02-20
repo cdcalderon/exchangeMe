@@ -1,6 +1,7 @@
 import * as provider from './provider.reducer';
 import * as token from './token.reducer';
 import * as exchange from './exchange.reducer';
+import * as signals from './signals.reducer';
 import {
   ActionReducerMap,
   createFeatureSelector,
@@ -17,12 +18,14 @@ export interface AppState {
   provider: provider.ProviderState;
   token: token.TokenState;
   exchange: exchange.ExchangeState;
+  signals: signals.SgnalsState;
 }
 
 export const appReducers: ActionReducerMap<AppState> = {
   token: token.tokenReducer,
   provider: provider.providerReducer,
   exchange: exchange.exchangeReducer,
+  signals: signals.signalsReducer,
 };
 
 export const getTokenState = createFeatureSelector<token.TokenState>('token');
