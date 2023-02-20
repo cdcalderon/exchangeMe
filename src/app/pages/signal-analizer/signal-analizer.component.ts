@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { filter, map, Observable, tap } from 'rxjs';
 import { ISignal } from 'src/app/shared/models/ISignal';
 import { ThreeArrowSignal } from 'src/app/shared/models/three-arrow-signal';
 import { IZigZagFiboSignal } from 'src/app/shared/models/zigzag-fibo-signal';
 import { ZigzagFiboWeeklySignalsService } from 'src/app/shared/services/zigzag-fibo-weekly-signals.service';
+import { AppState } from 'src/app/store/app.reducer';
+import * as signalActions from '../../store/signals.actions';
 
 @Component({
   selector: 'app-signal-analizer',
@@ -13,18 +16,29 @@ import { ZigzagFiboWeeklySignalsService } from 'src/app/shared/services/zigzag-f
 export class SignalAnalizerComponent implements OnInit {
   zigZagFibSignalsUp$: Observable<IZigZagFiboSignal[]>;
   threeGreenArrowsSignals$: Observable<ThreeArrowSignal[]>;
+  selectedSignals$: Observable<ISignal[]>;
+
   defaultSelected = 0;
   selectedSignal: ISignal;
   loading = false;
-  activeSignal = 'threearrows';
-  constructor(private zigzagSignalService: ZigzagFiboWeeklySignalsService) {}
+  activeSignal = 'zigzag';
+  constructor(
+    private zigzagSignalService: ZigzagFiboWeeklySignalsService,
+    private store: Store<AppState>
+  ) {}
 
   ngOnInit(): void {
-    if (this.activeSignal === 'zigzag') {
-      this.getSignals();
-    } else {
-      this.getThreeArrowSignals();
-    }
+    this.store
+      .select('signals')
+      .pipe(map((s) => s.activeSignal))
+      .subscribe((activeSignal) => {
+        this.activeSignal = activeSignal;
+        if (this.activeSignal === 'zigzag') {
+          this.getSignals();
+        } else {
+          this.getThreeArrowSignals();
+        }
+      });
   }
 
   getSignals() {
@@ -65,5 +79,11 @@ export class SignalAnalizerComponent implements OnInit {
   signalSelected(signal: ISignal) {
     console.log(signal);
     this.selectedSignal = signal;
+  }
+
+  changeActiveSignal(selectedSignals: string) {
+    this.store.dispatch(
+      signalActions.changeActiveSignals({ activeSignal: selectedSignals })
+    );
   }
 }

@@ -40,7 +40,7 @@ import { ThreeArrowSignal } from 'src/app/shared/models/three-arrow-signal';
   styleUrls: ['./tv-chart-container.component.css'],
 })
 export class TvChartContainerComponent implements OnInit, OnDestroy {
-  activeSignal = 'threearrows';
+  @Input() activeSignals = 'threearrows';
   priceChart$: Observable<any>; // TODO: create interfaces
   chartMode: string;
   @ViewChild('chart') chart: ChartComponent;
@@ -146,7 +146,7 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes && changes['selectedSignal'] && this._tvWidget) {
-      if (this.activeSignal === 'zigzag') {
+      if (this.activeSignals === 'zigzag') {
         this.handleZigZagSignal(changes['selectedSignal'].currentValue);
       } else {
         this.handleThreeArrowSignal(changes['selectedSignal'].currentValue);

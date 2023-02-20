@@ -6,6 +6,7 @@ import {
   OnChanges,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { map } from 'rxjs';
 import { ISignal } from 'src/app/shared/models/ISignal';
 import { IZigZagFiboSignal } from 'src/app/shared/models/zigzag-fibo-signal';
 import { AppState } from 'src/app/store/app.reducer';
@@ -18,6 +19,7 @@ import * as providerActions from '../../store/provider.actions';
 })
 export class InvestipsChartComponent implements OnInit, OnChanges {
   private _selectedSignal: ISignal;
+  activeSignals = 'zigzag';
 
   @Input()
   set selectedSignal(selectedSignal: ISignal) {
@@ -33,7 +35,14 @@ export class InvestipsChartComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {}
 
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: Store<AppState>) {
+    this.store
+      .select('signals')
+      .pipe(map((s) => s.activeSignal))
+      .subscribe((activeSignals) => {
+        this.activeSignals = activeSignals;
+      });
+  }
 
   ngOnInit(): void {
     this.store.dispatch(
