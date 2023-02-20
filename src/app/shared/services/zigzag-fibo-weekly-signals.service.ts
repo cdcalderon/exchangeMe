@@ -10,6 +10,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { PagedSignalList } from 'src/app/shared/models/paged-signal-list';
 import { IZigZagFiboSignal } from 'src/app/shared/models/zigzag-fibo-signal';
 import { environment } from 'src/environments/environment';
+import { ThreeArrowSignal } from '../models/three-arrow-signal';
 
 @Injectable({
   providedIn: 'root',
@@ -82,6 +83,16 @@ export class ZigzagFiboWeeklySignalsService {
     //     tap((data) => console.log('Published Signals: ' + data)),
     //     catchError(this.handleError)
     //   );
+  }
+
+  getThreeGreenArrowSignals(
+    from: string,
+    to: string
+  ): Observable<ThreeArrowSignal[]> {
+    let params = new HttpParams();
+    params = params.append('symbol', 'AAPL');
+    const apiRequestUrl = `${this._stockQuotesAndIndicatorssUrlBase}/api/signals/threegreeauprrows`;
+    return this.http.get<ThreeArrowSignal[]>(apiRequestUrl);
   }
 
   private handleError(error: Response) {

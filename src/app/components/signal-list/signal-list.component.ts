@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { IZigZagFiboSignal } from 'src/app/shared/models/zigzag-fibo-signal';
+import { ISignal } from 'src/app/shared/models/ISignal';
 
 @Component({
   selector: 'app-signal-list',
@@ -8,15 +8,15 @@ import { IZigZagFiboSignal } from 'src/app/shared/models/zigzag-fibo-signal';
 })
 export class SignalListComponent implements OnInit {
   @Input()
-  signals: IZigZagFiboSignal[] = [];
+  signals: ISignal[] = [];
   @Output()
-  signalSelected = new EventEmitter<IZigZagFiboSignal>();
+  signalSelected = new EventEmitter<ISignal>();
 
   constructor() {}
 
   ngOnInit(): void {}
 
-  selectSignal(signal: IZigZagFiboSignal) {
+  selectSignal(signal: ISignal) {
     this.signalSelected.emit(signal);
   }
 }

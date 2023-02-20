@@ -31,6 +31,7 @@ import * as fromStore from 'src/app/store/app.reducer';
 import { Store } from '@ngrx/store';
 import { IZigZagFiboSignal } from 'src/app/shared/models/zigzag-fibo-signal';
 import { environment } from '../../../environments/environment';
+import { ISignal } from 'src/app/shared/models/ISignal';
 
 @Component({
   selector: 'app-tv-chart-container',
@@ -47,7 +48,7 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
     this.options = options;
   }
   studyIds: any[] = [];
-  @Input() selectedZigZagSignal: IZigZagFiboSignal;
+  @Input() selectedSignal: ISignal;
 
   private _symbol: ChartingLibraryWidgetOptions['symbol'] = 'AAPL';
   private _interval: ChartingLibraryWidgetOptions['interval'] =
@@ -142,8 +143,8 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes && changes['selectedZigZagSignal'] && this._tvWidget) {
-      this.handleZigZagSignal(changes['selectedZigZagSignal'].currentValue);
+    if (changes && changes['selectedSignal'] && this._tvWidget) {
+      this.handleZigZagSignal(changes['selectedSignal'].currentValue);
     }
   }
 
@@ -456,9 +457,7 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
     if (selectedZigZagSignal && this._tvWidget) {
       this.clearChart();
       console.log('Changes from tv chart container ' + selectedZigZagSignal);
-      const base = this.getUTCUnixDate(
-        this.selectedZigZagSignal.activationDate
-      );
+      const base = this.getUTCUnixDate(selectedZigZagSignal.activationDate);
       const from = this.twoMonthsBeforeUTC(base);
       const to = this.oneMonthAfterUTC(base);
 
@@ -474,18 +473,18 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
           .setVisibleRange({ from, to }, { percentRightMargin: 20 })
           .then(() => {
             console.log('New visible range is applied');
-            this.addZigZagFiboSignal(this.selectedZigZagSignal);
+            this.addZigZagFiboSignal(selectedZigZagSignal);
           });
       } else {
         this._tvWidget
           .activeChart()
-          .setSymbol(this.selectedZigZagSignal.symbol, () => {
+          .setSymbol(selectedZigZagSignal.symbol, () => {
             this._tvWidget
               .activeChart()
               .setVisibleRange({ from, to }, { percentRightMargin: 20 })
               .then(() => {
                 console.log('New visible range is applied');
-                this.addZigZagFiboSignal(this.selectedZigZagSignal);
+                this.addZigZagFiboSignal(selectedZigZagSignal);
               });
           });
       }

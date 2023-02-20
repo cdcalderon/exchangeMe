@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { filter, map, Observable, tap } from 'rxjs';
+import { ISignal } from 'src/app/shared/models/ISignal';
+import { ThreeArrowSignal } from 'src/app/shared/models/three-arrow-signal';
 import { IZigZagFiboSignal } from 'src/app/shared/models/zigzag-fibo-signal';
 import { ZigzagFiboWeeklySignalsService } from 'src/app/shared/services/zigzag-fibo-weekly-signals.service';
 
@@ -10,8 +12,9 @@ import { ZigzagFiboWeeklySignalsService } from 'src/app/shared/services/zigzag-f
 })
 export class SignalAnalizerComponent implements OnInit {
   zigZagFibSignalsUp$: Observable<IZigZagFiboSignal[]>;
+  threeGreenArrowsSignals$: Observable<ThreeArrowSignal[]>;
   defaultSelected = 0;
-  selectedSignal: IZigZagFiboSignal;
+  selectedSignal: ISignal;
   loading = false;
   constructor(private zigzagSignalService: ZigzagFiboWeeklySignalsService) {}
 
@@ -41,7 +44,20 @@ export class SignalAnalizerComponent implements OnInit {
       );
   }
 
-  signalSelected(signal: IZigZagFiboSignal) {
+  getThreeArrowSignals() {
+    this.loading = true;
+    this.threeGreenArrowsSignals$ = this.zigzagSignalService
+      .getThreeGreenArrowSignals(null, null)
+      .pipe(
+        filter((signals) => signals != null),
+        tap((result) => {
+          console.log(JSON.stringify(result, null, '\t'));
+          this.loading = false;
+        })
+      );
+  }
+
+  signalSelected(signal: ISignal) {
     console.log(signal);
     this.selectedSignal = signal;
   }

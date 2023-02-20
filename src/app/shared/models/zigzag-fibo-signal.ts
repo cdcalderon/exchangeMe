@@ -1,10 +1,6 @@
-export interface IZigZagFiboSignal {
-  id: number;
-  symbol: string;
-  weekNumber: number;
-  activationDirection: string;
-  activationPrice: number;
-  activationDate: Date;
+import { ISignal } from './ISignal';
+
+export class IZigZagFiboSignal extends ISignal {
   aLow: number;
   aHigh: number;
   bHigh: number;
@@ -17,11 +13,4 @@ export interface IZigZagFiboSignal {
   bDate: Date;
   cDate: Date;
   zigzagType: string;
-  support?: number;
-  resistence?: number;
-  selected?: boolean;
-  highlighted?: boolean;
-  hovered?: boolean;
-  signalType: string;
-  isPublished: boolean;
 }

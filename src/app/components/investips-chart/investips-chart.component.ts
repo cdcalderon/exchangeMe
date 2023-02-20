@@ -6,6 +6,7 @@ import {
   OnChanges,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { ISignal } from 'src/app/shared/models/ISignal';
 import { IZigZagFiboSignal } from 'src/app/shared/models/zigzag-fibo-signal';
 import { AppState } from 'src/app/store/app.reducer';
 import * as providerActions from '../../store/provider.actions';
@@ -16,16 +17,16 @@ import * as providerActions from '../../store/provider.actions';
   styleUrls: ['./investips-chart.component.scss'],
 })
 export class InvestipsChartComponent implements OnInit, OnChanges {
-  private _selectedZigZagSignal: IZigZagFiboSignal;
+  private _selectedSignal: ISignal;
 
   @Input()
-  set selectedZigZagSignal(selectedZigZagSignal: IZigZagFiboSignal) {
-    this._selectedZigZagSignal =
-      selectedZigZagSignal || this._selectedZigZagSignal;
+  set selectedSignal(selectedSignal: ISignal) {
+    console.log('selectedSignal chan', selectedSignal);
+    this._selectedSignal = selectedSignal || this._selectedSignal;
   }
 
-  get selectedZigZagSignal(): IZigZagFiboSignal {
-    return this._selectedZigZagSignal;
+  get selectedSignal(): ISignal {
+    return this._selectedSignal;
   }
 
   @Input() marksType: string;
