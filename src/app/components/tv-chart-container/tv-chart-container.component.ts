@@ -540,7 +540,7 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
     if (signal.activationDirection === 'UP') {
       //const support = Math.min(signal.cLow, signal.cLowestOpenOrClose);
       const support = signal.support;
-      this.createTrendLine(pointA, pointB, support, support, '#1c100b');
+      this.createTrendLine(pointA, pointB, support, support, '#3073d1');
       // this.createTrendLine(pointA, pointB, signal.currentWeekFibSupport, signal.currentWeekFibSupport, '#00FFFF');
 
       // this.createTrendLine(pointA, pointB, signal.ironCondorUpLeg, signal.ironCondorUpLeg, '#00FFFF');

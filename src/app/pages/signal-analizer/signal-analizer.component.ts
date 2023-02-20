@@ -27,7 +27,7 @@ export class SignalAnalizerComponent implements OnInit {
         filter((signals) => signals != null),
         map(
           (response) =>
-            response.signals.filter((s) => s.activationDirection === 'DOWN')
+            response.signals.filter((s) => s.activationDirection === 'UP')
           // .map((s, i) => {
           //   s.id = i + 1;
           //   s.highlighted = false;
