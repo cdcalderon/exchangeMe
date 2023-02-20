@@ -3,7 +3,22 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: true,
+  stockMarketQuotesWithIndicatorsApiBaseUrl:
+    'https://warm-journey-46979.herokuapp.com',
+  //udfApiBaseUrl: 'http://localhost:50894',
+  udfApiBaseUrl: 'https://investipsquotesgateway.azurewebsites.net',
+  stockMarketUDFApiBaseUrl: 'https://enigmatic-waters-56889.herokuapp.com',
+  investipsServerWebAPIBaseUrl: 'http://localhost:3308',
+  investipsDotnetApi: 'http://investipsapi.azurewebsites.net',
+
+  // udfApiBaseUrl: 'https://localhost:5002',
+
+  // production: false,
+  // stockMarketQuotesWithIndicatorsApiBaseUrl: 'http://localhost:4000',
+  // stockMarketUDFApiBaseUrl: 'http://localhost:4600',
+  // investipsServerWebAPIBaseUrl: 'http://localhost:3308',
+  // investipsDotnetApi: 'http://investipsapi.azurewebsites.net'
 };
 
 /*
