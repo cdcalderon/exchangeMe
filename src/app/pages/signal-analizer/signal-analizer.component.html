@@ -1,10 +1,19 @@
 <div class="container-fluid mtb15 no-fluid">
   <div class="row sm-gutters">
     <div class="col-sm-12 col-md-3">
-      <app-signal-list
-        [signals]="zigZagFibSignalsUp$ | async"
-        (signalSelected)="signalSelected($event)"
-      ></app-signal-list>
+      <ng-container *ngIf="activeSignal === 'zigzag'; else threearrows">
+        <app-signal-list
+          [signals]="zigZagFibSignalsUp$ | async"
+          (signalSelected)="signalSelected($event)"
+        ></app-signal-list>
+      </ng-container>
+
+      <ng-template #threearrows>
+        <app-signal-list
+          [signals]="threeGreenArrowsSignals$ | async"
+          (signalSelected)="signalSelected($event)"
+        ></app-signal-list>
+      </ng-template>
     </div>
     <div class="col-sm-12 col-md-9">
       <app-investips-chart

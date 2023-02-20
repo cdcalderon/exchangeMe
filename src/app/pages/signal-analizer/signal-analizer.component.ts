@@ -16,10 +16,15 @@ export class SignalAnalizerComponent implements OnInit {
   defaultSelected = 0;
   selectedSignal: ISignal;
   loading = false;
+  activeSignal = 'threearrows';
   constructor(private zigzagSignalService: ZigzagFiboWeeklySignalsService) {}
 
   ngOnInit(): void {
-    this.getSignals();
+    if (this.activeSignal === 'zigzag') {
+      this.getSignals();
+    } else {
+      this.getThreeArrowSignals();
+    }
   }
 
   getSignals() {

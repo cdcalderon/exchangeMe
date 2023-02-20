@@ -32,6 +32,7 @@ import { Store } from '@ngrx/store';
 import { IZigZagFiboSignal } from 'src/app/shared/models/zigzag-fibo-signal';
 import { environment } from '../../../environments/environment';
 import { ISignal } from 'src/app/shared/models/ISignal';
+import { ThreeArrowSignal } from 'src/app/shared/models/three-arrow-signal';
 
 @Component({
   selector: 'app-tv-chart-container',
@@ -39,6 +40,7 @@ import { ISignal } from 'src/app/shared/models/ISignal';
   styleUrls: ['./tv-chart-container.component.css'],
 })
 export class TvChartContainerComponent implements OnInit, OnDestroy {
+  activeSignal = 'threearrows';
   priceChart$: Observable<any>; // TODO: create interfaces
   chartMode: string;
   @ViewChild('chart') chart: ChartComponent;
@@ -144,7 +146,11 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes && changes['selectedSignal'] && this._tvWidget) {
-      this.handleZigZagSignal(changes['selectedSignal'].currentValue);
+      if (this.activeSignal === 'zigzag') {
+        this.handleZigZagSignal(changes['selectedSignal'].currentValue);
+      } else {
+        this.handleThreeArrowSignal(changes['selectedSignal'].currentValue);
+      }
     }
   }
 
@@ -365,10 +371,15 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
           this.studyIds.push(id);
         });
     } else {
-      widget.chart().createStudy('Stochastic', false, false, [14, 5, 5], null, {
-        '%d.color': '#E3FFCA',
-        '%k.color': '#00FF00',
-      });
+      widget
+        .chart()
+        .createStudy('Stochastic', false, false, [14, 5, 5], null, {
+          '%d.color': '#E3FFCA',
+          '%k.color': '#00FF00',
+        })
+        .then((id) => {
+          this.studyIds.push(id);
+        });
 
       widget
         .chart()
@@ -376,18 +387,42 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
           'macd.color': '#00FF00',
           'signal.color': '#fffa00',
           'histogram.color': '#00F9FF',
+        })
+        .then((id) => {
+          this.studyIds.push(id);
         });
 
-      widget.chart().createStudy(
-        'Moving Average',
-        false,
-        true,
-        [10],
-        function (guid) {
-          console.log(guid);
-        },
-        { 'plot.color.0': '#fffa00' }
-      );
+      widget
+        .chart()
+        .createStudy(
+          'Moving Average',
+          false,
+          true,
+          [10],
+          function (guid) {
+            console.log(guid);
+          },
+          { 'plot.color.0': '#fffa00' }
+        )
+        .then((id) => {
+          this.studyIds.push(id);
+        });
+
+      widget
+        .chart()
+        .createStudy(
+          'Moving Average',
+          false,
+          true,
+          [30],
+          function (guid) {
+            console.log(guid);
+          },
+          { 'plot.color.0': '#b4ff05' }
+        )
+        .then((id) => {
+          this.studyIds.push(id);
+        });
     }
   }
 
@@ -485,6 +520,44 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
               .then(() => {
                 console.log('New visible range is applied');
                 this.addZigZagFiboSignal(selectedZigZagSignal);
+              });
+          });
+      }
+    }
+  }
+
+  private handleThreeArrowSignal(selectedZigZagSignal: ThreeArrowSignal) {
+    if (selectedZigZagSignal && this._tvWidget) {
+      this.clearChart();
+      console.log('Changes from tv chart container ' + selectedZigZagSignal);
+      const base = this.getUTCUnixDate(selectedZigZagSignal.activationDate);
+      const from = this.twoMonthsBeforeUTC(base);
+      const to = this.oneMonthAfterUTC(base);
+
+      const currentSymbol = this._tvWidget
+        .activeChart()
+        .symbol()
+        .split(':')
+        .pop();
+      this.onCreateStudy(this._tvWidget, 'threarrows');
+      if (selectedZigZagSignal.symbol === currentSymbol) {
+        this._tvWidget
+          .activeChart()
+          .setVisibleRange({ from, to }, { percentRightMargin: 20 })
+          .then(() => {
+            console.log('New visible range is applied');
+            //this.addZigZagFiboSignal(selectedZigZagSignal);
+          });
+      } else {
+        this._tvWidget
+          .activeChart()
+          .setSymbol(selectedZigZagSignal.symbol, () => {
+            this._tvWidget
+              .activeChart()
+              .setVisibleRange({ from, to }, { percentRightMargin: 20 })
+              .then(() => {
+                console.log('New visible range is applied');
+                //this.addZigZagFiboSignal(selectedZigZagSignal);
               });
           });
       }
