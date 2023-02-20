@@ -15,7 +15,9 @@ export class SignalAnalizerComponent implements OnInit {
   loading = false;
   constructor(private zigzagSignalService: ZigzagFiboWeeklySignalsService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getSignals();
+  }
 
   getSignals() {
     this.loading = true;
@@ -32,7 +34,10 @@ export class SignalAnalizerComponent implements OnInit {
           //   return s;
           // })
         ),
-        tap(() => (this.loading = false))
+        tap((result) => {
+          console.log(JSON.stringify(result, null, '\t'));
+          this.loading = false;
+        })
       );
   }
 }

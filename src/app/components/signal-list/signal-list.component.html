@@ -1,8 +1,11 @@
-<div class="market-news mt15">
+<div class="main-chart mt15">
   <h2 class="heading">Liquidity Pools</h2>
   <div>
-    <ul class="settings-nav nav nav-pills nav-tabs">
-      <li class="nav-item">
+    <ul
+      class="settings-nav nav nav-pills nav-tabs"
+      style="overflow: auto; height: 88vh"
+    >
+      <li class="nav-item" *ngFor="let signal of signals">
         <a
           href="https://throbbing-hat-4928.on.fleek.co/"
           rel="noopener noreferrer"
@@ -19,62 +22,8 @@
               alt="btc"
             />
             <div>
-              <h2>PCHO</h2>
+              <h2>{{ signal.symbol }}</h2>
               <p>Get PCHO by joining liquidity pool</p>
-            </div>
-          </div>
-          <div>
-            <h3>1</h3>
-            <p class="text-end"><i class="icon ion-md-lock"></i> Per Block</p>
-          </div>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a
-          href="https://calm-hall-6939.on.fleek.co/"
-          rel="noopener noreferrer"
-          target="_blank"
-          class="nav-link d-flex justify-content-between align-items-center active l-pool"
-          role="tab"
-          aria-controls="coinBTC"
-          aria-selected="true"
-        >
-          <div class="d-flex">
-            <img
-              class="token-img"
-              src="../../../assets/img/icon/5.png"
-              alt="btc"
-            />
-            <div>
-              <h2>JEDY</h2>
-              <p>Get JEDY by joining liquidity pool</p>
-            </div>
-          </div>
-          <div>
-            <h3>1</h3>
-            <p class="text-end"><i class="icon ion-md-lock"></i> Per Block</p>
-          </div>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a
-          href="https://summer-band-4978.on.fleek.co"
-          rel="noopener noreferrer"
-          target="_blank"
-          class="nav-link d-flex justify-content-between align-items-center active l-pool"
-          role="tab"
-          aria-controls="coinBTC"
-          aria-selected="true"
-        >
-          <div class="d-flex">
-            <img
-              class="token-img"
-              src="../../../assets/img/icon/3.png"
-              alt="btc"
-            />
-            <div>
-              <h2>CHIH</h2>
-              <p>Get CHIH by joining liquidity pool</p>
             </div>
           </div>
           <div>

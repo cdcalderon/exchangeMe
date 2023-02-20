@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-signal-list',
   templateUrl: './signal-list.component.html',
-  styleUrls: ['./signal-list.component.scss']
+  styleUrls: ['./signal-list.component.scss'],
 })
 export class SignalListComponent implements OnInit {
+  @Input()
+  signals = [];
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }
