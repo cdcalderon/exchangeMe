@@ -5,7 +5,10 @@ import {
   SimpleChanges,
   OnChanges,
 } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { IZigZagFiboSignal } from 'src/app/shared/models/zigzag-fibo-signal';
+import { AppState } from 'src/app/store/app.reducer';
+import * as providerActions from '../../store/provider.actions';
 
 @Component({
   selector: 'app-investips-chart',
@@ -29,7 +32,11 @@ export class InvestipsChartComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {}
 
-  constructor() {}
+  constructor(private store: Store<AppState>) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.store.dispatch(
+      providerActions.loadChart({ chartMode: 'tradingview' })
+    );
+  }
 }

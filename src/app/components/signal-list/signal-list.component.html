@@ -5,11 +5,12 @@
       class="settings-nav nav nav-pills nav-tabs"
       style="overflow: auto; height: 88vh"
     >
-      <li class="nav-item" *ngFor="let signal of signals">
-        <a
-          href="https://throbbing-hat-4928.on.fleek.co/"
-          rel="noopener noreferrer"
-          target="_blank"
+      <li
+        class="nav-item"
+        *ngFor="let signal of signals"
+        (click)="selectSignal(signal)"
+      >
+        <div
           class="nav-link d-flex justify-content-between align-items-center active l-pool"
           role="tab"
           aria-controls="coinBTC"
@@ -30,7 +31,7 @@
             <h3>1</h3>
             <p class="text-end"><i class="icon ion-md-lock"></i> Per Block</p>
           </div>
-        </a>
+        </div>
       </li>
     </ul>
   </div>

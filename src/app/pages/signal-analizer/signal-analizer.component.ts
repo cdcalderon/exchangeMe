@@ -27,7 +27,7 @@ export class SignalAnalizerComponent implements OnInit {
         filter((signals) => signals != null),
         map(
           (response) =>
-            response.signals.filter((s) => s.activationDirection === 'UP')
+            response.signals.filter((s) => s.activationDirection === 'DOWN')
           // .map((s, i) => {
           //   s.id = i + 1;
           //   s.highlighted = false;
@@ -39,5 +39,10 @@ export class SignalAnalizerComponent implements OnInit {
           this.loading = false;
         })
       );
+  }
+
+  signalSelected(signal: IZigZagFiboSignal) {
+    console.log(signal);
+    this.selectedSignal = signal;
   }
 }

@@ -3,8 +3,15 @@
     <div class="col-sm-12 col-md-3">
       <app-signal-list
         [signals]="zigZagFibSignalsUp$ | async"
+        (signalSelected)="signalSelected($event)"
       ></app-signal-list>
     </div>
-    <div style="background-color: red" class="col-sm-12 col-md-9">.</div>
+    <div class="col-sm-12 col-md-9">
+      <app-investips-chart
+        [selectedZigZagSignal]="selectedSignal"
+        class="signal-chart"
+      >
+      </app-investips-chart>
+    </div>
   </div>
 </div>

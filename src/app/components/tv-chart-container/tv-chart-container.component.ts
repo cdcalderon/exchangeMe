@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+  SimpleChanges,
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   widget,
@@ -23,6 +30,7 @@ import { ChartOptions } from '../trading-chart/trading-chart.component';
 import * as fromStore from 'src/app/store/app.reducer';
 import { Store } from '@ngrx/store';
 import { IZigZagFiboSignal } from 'src/app/shared/models/zigzag-fibo-signal';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-tv-chart-container',
@@ -45,7 +53,8 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
   private _interval: ChartingLibraryWidgetOptions['interval'] =
     'D' as ResolutionString;
   // BEWARE: no trailing slash is expected in feed URL
-  private _datafeedUrl = 'https://demo_feed.tradingview.com';
+  //private _datafeedUrl = 'https://demo_feed.tradingview.com';
+  private _datafeedUrl = environment.udfApiBaseUrl + '/api/udf';
   private _libraryPath: ChartingLibraryWidgetOptions['library_path'] =
     '/assets/charting_library/';
   private _chartsStorageUrl: ChartingLibraryWidgetOptions['charts_storage_url'] =
@@ -132,6 +141,12 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
     this._theme = theme || this._theme;
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes && changes['selectedZigZagSignal'] && this._tvWidget) {
+      this.handleZigZagSignal(changes['selectedZigZagSignal'].currentValue);
+    }
+  }
+
   ngOnInit() {
     this.priceChart$ = this.store.select(fromStore.priceChartSelector);
     this.store
@@ -171,48 +186,8 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
     this._tvWidget = tvWidget;
 
     tvWidget.onChartReady(() => {
+      //this.drawTempDemoElements(this._tvWidget); // TODO: add conditional display; data
       this.onCreateStudy(this._tvWidget, 'stoch307bull');
-
-      const baseDate = new Date('Dec/01/2017');
-      const year = baseDate.getFullYear();
-      const month = baseDate.getMonth();
-      const day = baseDate.getDate();
-      const signalDate = Date.UTC(year, month, day) / 1000;
-      const pointA = signalDate;
-      const pointB = this.sixMonthsBeforeUTC(pointA);
-
-      this.createText(this.getNumberDateTime('Jan/10/2018'), 183);
-      this.createTrendLine(pointA, pointB, 180, 152, '#F15152');
-      this.createFlag(this.getNumberDateTime('Dec/01/2017'), 183);
-      this.createBallon(
-        "Sorry I'm still working on this tradingview integration, you can use the chart widget in the meantime",
-        this.getNumberDateTime('Dec/01/2017'),
-        177,
-        '#2ef03a'
-      );
-      tvWidget.headerReady().then(() => {
-        this.createNote(
-          `Hello this is a Message form Carlos Calderon: Sorry I'm still working on this tradingview integration, you can use the chart widget in the meantime 👆🏻`,
-          this.getNumberDateTime('Jan/01/2018'),
-          177,
-          '#2ef03a'
-        );
-        tvWidget.chart().createStudy('Moving Average', false, true);
-
-        const button = tvWidget.createButton();
-        button.setAttribute('title', 'Click to show a notification popup');
-        button.classList.add('apply-common-tooltip');
-        button.addEventListener('click', () =>
-          tvWidget.showNoticeDialog({
-            title: 'Notification',
-            body: 'TradingView Charting Library API works correctly',
-            callback: () => {
-              console.log('Noticed!');
-            },
-          })
-        );
-        button.innerHTML = 'Check API';
-      });
     });
   }
 
@@ -425,6 +400,230 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
     const oneMonthAfter = Math.floor(date - 6 * 30 * 24 * 60 * 60);
 
     return oneMonthAfter;
+  }
+
+  private oneMonthAfterUTC(date: number) {
+    const oneMonthAfter = Math.floor(date + 1 * 30 * 24 * 60 * 60);
+
+    return oneMonthAfter;
+  }
+
+  private drawTempDemoElements(tvWidget: IChartingLibraryWidget) {
+    const baseDate = new Date('Dec/01/2017');
+    const year = baseDate.getFullYear();
+    const month = baseDate.getMonth();
+    const day = baseDate.getDate();
+    const signalDate = Date.UTC(year, month, day) / 1000;
+    const pointA = signalDate;
+    const pointB = this.sixMonthsBeforeUTC(pointA);
+
+    this.createText(this.getNumberDateTime('Jan/10/2018'), 183);
+    this.createTrendLine(pointA, pointB, 180, 152, '#F15152');
+    this.createFlag(this.getNumberDateTime('Dec/01/2017'), 183);
+    this.createBallon(
+      "Sorry I'm still working on this tradingview integration, you can use the chart widget in the meantime",
+      this.getNumberDateTime('Dec/01/2017'),
+      177,
+      '#2ef03a'
+    );
+
+    tvWidget.headerReady().then(() => {
+      this.createNote(
+        `Hello this is a Message form Carlos Calderon: Sorry I'm still working on this tradingview integration, you can use the chart widget in the meantime 👆🏻`,
+        this.getNumberDateTime('Jan/01/2018'),
+        177,
+        '#2ef03a'
+      );
+      tvWidget.chart().createStudy('Moving Average', false, true);
+
+      const button = tvWidget.createButton();
+      button.setAttribute('title', 'Click to show a notification popup');
+      button.classList.add('apply-common-tooltip');
+      button.addEventListener('click', () =>
+        tvWidget.showNoticeDialog({
+          title: 'Notification',
+          body: 'TradingView Charting Library API works correctly',
+          callback: () => {
+            console.log('Noticed!');
+          },
+        })
+      );
+      button.innerHTML = 'Check API';
+    });
+  }
+
+  private handleZigZagSignal(selectedZigZagSignal: IZigZagFiboSignal) {
+    if (selectedZigZagSignal && this._tvWidget) {
+      this.clearChart();
+      console.log('Changes from tv chart container ' + selectedZigZagSignal);
+      const base = this.getUTCUnixDate(
+        this.selectedZigZagSignal.activationDate
+      );
+      const from = this.twoMonthsBeforeUTC(base);
+      const to = this.oneMonthAfterUTC(base);
+
+      const currentSymbol = this._tvWidget
+        .activeChart()
+        .symbol()
+        .split(':')
+        .pop();
+      this.onCreateStudy(this._tvWidget, 'stoch307bull');
+      if (selectedZigZagSignal.symbol === currentSymbol) {
+        this._tvWidget
+          .activeChart()
+          .setVisibleRange({ from, to }, { percentRightMargin: 20 })
+          .then(() => {
+            console.log('New visible range is applied');
+            this.addZigZagFiboSignal(this.selectedZigZagSignal);
+          });
+      } else {
+        this._tvWidget
+          .activeChart()
+          .setSymbol(this.selectedZigZagSignal.symbol, () => {
+            this._tvWidget
+              .activeChart()
+              .setVisibleRange({ from, to }, { percentRightMargin: 20 })
+              .then(() => {
+                console.log('New visible range is applied');
+                this.addZigZagFiboSignal(this.selectedZigZagSignal);
+              });
+          });
+      }
+    }
+  }
+
+  private clearChart() {
+    if (this._tvWidget && this._tvWidget.chart) {
+      this._tvWidget.chart().removeAllShapes();
+      this.studyIds.forEach((id) => {
+        this._tvWidget.activeChart().removeEntity(id);
+      });
+      //this._tvWidget.activeChart().getAllStudies().forEach(({ name, id }) => this._tvWidget.activeChart().removeEntity(id));
+      //this._tvWidget.activeChart().removeAllStudies();
+    }
+  }
+
+  private getUTCUnixDate(date: Date) {
+    const baseDate = new Date(date);
+    const year = baseDate.getFullYear();
+    const month = baseDate.getMonth();
+    const day = baseDate.getDate();
+    return Date.UTC(year, month, day) / 1000;
+  }
+
+  private twoMonthsBeforeUTC(date: number) {
+    const oneMonthAfter = Math.floor(date - 2 * 30 * 24 * 60 * 60);
+
+    return oneMonthAfter;
+  }
+
+  private twoWeekAfterUTC(date: number) {
+    const oneMonthAfter = Math.floor(date + 2 * 7 * 24 * 60 * 60);
+
+    return oneMonthAfter;
+  }
+
+  private addZigZagFiboSignal(signal: IZigZagFiboSignal) {
+    if (this._tvWidget) {
+      this._tvWidget.chart().removeAllShapes();
+    }
+
+    const baseDate = new Date(signal.activationDate);
+    const year = baseDate.getFullYear();
+    const month = baseDate.getMonth();
+    const day = baseDate.getDate();
+    const signalDate = Date.UTC(year, month, day) / 1000;
+    const pointA = signalDate;
+
+    const pointB = this.twoWeekAfterUTC(pointA);
+
+    if (signal.activationDirection === 'UP') {
+      //const support = Math.min(signal.cLow, signal.cLowestOpenOrClose);
+      const support = signal.support;
+      this.createTrendLine(pointA, pointB, support, support, '#1c100b');
+      // this.createTrendLine(pointA, pointB, signal.currentWeekFibSupport, signal.currentWeekFibSupport, '#00FFFF');
+
+      // this.createTrendLine(pointA, pointB, signal.ironCondorUpLeg, signal.ironCondorUpLeg, '#00FFFF');
+
+      // this.createCalloutSignalUp
+      //     (`Buy Credit Put Spread at ${support} ${month + 1}-${day}-${year}`,
+      //         pointA, support, '#2ef03a');
+
+      //this.fibTrendExtABC(signal.aLow, signal.bHigh, signal.cLowestOpenOrClose, signal.aDate, signal.bDate, signal.cDate);
+      this.fibTrendExtABC(
+        signal.aLow,
+        signal.bHigh,
+        signal.cLow,
+        signal.aDate,
+        signal.bDate,
+        signal.cDate
+      );
+
+      // this.createCalloutSignalDown
+      //     (`Buy Credit Call Spread at ${signal.ironCondorUpLeg} ${month + 1}-${day}-${year}`,
+      //         pointA, signal.ironCondorUpLeg, '#2ef03a');
+    } else if (signal.activationDirection === 'DOWN') {
+      //const resistence = Math.max(signal.cHigh, signal.cHighestOpenOrClose);
+      const resistence = signal.resistence;
+      this.createTrendLine(pointA, pointB, resistence, resistence, '#1c100b');
+      //this.createTrendLine(pointA, pointB, signal.currentWeekFibResistence, signal.currentWeekFibResistence, '#00FFFF');
+
+      //this.createTrendLine(pointA, pointB, signal.ironCondorDownLeg, signal.ironCondorDownLeg, '#00FFFF');
+
+      // this.createCalloutSignalDown
+      //     (`Buy Credit Call Spread at ${resistence} ${month + 1}-${day}-${year}`,
+      //         pointA, resistence, '#2ef03a');
+
+      //this.fibTrendExtABC(signal.aHigh, signal.bLow, signal.cHighestOpenOrClose, signal.aDate, signal.bDate, signal.cDate);
+      this.fibTrendExtABC(
+        signal.aHigh,
+        signal.bLow,
+        signal.cHigh,
+        signal.aDate,
+        signal.bDate,
+        signal.cDate
+      );
+      // this.createCalloutSignalUp
+      //     (`Buy Credit Put Spread at ${signal.ironCondorDownLeg} ${month + 1}-${day}-${year}`,
+      //         pointA, signal.ironCondorDownLeg, '#2ef03a');
+    }
+  }
+
+  private fibTrendExtABC(
+    aPrice: number,
+    bPrice: number,
+    cPrice: number,
+    aDate: Date,
+    bDate: Date,
+    cDate: Date
+  ) {
+    if (this._tvWidget) {
+      this._tvWidget.chart().createMultipointShape(
+        [
+          { time: this.getNumberDateTime(aDate.toString()), price: aPrice },
+          { time: this.getNumberDateTime(bDate.toString()), price: bPrice },
+          { time: this.getNumberDateTime(cDate.toString()), price: cPrice },
+        ],
+        {
+          shape: 'fib_trend_ext',
+          lock: false,
+          disableSelection: false,
+          disableSave: true,
+          disableUndo: true,
+          overrides: {
+            'trendline.visible': false,
+            'level10.visible': false,
+            'level9.visible': false,
+            'level11.visible': false,
+            'level1.visible': false,
+            'level2.visible': false,
+            transparency: 95,
+            extendLines: 'true',
+            showCoeffs: true,
+          },
+        }
+      );
+    }
   }
 
   ngOnDestroy() {
