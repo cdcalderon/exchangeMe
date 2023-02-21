@@ -289,6 +289,28 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
     );
   }
 
+  private createArrowUp(time: number, price: number) {
+    this._tvWidget.chart().createShape(
+      {
+        time: time,
+        price: price,
+      },
+      {
+        shape: 'arrow_up',
+        zOrder: 'top',
+        lock: true,
+        disableSelection: true,
+        disableSave: true,
+        disableUndo: true,
+        text: 'Stochastic, Macd and Moving average requirements met',
+        overrides: {
+          color: '#0ffc03',
+          fontsize: 20,
+        },
+      }
+    );
+  }
+
   private createTrendLine(
     pointA: number,
     pointB: number,
@@ -526,11 +548,13 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
     }
   }
 
-  private handleThreeArrowSignal(selectedZigZagSignal: ThreeArrowSignal) {
-    if (selectedZigZagSignal && this._tvWidget) {
+  private handleThreeArrowSignal(selectedThreeArrowSignal: ThreeArrowSignal) {
+    if (selectedThreeArrowSignal && this._tvWidget) {
       this.clearChart();
-      console.log('Changes from tv chart container ' + selectedZigZagSignal);
-      const base = this.getUTCUnixDate(selectedZigZagSignal.activationDate);
+      console.log(
+        'Changes from tv chart container ' + selectedThreeArrowSignal
+      );
+      const base = this.getUTCUnixDate(selectedThreeArrowSignal.activationDate);
       const from = this.twoMonthsBeforeUTC(base);
       const to = this.oneMonthAfterUTC(base);
 
@@ -540,24 +564,24 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
         .split(':')
         .pop();
       this.onCreateStudy(this._tvWidget, 'threarrows');
-      if (selectedZigZagSignal.symbol === currentSymbol) {
+      if (selectedThreeArrowSignal.symbol === currentSymbol) {
         this._tvWidget
           .activeChart()
           .setVisibleRange({ from, to }, { percentRightMargin: 20 })
           .then(() => {
             console.log('New visible range is applied');
-            //this.addZigZagFiboSignal(selectedZigZagSignal);
+            this.addThreeGreenArrowsSignal(selectedThreeArrowSignal);
           });
       } else {
         this._tvWidget
           .activeChart()
-          .setSymbol(selectedZigZagSignal.symbol, () => {
+          .setSymbol(selectedThreeArrowSignal.symbol, () => {
             this._tvWidget
               .activeChart()
               .setVisibleRange({ from, to }, { percentRightMargin: 20 })
               .then(() => {
                 console.log('New visible range is applied');
-                //this.addZigZagFiboSignal(selectedZigZagSignal);
+                this.addThreeGreenArrowsSignal(selectedThreeArrowSignal);
               });
           });
       }
@@ -659,6 +683,35 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
       //     (`Buy Credit Put Spread at ${signal.ironCondorDownLeg} ${month + 1}-${day}-${year}`,
       //         pointA, signal.ironCondorDownLeg, '#2ef03a');
     }
+  }
+
+  private addThreeGreenArrowsSignal(signal: ThreeArrowSignal) {
+    if (this._tvWidget) {
+      this._tvWidget.chart().removeAllShapes();
+    }
+
+    const baseDate = new Date(signal.activationDate);
+    const year = baseDate.getFullYear();
+    const month = baseDate.getMonth();
+    const day = baseDate.getDate();
+    const signalDate = Date.UTC(year, month, day) / 1000;
+    const pointA = signalDate;
+
+    const pointB = this.twoWeekAfterUTC(pointA);
+    const pricePointArrow =
+      signal.activationPrice - signal.activationPrice * 0.1;
+    const pricePointNote =
+      signal.activationPrice + signal.activationPrice * 0.01;
+    const formattedDate = new Date(signal.activationDate).toDateString();
+
+    const noteMessage = `Activation Price: ${signal.activationPrice} 
+      Activation Date: ${formattedDate}
+      Stochastics ✅
+      MACD ✅
+      Moving Average 30 Crossing Up ✅`;
+
+    this.createArrowUp(signalDate, pricePointArrow);
+    this.createNote(noteMessage, signalDate, pricePointNote);
   }
 
   private fibTrendExtABC(
