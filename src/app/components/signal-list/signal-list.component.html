@@ -6,7 +6,7 @@
       style="overflow: auto; height: 88vh"
     >
       <li
-        class="nav-item"
+        class="nav-item signal-item"
         *ngFor="let signal of signals"
         (click)="selectSignal(signal)"
       >
@@ -29,12 +29,12 @@
             />
             <div>
               <h2>{{ signal.symbol }}</h2>
-              <p>Get PCHO by joining liquidity pool</p>
+              <p>Signal Date: {{ signal.activationDate | date }}</p>
             </div>
           </div>
           <div>
-            <h3>1</h3>
-            <p class="text-end"><i class="icon ion-md-lock"></i> Per Block</p>
+            <h3>{{ signal.weekNumber }}</h3>
+            <p class="text-end">Week Number</p>
           </div>
         </div>
       </li>
