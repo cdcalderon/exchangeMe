@@ -115,4 +115,22 @@
 
 .form-check-label {
   color: #2187d0;
+  position: relative;
+  top: 2px !important;
+}
+
+.stock-m-signals {
+  margin-left: 25px;
+  color: #2187d0 !important;
+  font-size: larger;
+
+  &:hover {
+    opacity: 0.9;
+    color: #21b6d0 !important;
+    text-decoration: underline
+  }
+}
+
+.active{
+  color: 'white' !important
 }

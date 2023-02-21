@@ -39,6 +39,14 @@
             alt=""
           />
         </li>
+        <li>
+          <a
+            class="stock-m-signals"
+            [routerLinkActive]="['active']"
+            [routerLink]="['/signal-analizer']"
+            >Stock Market Signals</a
+          >
+        </li>
       </ul>
       <ul class="navbar-nav ml-auto" *ngIf="provider$ | async as provider">
         <!-- <li class="nav-item">{{ account$ | async }}</li> -->
