@@ -637,6 +637,12 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
       //const support = Math.min(signal.cLow, signal.cLowestOpenOrClose);
       const support = signal.support;
       this.createTrendLine(pointA, pointB, support, support, '#3073d1');
+      const formattedDate = new Date(signal.activationDate).toDateString();
+      const noteMessage = `Activation Price: ${signal.activationPrice} 
+      Activation Date: ${formattedDate}
+      Fib %0.236 Crossing up ✅`;
+
+      this.createNote(noteMessage, pointA, support);
       // this.createTrendLine(pointA, pointB, signal.currentWeekFibSupport, signal.currentWeekFibSupport, '#00FFFF');
 
       // this.createTrendLine(pointA, pointB, signal.ironCondorUpLeg, signal.ironCondorUpLeg, '#00FFFF');
