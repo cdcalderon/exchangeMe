@@ -445,6 +445,22 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
         .then((id) => {
           this.studyIds.push(id);
         });
+
+      widget
+        .chart()
+        .createStudy(
+          'Moving Average',
+          false,
+          true,
+          [30],
+          function (guid) {
+            console.log(guid);
+          },
+          { 'plot.color.0': '#b4ff05' }
+        )
+        .then((id) => {
+          this.studyIds.push(id);
+        });
     }
   }
 
