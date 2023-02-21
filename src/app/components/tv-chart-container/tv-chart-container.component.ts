@@ -358,19 +358,31 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
         });
 
       widget
-        .chart()
-        .createStudy('Moving Average', false, true, [7], {
-          'plot.color.0': '#44bcd8',
-        })
+        .activeChart()
+        .createStudy(
+          'Moving Average Exponential',
+          false,
+          false,
+          {
+            length: 7,
+          },
+          { 'plot.color.0': '#44bcd8' }
+        )
         .then((id) => {
           this.studyIds.push(id);
         });
 
       widget
-        .chart()
-        .createStudy('Moving Average', false, true, [13], {
-          'plot.color.0': '#e07b39',
-        })
+        .activeChart()
+        .createStudy(
+          'Moving Average Exponential',
+          false,
+          false,
+          {
+            length: 13,
+          },
+          { 'plot.color.0': '#b907f0' }
+        )
         .then((id) => {
           this.studyIds.push(id);
         });
@@ -415,30 +427,13 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
         });
 
       widget
-        .chart()
+        .activeChart()
         .createStudy(
-          'Moving Average',
+          'Moving Average Exponential',
           false,
-          true,
-          [10],
-          function (guid) {
-            console.log(guid);
-          },
-          { 'plot.color.0': '#fffa00' }
-        )
-        .then((id) => {
-          this.studyIds.push(id);
-        });
-
-      widget
-        .chart()
-        .createStudy(
-          'Moving Average',
           false,
-          true,
-          [30],
-          function (guid) {
-            console.log(guid);
+          {
+            length: 30,
           },
           { 'plot.color.0': '#b4ff05' }
         )
@@ -447,16 +442,15 @@ export class TvChartContainerComponent implements OnInit, OnDestroy {
         });
 
       widget
-        .chart()
+        .activeChart()
         .createStudy(
-          'Moving Average',
+          'Moving Average Exponential',
           false,
-          true,
-          [30],
-          function (guid) {
-            console.log(guid);
+          false,
+          {
+            length: 10,
           },
-          { 'plot.color.0': '#b4ff05' }
+          { 'plot.color.0': '#07d8f0' }
         )
         .then((id) => {
           this.studyIds.push(id);
